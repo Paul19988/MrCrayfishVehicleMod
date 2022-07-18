@@ -4,6 +4,7 @@ import com.mrcrayfish.vehicle.entity.PlaneEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -16,7 +17,7 @@ public class SportsPlaneEntity extends PlaneEntity
     }
 
     @Override
-    public AxisAlignedBB getBoundingBoxForCulling()
+    public @NotNull AxisAlignedBB getBoundingBoxForCulling()
     {
         return this.getBoundingBox().inflate(1.5);
     }

@@ -47,7 +47,7 @@ public class FluidEntry
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
         if(fluid == null)
         {
-            throw new com.google.gson.JsonSyntaxException("Invalid fluid entry, unknown fluid: " + fluidId.toString());
+            throw new com.google.gson.JsonSyntaxException("Invalid fluid entry, unknown fluid: " + fluidId);
         }
         int amount = JSONUtils.getAsInt(object, "amount");
         if(amount < 1)

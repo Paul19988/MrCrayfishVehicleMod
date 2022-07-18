@@ -72,12 +72,14 @@ public class SurfaceHelper
             return defaultValue;
 
         Optional<IWheelType> optional = vehicle.getWheelType();
-        if(!optional.isPresent())
+        if(optional.isEmpty())
             return defaultValue;
 
         int wheelCount = 0;
         float surfaceModifier = 0F;
         double[] wheelPositions = vehicle.getWheelPositions();
+
+        BlockPos.Mutable mpos = new BlockPos.Mutable();
         for(int i = 0; i < wheels.size(); i++)
         {
             double wheelX = wheelPositions[i * 3];
@@ -86,7 +88,7 @@ public class SurfaceHelper
             int x = MathHelper.floor(vehicle.getX() + wheelX);
             int y = MathHelper.floor(vehicle.getY() + wheelY - 0.2D);
             int z = MathHelper.floor(vehicle.getZ() + wheelZ);
-            BlockState state = vehicle.level.getBlockState(new BlockPos(x, y, z));
+            BlockState state = vehicle.level.getBlockState(mpos.set(x, y, z));
             SurfaceType surfaceType = getSurfaceTypeForMaterial(state.getMaterial());
             if(surfaceType == SurfaceType.NONE)
                 continue;

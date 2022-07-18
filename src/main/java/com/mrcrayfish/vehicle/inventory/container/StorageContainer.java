@@ -8,6 +8,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -48,13 +49,13 @@ public class StorageContainer extends Container
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn)
+    public boolean stillValid(@NotNull PlayerEntity playerIn)
     {
         return this.storageInventory.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public @NotNull ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index)
     {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -90,7 +91,7 @@ public class StorageContainer extends Container
     }
 
     @Override
-    public void removed(PlayerEntity playerIn)
+    public void removed(@NotNull PlayerEntity playerIn)
     {
         super.removed(playerIn);
         this.storageInventory.stopOpen(playerIn);

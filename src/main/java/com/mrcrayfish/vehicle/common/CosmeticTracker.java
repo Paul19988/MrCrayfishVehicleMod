@@ -129,7 +129,7 @@ public class CosmeticTracker
     @OnlyIn(Dist.CLIENT)
     public Entry getSelectedEntry(ResourceLocation cosmeticId)
     {
-        return Optional.ofNullable(this.selectedCosmetics.get(cosmeticId)).orElse(null);
+        return this.selectedCosmetics.get(cosmeticId);
     }
 
     public Collection<Action> getActions(ResourceLocation cosmeticId)

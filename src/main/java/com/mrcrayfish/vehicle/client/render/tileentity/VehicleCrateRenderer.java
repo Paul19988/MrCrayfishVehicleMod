@@ -15,14 +15,15 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.Direction;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -36,7 +37,7 @@ public class VehicleCrateRenderer extends TileEntityRenderer<VehicleCrateTileEnt
 
     @SuppressWarnings("unchecked")
     @Override
-    public void render(VehicleCrateTileEntity crate, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, int overlay)
+    public void render(VehicleCrateTileEntity crate, float partialTicks, @NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer renderTypeBuffer, int light, int overlay)
     {
         BlockState state = crate.getLevel().getBlockState(crate.getBlockPos());
         if(state.getBlock() != ModBlocks.VEHICLE_CRATE.get())
@@ -49,7 +50,7 @@ public class VehicleCrateRenderer extends TileEntityRenderer<VehicleCrateTileEnt
         matrixStack.mulPose(Axis.POSITIVE_Y.rotationDegrees(facing.get2DDataValue() * -90F + 180F));
         matrixStack.translate(-0.5, -0.5, -0.5);
 
-        this.renderer.textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
+        this.renderer.textureManager.bind(PlayerContainer.BLOCK_ATLAS);
 
         matrixStack.pushPose();
 

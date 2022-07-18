@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -45,6 +46,7 @@ import java.util.List;
 /**
  * Author: MrCrayfish
  */
+@SuppressWarnings("deprecation")
 public class FuelDrumBlock extends Block
 {
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
@@ -63,19 +65,28 @@ public class FuelDrumBlock extends Block
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    @NotNull
+    public VoxelShape getShape(BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context)
     {
         return SHAPE[state.getValue(AXIS).ordinal()];
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    @NotNull
+    public VoxelShape getCollisionShape(BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context)
     {
         return SHAPE[state.getValue(AXIS).ordinal()];
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag advanced)
+    @NotNull
+    public VoxelShape getInteractionShape(BlockState state, @NotNull IBlockReader level, @NotNull BlockPos pos)
+    {
+        return SHAPE[state.getValue(AXIS).ordinal()];
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader reader, @NotNull List<ITextComponent> list, @NotNull ITooltipFlag advanced)
     {
         if(Screen.hasShiftDown())
         {
@@ -104,11 +115,12 @@ public class FuelDrumBlock extends Block
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult result)
+    @NotNull
+    public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult result)
     {
         if(!world.isClientSide())
         {
-            if(FluidUtil.interactWithFluidHandler(playerEntity, hand, world, pos, result.getDirection()))
+            if(FluidUtil.interactWithFluidHandler(player, hand, world, pos, result.getDirection()))
             {
                 return ActionResultType.SUCCESS;
             }
@@ -117,7 +129,8 @@ public class FuelDrumBlock extends Block
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rotation)
+    @NotNull
+    public BlockState rotate(@NotNull BlockState state, Rotation rotation)
     {
         switch(rotation)
         {

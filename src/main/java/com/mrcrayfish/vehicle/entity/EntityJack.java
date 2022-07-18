@@ -12,6 +12,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -86,7 +87,7 @@ public class EntityJack extends Entity implements IEntityAdditionalSpawnData
     }
 
     @Override
-    protected void addPassenger(Entity passenger)
+    protected void addPassenger(@NotNull Entity passenger)
     {
         super.addPassenger(passenger);
         if(this.getPassengers().contains(passenger))
@@ -101,13 +102,13 @@ public class EntityJack extends Entity implements IEntityAdditionalSpawnData
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket()
+    public @NotNull IPacket<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    public void positionRider(Entity passenger)
+    public void positionRider(@NotNull Entity passenger)
     {
         if(passenger instanceof VehicleEntity)
         {

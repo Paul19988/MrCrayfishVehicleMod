@@ -10,6 +10,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ObjectBlock extends Block
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag flag)
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader reader, @NotNull List<ITextComponent> list, @NotNull ITooltipFlag flag)
     {
         if(Screen.hasShiftDown())
         {

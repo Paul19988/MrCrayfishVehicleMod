@@ -8,6 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 public class FluidMixerRecipeSerializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FluidMixerRecipe>
 {
     @Override
-    public FluidMixerRecipe fromJson(ResourceLocation recipeId, JsonObject json)
+    public @NotNull FluidMixerRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json)
     {
         String s = JSONUtils.getAsString(json, "group", "");
         JsonArray input = JSONUtils.getAsJsonArray(json, "input");
@@ -34,7 +35,7 @@ public class FluidMixerRecipeSerializer extends net.minecraftforge.registries.Fo
 
     @Nullable
     @Override
-    public FluidMixerRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
+    public FluidMixerRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer)
     {
         FluidEntry inputOne = FluidEntry.read(buffer);
         FluidEntry inputTwo = FluidEntry.read(buffer);
@@ -44,7 +45,7 @@ public class FluidMixerRecipeSerializer extends net.minecraftforge.registries.Fo
     }
 
     @Override
-    public void toNetwork(PacketBuffer buffer, FluidMixerRecipe recipe)
+    public void toNetwork(@NotNull PacketBuffer buffer, FluidMixerRecipe recipe)
     {
         for(FluidEntry entry : recipe.getInputs())
         {

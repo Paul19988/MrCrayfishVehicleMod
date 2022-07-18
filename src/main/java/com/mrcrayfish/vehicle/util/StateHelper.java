@@ -24,7 +24,7 @@ public class StateHelper
     public static boolean isAirBlock(IWorldReader world, BlockPos pos, Direction facing, RelativeDirection dir)
     {
         BlockPos target = getBlockPosRelativeTo(world, pos, facing, dir);
-        return world.getBlockState(target).isAir();
+        return world.getBlockState(target).isAir(world, pos);
     }
 
     private static BlockPos getBlockPosRelativeTo(IWorldReader world, BlockPos pos, Direction facing, RelativeDirection dir)
@@ -50,19 +50,16 @@ public class StateHelper
         switch(num)
         {
             case -3:
+            case 1:
                 return RelativeDirection.LEFT;
             case -2:
+            case 2:
                 return RelativeDirection.UP;
             case -1:
+            case 3:
                 return RelativeDirection.RIGHT;
             case 0:
                 return RelativeDirection.DOWN;
-            case 1:
-                return RelativeDirection.LEFT;
-            case 2:
-                return RelativeDirection.UP;
-            case 3:
-                return RelativeDirection.RIGHT;
         }
         return RelativeDirection.NONE;
     }

@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -18,11 +19,11 @@ public class JackRenderer extends EntityRenderer<EntityJack>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityJack entity)
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityJack entity)
     {
         return null;
     }
 
     @Override
-    public void render(EntityJack jack, float p_225623_2_, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light) {}
+    public void render(@NotNull EntityJack jack, float p_225623_2_, float partialTicks, @NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer renderTypeBuffer, int light) {}
 }

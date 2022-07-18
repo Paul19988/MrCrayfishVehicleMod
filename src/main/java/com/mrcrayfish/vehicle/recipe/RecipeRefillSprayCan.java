@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -20,7 +21,7 @@ public class RecipeRefillSprayCan extends SpecialRecipe
     }
 
     @Override
-    public boolean matches(CraftingInventory inventory, World worldIn)
+    public boolean matches(CraftingInventory inventory, @NotNull World worldIn)
     {
         ItemStack sprayCan = ItemStack.EMPTY;
         ItemStack emptySprayCan = ItemStack.EMPTY;
@@ -55,7 +56,7 @@ public class RecipeRefillSprayCan extends SpecialRecipe
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inventory)
+    public @NotNull ItemStack assemble(CraftingInventory inventory)
     {
         ItemStack sprayCan = ItemStack.EMPTY;
         ItemStack emptySprayCan = ItemStack.EMPTY;
@@ -104,7 +105,7 @@ public class RecipeRefillSprayCan extends SpecialRecipe
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
+    public @NotNull IRecipeSerializer<?> getSerializer()
     {
         return ModRecipeSerializers.REFILL_SPRAY_CAN.get();
     }

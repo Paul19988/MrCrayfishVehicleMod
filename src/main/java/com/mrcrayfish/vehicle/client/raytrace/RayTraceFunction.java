@@ -78,7 +78,7 @@ public interface RayTraceFunction
                 continue;
 
             Optional<IFluidHandlerItem> optional = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).resolve();
-            if(!optional.isPresent())
+            if(optional.isEmpty())
                 continue;
 
             IFluidHandlerItem handler = optional.get();

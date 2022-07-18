@@ -184,7 +184,7 @@ public class ServerPlayHandler
         }
 
         ItemStack wheelStack = ItemStack.EMPTY;
-        if(vehicle instanceof PoweredVehicleEntity && ((PoweredVehicleEntity) vehicle).canChangeWheels())
+        if(vehicle instanceof PoweredVehicleEntity && vehicle.canChangeWheels())
         {
             ItemStack workstationWheelStack = workstationTileEntity.getInventory().get(2);
             if(workstationWheelStack.getItem() instanceof WheelItem)
@@ -417,7 +417,7 @@ public class ServerPlayHandler
 
         CompoundNBT heldTag = HeldVehicleDataHandler.getHeldVehicle(player);
         Optional<EntityType<?>> optional = EntityType.byString(heldTag.getString("id"));
-        if(!optional.isPresent())
+        if(optional.isEmpty())
             return;
 
         EntityType<?> entityType = optional.get();

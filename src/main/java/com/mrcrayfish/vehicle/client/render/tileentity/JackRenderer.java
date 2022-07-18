@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -35,7 +36,7 @@ public class JackRenderer extends TileEntityRenderer<JackTileEntity>
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void render(JackTileEntity jack, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, int i1)
+    public void render(JackTileEntity jack, float partialTicks, @NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer renderTypeBuffer, int light, int i1)
     {
         if(!jack.hasLevel())
             return;

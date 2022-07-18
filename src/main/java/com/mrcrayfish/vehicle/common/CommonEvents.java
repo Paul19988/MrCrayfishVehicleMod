@@ -184,7 +184,7 @@ public class CommonEvents
 
         CompoundNBT heldTag = HeldVehicleDataHandler.getHeldVehicle(player);
         Optional<EntityType<?>> optional = EntityType.byString(heldTag.getString("id"));
-        if(!optional.isPresent())
+        if(optional.isEmpty())
             return false;
 
         EntityType<?> entityType = optional.get();

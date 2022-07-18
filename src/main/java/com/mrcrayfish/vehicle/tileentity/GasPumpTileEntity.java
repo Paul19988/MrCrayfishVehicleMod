@@ -19,6 +19,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -135,7 +136,7 @@ public class GasPumpTileEntity extends TileEntitySynced implements ITickableTile
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound)
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT compound)
     {
         super.load(state, compound);
         if(compound.contains("FuelingEntity", Constants.NBT.TAG_INT))
@@ -145,7 +146,7 @@ public class GasPumpTileEntity extends TileEntitySynced implements ITickableTile
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
+    public @NotNull CompoundNBT save(CompoundNBT compound)
     {
         compound.putInt("FuelingEntity", this.fuelingEntityId);
         return super.save(compound);

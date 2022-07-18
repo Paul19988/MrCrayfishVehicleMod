@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -48,7 +49,7 @@ public class FluidTrailerEntity extends TrailerEntity implements IEntityAddition
     }
 
     @Override
-    public ActionResultType interact(PlayerEntity player, Hand hand)
+    public @NotNull ActionResultType interact(@NotNull PlayerEntity player, @NotNull Hand hand)
     {
         if(!level.isClientSide && !player.isCrouching())
         {

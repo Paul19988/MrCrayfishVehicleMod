@@ -10,6 +10,8 @@ import com.mrcrayfish.vehicle.common.FluidNetworkHandler;
 import com.mrcrayfish.vehicle.init.ModTileEntities;
 import com.mrcrayfish.vehicle.util.FluidUtils;
 import com.mrcrayfish.vehicle.util.TileEntityUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -22,6 +24,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -35,8 +38,8 @@ public class PumpTileEntity extends PipeTileEntity implements ITickableTileEntit
 {
     private int lastHandlerIndex;
     private boolean validatedNetwork;
-    private Map<BlockPos, PipeNode> fluidNetwork = new HashMap<>();
-    private List<Pair<BlockPos, Direction>> fluidHandlers = new ArrayList<>();
+    private final Map<BlockPos, PipeNode> fluidNetwork = new Reference2ObjectOpenHashMap<>();
+    private final List<Pair<BlockPos, Direction>> fluidHandlers = new ObjectArrayList<>();
     private PowerMode powerMode = PowerMode.ALWAYS_ACTIVE;
 
     public PumpTileEntity()
@@ -87,7 +90,7 @@ public class PumpTileEntity extends PipeTileEntity implements ITickableTileEntit
             return;
 
         Optional<IFluidHandler> source = this.getSourceFluidHandler(this.level);
-        if(!source.isPresent())
+        if(source.isEmpty())
             return;
 
         IFluidHandler sourceHandler = source.get();
@@ -294,7 +297,7 @@ public class PumpTileEntity extends PipeTileEntity implements ITickableTileEntit
 
     public void cyclePowerMode()
     {
-        this.powerMode = PowerMode.values()[(this.powerMode.ordinal() + 1) % PowerMode.values().length];
+        this.powerMode = PowerMode.VALUES[(this.powerMode.ordinal() + 1) % PowerMode.VALUES.length];
         if(this.level != null && !this.level.isClientSide())
         {
             CompoundNBT compound = new CompoundNBT();
@@ -307,7 +310,7 @@ public class PumpTileEntity extends PipeTileEntity implements ITickableTileEntit
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound)
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT compound)
     {
         super.load(state, compound);
         if(compound.contains("PowerMode", Constants.NBT.TAG_INT))
@@ -317,7 +320,7 @@ public class PumpTileEntity extends PipeTileEntity implements ITickableTileEntit
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
+    public @NotNull CompoundNBT save(CompoundNBT compound)
     {
         compound.putInt("PowerMode", this.powerMode.ordinal());
         return super.save(compound);
@@ -339,9 +342,11 @@ public class PumpTileEntity extends PipeTileEntity implements ITickableTileEntit
         REQUIRES_SIGNAL_ON("on", input -> Objects.requireNonNull(input.level).hasNeighborSignal(input.worldPosition)),
         REQUIRES_SIGNAL_OFF("off", input -> !Objects.requireNonNull(input.level).hasNeighborSignal(input.worldPosition));
 
+        public static final PowerMode[] VALUES = values();
+
         private static final String LANG_KEY_CHAT_PREFIX = Reference.MOD_ID + ".chat.pump.power";
-        private String key;
-        private Function<PumpTileEntity, Boolean> function;
+        private final String key;
+        private final Function<PumpTileEntity, Boolean> function;
 
         PowerMode(String key, Function<PumpTileEntity, Boolean> function)
         {
@@ -362,9 +367,7 @@ public class PumpTileEntity extends PipeTileEntity implements ITickableTileEntit
         @Nullable
         public static PowerMode fromOrdinal(int ordinal)
         {
-            if(ordinal < 0 || ordinal >= values().length)
-                return null;
-            return values()[ordinal];
+            return VALUES[Math.floorMod(ordinal, VALUES.length)];
         }
     }
 }

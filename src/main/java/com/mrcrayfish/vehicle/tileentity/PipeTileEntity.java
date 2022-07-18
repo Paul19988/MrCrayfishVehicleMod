@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -72,7 +73,7 @@ public class PipeTileEntity extends TileEntitySynced
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound)
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT compound)
     {
         super.load(state, compound);
         if(compound.contains("DisabledConnections", Constants.NBT.TAG_BYTE_ARRAY))
@@ -86,7 +87,7 @@ public class PipeTileEntity extends TileEntitySynced
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
+    public @NotNull CompoundNBT save(@NotNull CompoundNBT compound)
     {
         this.writeConnections(compound);
         return super.save(compound);

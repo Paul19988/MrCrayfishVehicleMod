@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -49,7 +50,7 @@ public class IconButton extends Button implements IToolbarLabel
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
         Minecraft mc = Minecraft.getInstance();

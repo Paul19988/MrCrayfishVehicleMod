@@ -10,6 +10,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class WorkstationRecipeSerializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<WorkstationRecipe>
 {
     @Override
-    public WorkstationRecipe fromJson(ResourceLocation recipeId, JsonObject parent)
+    public @NotNull WorkstationRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject parent)
     {
         ImmutableList.Builder<WorkstationIngredient> builder = ImmutableList.builder();
         JsonArray input = JSONUtils.getAsJsonArray(parent, "materials");
@@ -35,7 +36,7 @@ public class WorkstationRecipeSerializer extends net.minecraftforge.registries.F
         }
         ResourceLocation vehicle = new ResourceLocation(JSONUtils.getAsString(parent, "vehicle"));
         Optional<EntityType<?>> optional = EntityType.byString(JSONUtils.getAsString(parent, "vehicle"));
-        if(!optional.isPresent())
+        if(optional.isEmpty())
         {
             throw new com.google.gson.JsonSyntaxException("Invalid vehicle entity: " + vehicle);
         }
@@ -44,7 +45,7 @@ public class WorkstationRecipeSerializer extends net.minecraftforge.registries.F
 
     @Nullable
     @Override
-    public WorkstationRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
+    public WorkstationRecipe fromNetwork(@NotNull ResourceLocation recipeId, PacketBuffer buffer)
     {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(buffer.readResourceLocation());
         ImmutableList.Builder<WorkstationIngredient> builder = ImmutableList.builder();

@@ -11,6 +11,7 @@ import com.mrcrayfish.vehicle.entity.properties.PoweredProperties;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
 import com.mrcrayfish.vehicle.entity.vehicle.GolfCartEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.EntityType;
@@ -56,7 +57,7 @@ public class GolfCartRenderer extends AbstractHelicopterRenderer<GolfCartEntity>
     }
 
     @Override
-    public void applyPlayerModel(GolfCartEntity entity, PlayerEntity player, PlayerModel model, float partialTicks)
+    public void applyPlayerModel(GolfCartEntity entity, PlayerEntity player, PlayerModel<AbstractClientPlayerEntity> model, float partialTicks)
     {
         model.rightLeg.xRot = (float) Math.toRadians(-80F);
         model.rightLeg.yRot = (float) Math.toRadians(15F);

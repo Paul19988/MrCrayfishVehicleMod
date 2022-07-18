@@ -30,6 +30,7 @@ import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -66,7 +67,7 @@ public class EditVehicleScreen extends ContainerScreen<EditVehicleContainer>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(@NotNull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft minecraft = Minecraft.getInstance();
@@ -119,18 +120,17 @@ public class EditVehicleScreen extends ContainerScreen<EditVehicleContainer>
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
+    protected void renderLabels(@NotNull MatrixStack matrices, int mouseX, int mouseY)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.font.draw(matrixStack, this.title.getString(), 8, 6, 4210752);
-        minecraft.font.draw(matrixStack, this.playerInventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
+        minecraft.font.draw(matrices, this.title.getString(), 8, 6, 4210752);
+        minecraft.font.draw(matrices, this.playerInventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
 
         if(this.showHelp)
         {
             RenderSystem.pushMatrix();
             RenderSystem.scalef(0.5F, 0.5F, 0.5F);
-            minecraft.font.draw(matrixStack, I18n.get("container.edit_vehicle.window_help"), 56, 38, 0xFFFFFF);
+            minecraft.font.draw(matrices, I18n.get("container.edit_vehicle.window_help"), 56, 38, 0xFFFFFF);
             RenderSystem.popMatrix();
         }
     }
@@ -258,7 +258,7 @@ public class EditVehicleScreen extends ContainerScreen<EditVehicleContainer>
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         this.renderVehicleToBuffer(matrixStack, mouseX, mouseY, partialTicks);
         this.renderBackground(matrixStack);

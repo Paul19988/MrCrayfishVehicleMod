@@ -9,6 +9,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -37,14 +38,14 @@ public class FluidExtractorRecipe implements IRecipe<FluidExtractorTileEntity>
     }
 
     @Override
-    public boolean matches(FluidExtractorTileEntity fluidExtractor, World worldIn)
+    public boolean matches(FluidExtractorTileEntity fluidExtractor, @NotNull World worldIn)
     {
         ItemStack source = fluidExtractor.getItem(FluidExtractorTileEntity.SLOT_FLUID_SOURCE);
         return InventoryUtil.areItemStacksEqualIgnoreCount(source, this.ingredient);
     }
 
     @Override
-    public ItemStack assemble(FluidExtractorTileEntity inv)
+    public @NotNull ItemStack assemble(@NotNull FluidExtractorTileEntity inv)
     {
         return ItemStack.EMPTY;
     }
@@ -56,25 +57,25 @@ public class FluidExtractorRecipe implements IRecipe<FluidExtractorTileEntity>
     }
 
     @Override
-    public ItemStack getResultItem()
+    public @NotNull ItemStack getResultItem()
     {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public ResourceLocation getId()
+    public @NotNull ResourceLocation getId()
     {
         return this.id;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
+    public @NotNull IRecipeSerializer<?> getSerializer()
     {
         return ModRecipeSerializers.FLUID_EXTRACTOR.get();
     }
 
     @Override
-    public IRecipeType<?> getType()
+    public @NotNull IRecipeType<?> getType()
     {
         return RecipeType.FLUID_EXTRACTOR;
     }

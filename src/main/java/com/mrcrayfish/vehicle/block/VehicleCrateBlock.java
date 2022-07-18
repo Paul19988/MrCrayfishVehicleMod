@@ -43,6 +43,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ import java.util.List;
 /**
  * Author: MrCrayfish
  */
+@SuppressWarnings("deprecation")
 public class VehicleCrateBlock extends RotatedObjectBlock
 {
     public static final List<ResourceLocation> REGISTERED_CRATES = new ArrayList<>();
@@ -63,7 +65,7 @@ public class VehicleCrateBlock extends RotatedObjectBlock
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
+    public void fillItemCategory(@NotNull ItemGroup group, @NotNull NonNullList<ItemStack> items)
     {
         REGISTERED_CRATES.forEach(resourceLocation ->
         {
@@ -79,13 +81,14 @@ public class VehicleCrateBlock extends RotatedObjectBlock
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos)
+    public boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull IBlockReader reader, @NotNull BlockPos pos)
     {
         return true;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    @NotNull
+    public VoxelShape getShape(@NotNull BlockState state, IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context)
     {
         TileEntity te = worldIn.getBlockEntity(pos);
         if(te instanceof VehicleCrateTileEntity && ((VehicleCrateTileEntity)te).isOpened())
@@ -94,7 +97,7 @@ public class VehicleCrateBlock extends RotatedObjectBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader reader, BlockPos pos)
+    public boolean canSurvive(@NotNull BlockState state, @NotNull IWorldReader reader, @NotNull BlockPos pos)
     {
         return this.isBelowBlockTopSolid(reader, pos) && this.canOpen(reader, pos);
     }
@@ -121,22 +124,23 @@ public class VehicleCrateBlock extends RotatedObjectBlock
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult result)
+    @NotNull
+    public ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, BlockRayTraceResult result)
     {
-        if(result.getDirection() == Direction.UP && playerEntity.getItemInHand(hand).getItem() == ModItems.WRENCH.get())
+        if(result.getDirection() == Direction.UP && player.getItemInHand(hand).getItem() == ModItems.WRENCH.get())
         {
-            this.openCrate(world, pos, state, playerEntity);
+            this.openCrate(world, pos, state, player);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.SUCCESS;
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack stack)
+    public void setPlacedBy(@NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity entity, @NotNull ItemStack stack)
     {
-        if(livingEntity instanceof PlayerEntity && ((PlayerEntity) livingEntity).isCreative())
+        if(entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative())
         {
-            this.openCrate(world, pos, state, livingEntity);
+            this.openCrate(world, pos, state, entity);
         }
     }
 
@@ -187,14 +191,15 @@ public class VehicleCrateBlock extends RotatedObjectBlock
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state)
+    @NotNull
+    public BlockRenderType getRenderShape(@NotNull BlockState state)
     {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag advanced)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader reader, @NotNull List<ITextComponent> list, @NotNull ITooltipFlag advanced)
     {
         ITextComponent vehicleName = EntityType.PIG.getDescription();
         CompoundNBT tagCompound = stack.getTag();

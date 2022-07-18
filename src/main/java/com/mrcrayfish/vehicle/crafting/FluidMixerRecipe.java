@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -89,7 +90,7 @@ public class FluidMixerRecipe implements IRecipe<FluidMixerTileEntity>
     }
 
     @Override
-    public boolean matches(FluidMixerTileEntity fluidMixer, World worldIn)
+    public boolean matches(FluidMixerTileEntity fluidMixer, @NotNull World worldIn)
     {
         if(fluidMixer.getEnderSapTank().isEmpty() || fluidMixer.getBlazeTank().isEmpty())
             return false;
@@ -109,7 +110,7 @@ public class FluidMixerRecipe implements IRecipe<FluidMixerTileEntity>
     }
 
     @Override
-    public ItemStack assemble(FluidMixerTileEntity inv)
+    public @NotNull ItemStack assemble(@NotNull FluidMixerTileEntity inv)
     {
         return ItemStack.EMPTY;
     }
@@ -121,25 +122,25 @@ public class FluidMixerRecipe implements IRecipe<FluidMixerTileEntity>
     }
 
     @Override
-    public ItemStack getResultItem()
+    public @NotNull ItemStack getResultItem()
     {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public ResourceLocation getId()
+    public @NotNull ResourceLocation getId()
     {
         return this.id;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
+    public @NotNull IRecipeSerializer<?> getSerializer()
     {
         return ModRecipeSerializers.FLUID_MIXER.get();
     }
 
     @Override
-    public IRecipeType<?> getType()
+    public @NotNull IRecipeType<?> getType()
     {
         return RecipeType.FLUID_MIXER;
     }

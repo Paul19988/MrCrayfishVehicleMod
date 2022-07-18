@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -31,7 +32,7 @@ public class CopyFluidTanks extends LootFunction
     }
 
     @Override
-    protected ItemStack run(ItemStack stack, LootContext context)
+    protected @NotNull ItemStack run(@NotNull ItemStack stack, LootContext context)
     {
         BlockState state = context.getParamOrNull(LootParameters.BLOCK_STATE);
         if(state != null && stack.getItem() == state.getBlock().asItem())
@@ -77,7 +78,7 @@ public class CopyFluidTanks extends LootFunction
     }
 
     @Override
-    public LootFunctionType getType()
+    public @NotNull LootFunctionType getType()
     {
         return ModLootFunctions.COPY_FLUID_TANKS;
     }
@@ -91,12 +92,12 @@ public class CopyFluidTanks extends LootFunction
     {
         private Builder() {}
 
-        protected CopyFluidTanks.Builder getThis()
+        protected CopyFluidTanks.@NotNull Builder getThis()
         {
             return this;
         }
 
-        public ILootFunction build()
+        public @NotNull ILootFunction build()
         {
             return new CopyFluidTanks(this.getConditions());
         }
@@ -105,7 +106,7 @@ public class CopyFluidTanks extends LootFunction
     public static class Serializer extends LootFunction.Serializer<CopyFluidTanks>
     {
         @Override
-        public CopyFluidTanks deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn)
+        public @NotNull CopyFluidTanks deserialize(@NotNull JsonObject object, @NotNull JsonDeserializationContext deserializationContext, ILootCondition @NotNull [] conditionsIn)
         {
             return new CopyFluidTanks(conditionsIn);
         }

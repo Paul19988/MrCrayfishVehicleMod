@@ -9,10 +9,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
  */
+@SuppressWarnings("deprecation")
 public class TrafficConeBlock extends ObjectBlock
 {
     private static final VoxelShape COLLISION_SHAPE = Block.box(2, 0, 2, 14, 18, 14);
@@ -24,13 +26,15 @@ public class TrafficConeBlock extends ObjectBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    @NotNull
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context)
     {
         return SELECTION_SHAPE;
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    @NotNull
+    public VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context)
     {
         return COLLISION_SHAPE;
     }

@@ -2,8 +2,6 @@ package com.mrcrayfish.vehicle.util;
 
 import net.minecraft.util.math.vector.Vector3f;
 
-import java.util.Arrays;
-
 /**
  * Author: MrCrayfish
  */
@@ -12,6 +10,8 @@ public enum Axis
     X(Vector3f.XP, "x"),
     Y(Vector3f.YP, "y"),
     Z(Vector3f.ZP, "z");
+
+    public static final Axis[] VALUES = values();
 
     private final Vector3f axis;
     private final String key;
@@ -34,6 +34,14 @@ public enum Axis
 
     public static Axis fromKey(String key)
     {
-        return Arrays.stream(values()).filter(axis -> axis.key.equals(key)).findFirst().orElse(Axis.X);
+        for(Axis axis : VALUES)
+        {
+            if(axis.key.equals(key))
+            {
+                return axis;
+            }
+        }
+
+        return X;
     }
 }

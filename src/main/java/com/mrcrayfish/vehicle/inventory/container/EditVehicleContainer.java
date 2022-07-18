@@ -11,6 +11,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -31,7 +32,7 @@ public class EditVehicleContainer extends Container
         this.addSlot(new Slot(EditVehicleContainer.this.vehicleInventory, 0, 8, 17)
         {
             @Override
-            public boolean mayPlace(ItemStack stack)
+            public boolean mayPlace(@NotNull ItemStack stack)
             {
                 return vehicle.getEngineType() != EngineType.NONE && stack.getItem() instanceof EngineItem && ((EngineItem) stack.getItem()).getEngineType() == vehicle.getEngineType();
             }
@@ -46,7 +47,7 @@ public class EditVehicleContainer extends Container
         this.addSlot(new Slot(EditVehicleContainer.this.vehicleInventory, 1, 8, 35)
         {
             @Override
-            public boolean mayPlace(ItemStack stack)
+            public boolean mayPlace(@NotNull ItemStack stack)
             {
                 return vehicle.canChangeWheels() && stack.getItem() instanceof WheelItem;
             }
@@ -83,13 +84,13 @@ public class EditVehicleContainer extends Container
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(@NotNull PlayerEntity player)
     {
         return vehicleInventory.stillValid(player) && vehicle.isAlive() && vehicle.distanceTo(player) < 8.0F;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public @NotNull ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index)
     {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -132,7 +133,7 @@ public class EditVehicleContainer extends Container
     }
 
     @Override
-    public void removed(PlayerEntity player)
+    public void removed(@NotNull PlayerEntity player)
     {
         super.removed(player);
         vehicleInventory.stopOpen(player);

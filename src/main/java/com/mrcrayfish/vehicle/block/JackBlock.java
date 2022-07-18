@@ -17,12 +17,14 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 /**
  * Author: MrCrayfish
  */
+@SuppressWarnings("deprecation")
 public class JackBlock extends RotatedObjectBlock
 {
     public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
@@ -36,7 +38,7 @@ public class JackBlock extends RotatedObjectBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context)
     {
         TileEntity tileEntity = worldIn.getBlockEntity(pos);
         if(tileEntity instanceof JackTileEntity)
@@ -61,13 +63,14 @@ public class JackBlock extends RotatedObjectBlock
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state)
+    @NotNull
+    public BlockRenderType getRenderShape(@NotNull BlockState state)
     {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.@NotNull Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
         builder.add(ENABLED);
@@ -75,7 +78,7 @@ public class JackBlock extends RotatedObjectBlock
 
     // Prevents the tile entity from being removed if the replacement block is the same
     @Override
-    public void onRemove(BlockState state, World world, BlockPos pos, BlockState replaceState, boolean what)
+    public void onRemove(BlockState state, @NotNull World world, @NotNull BlockPos pos, BlockState replaceState, boolean what)
     {
         if(!state.is(replaceState.getBlock()))
         {

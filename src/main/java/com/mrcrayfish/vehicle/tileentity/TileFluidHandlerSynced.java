@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -63,7 +64,7 @@ public class TileFluidHandlerSynced extends TileFluidHandler
     }
 
     @Override
-    public CompoundNBT getUpdateTag()
+    public @NotNull CompoundNBT getUpdateTag()
     {
         return this.save(new CompoundNBT());
     }

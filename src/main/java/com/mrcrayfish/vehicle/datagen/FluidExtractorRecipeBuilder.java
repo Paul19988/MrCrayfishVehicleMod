@@ -7,6 +7,7 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -65,13 +66,13 @@ public class FluidExtractorRecipeBuilder
         }
 
         @Override
-        public ResourceLocation getId()
+        public @NotNull ResourceLocation getId()
         {
             return this.id;
         }
 
         @Override
-        public IRecipeSerializer<?> getType()
+        public @NotNull IRecipeSerializer<?> getType()
         {
             return this.serializer;
         }

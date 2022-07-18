@@ -11,6 +11,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -29,7 +30,7 @@ public class WorkstationContainer extends Container
         this.addSlot(new Slot(workstationTileEntity, 0, 173, 30)
         {
             @Override
-            public boolean mayPlace(ItemStack stack)
+            public boolean mayPlace(@NotNull ItemStack stack)
             {
                 return stack.getItem() instanceof DyeItem;
             }
@@ -44,7 +45,7 @@ public class WorkstationContainer extends Container
         this.addSlot(new Slot(workstationTileEntity, 1, 193, 30)
         {
             @Override
-            public boolean mayPlace(ItemStack stack)
+            public boolean mayPlace(@NotNull ItemStack stack)
             {
                 return stack.getItem() instanceof EngineItem;
             }
@@ -59,7 +60,7 @@ public class WorkstationContainer extends Container
         this.addSlot(new Slot(workstationTileEntity, 2, 213, 30)
         {
             @Override
-            public boolean mayPlace(ItemStack stack)
+            public boolean mayPlace(@NotNull ItemStack stack)
             {
                 return stack.getItem() instanceof WheelItem;
             }
@@ -86,13 +87,13 @@ public class WorkstationContainer extends Container
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn)
+    public boolean stillValid(@NotNull PlayerEntity playerIn)
     {
         return true;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public @NotNull ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index)
     {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

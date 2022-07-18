@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -61,6 +62,7 @@ public abstract class AbstractToolbarScreen extends Screen
         int startX = (this.width - dimensions.getLeft()) / 2;
         int startY = (this.height - dimensions.getRight()) - dimensions.getRight() / 2;
         int offset = 0;
+        //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < widgets.size(); i++)
         {
             Widget widget = widgets.get(i);
@@ -80,7 +82,7 @@ public abstract class AbstractToolbarScreen extends Screen
     protected abstract void loadWidgets(List<Widget> widgets);
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         this.fillGradient(matrixStack, 0, this.height / 2, this.width, this.height, 0x00000000, 0xAA000000);
 

@@ -143,7 +143,7 @@ public class FuelingHandler
     public void onModelRenderPost(PlayerModelEvent.Render.Post event)
     {
         PlayerEntity player = event.getPlayer();
-        if(!SyncedPlayerData.instance().get(player, ModDataKeys.GAS_PUMP).isPresent())
+        if(SyncedPlayerData.instance().get(player, ModDataKeys.GAS_PUMP).isEmpty())
             return;
 
         MatrixStack matrixStack = event.getMatrixStack();

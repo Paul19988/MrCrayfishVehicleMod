@@ -47,6 +47,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -237,7 +238,6 @@ public class WorkstationScreen extends ContainerScreen<WorkstationContainer>
         return result;
     }
 
-    @SuppressWarnings({"unchecked"})
     private void loadVehicle(int index)
     {
         prevCachedVehicle = cachedVehicle;
@@ -248,7 +248,7 @@ public class WorkstationScreen extends ContainerScreen<WorkstationContainer>
         if(renderer instanceof AbstractLandVehicleRenderer<?>)
         {
             ((AbstractLandVehicleRenderer<?>) renderer).setEngineStack(ItemStack.EMPTY);
-            ((AbstractLandVehicleRenderer<?>) renderer).setWheelStack(ItemStack.EMPTY);
+            renderer.setWheelStack(ItemStack.EMPTY);
         }
 
         this.materials.clear();
@@ -271,7 +271,7 @@ public class WorkstationScreen extends ContainerScreen<WorkstationContainer>
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -324,7 +324,7 @@ public class WorkstationScreen extends ContainerScreen<WorkstationContainer>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(@NotNull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
         /* Fixes partial ticks to use percentage from 0 to 1 */
         partialTicks = this.minecraft.getFrameTime();
@@ -473,7 +473,7 @@ public class WorkstationScreen extends ContainerScreen<WorkstationContainer>
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
+    protected void renderLabels(@NotNull MatrixStack matrixStack, int mouseX, int mouseY)
     {
         this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
         this.font.draw(matrixStack, this.playerInventory.getDisplayName().getString(), this.inventoryLabelX, this.inventoryLabelY, 4210752);

@@ -30,6 +30,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -195,7 +196,7 @@ public class VehicleCrateTileEntity extends TileEntitySynced implements ITickabl
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound)
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT compound)
     {
         super.load(state, compound);
         if(compound.contains("Vehicle", Constants.NBT.TAG_STRING))
@@ -235,7 +236,7 @@ public class VehicleCrateTileEntity extends TileEntitySynced implements ITickabl
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
+    public @NotNull CompoundNBT save(@NotNull CompoundNBT compound)
     {
         if(this.entityId != null)
         {

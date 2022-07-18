@@ -30,6 +30,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,10 +69,10 @@ public class OpenModel implements IModelGeometry<OpenModel>
     public static class Loader implements IModelLoader<OpenModel>
     {
         @Override
-        public void onResourceManagerReload(IResourceManager manager) {}
+        public void onResourceManagerReload(@NotNull IResourceManager manager) {}
 
         @Override
-        public OpenModel read(JsonDeserializationContext context, JsonObject object)
+        public @NotNull OpenModel read(@NotNull JsonDeserializationContext context, @NotNull JsonObject object)
         {
             return new OpenModel(Deserializer.INSTANCE.deserialize(object, BlockModel.class, context));
         }
@@ -92,7 +93,7 @@ public class OpenModel implements IModelGeometry<OpenModel>
          * Reads the bl
          */
         @Override
-        protected List<BlockPart> getElements(JsonDeserializationContext context, JsonObject object)
+        protected @NotNull List<BlockPart> getElements(@NotNull JsonDeserializationContext context, @NotNull JsonObject object)
         {
             try
             {

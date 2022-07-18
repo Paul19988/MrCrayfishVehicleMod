@@ -52,6 +52,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -127,7 +128,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     }
 
     @Override
-    public void onSyncedDataUpdated(DataParameter<?> key)
+    public void onSyncedDataUpdated(@NotNull DataParameter<?> key)
     {
         super.onSyncedDataUpdated(key);
         // Yeah pretty cool java stuff
@@ -140,10 +141,10 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     /* Overridden to prevent odd step sound when driving vehicles. Ain't no subclasses getting
      * the ability to override this. */
     @Override
-    protected final void playStepSound(BlockPos pos, BlockState blockIn) {}
+    protected final void playStepSound(@NotNull BlockPos pos, @NotNull BlockState blockIn) {}
 
     @Override
-    public AxisAlignedBB getBoundingBoxForCulling()
+    public @NotNull AxisAlignedBB getBoundingBoxForCulling()
     {
         return this.getBoundingBox().inflate(1);
     }
@@ -155,7 +156,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     }
 
     @Override
-    public ActionResultType interact(PlayerEntity player, Hand hand)
+    public @NotNull ActionResultType interact(@NotNull PlayerEntity player, @NotNull Hand hand)
     {
         if(!this.level.isClientSide() && !player.isCrouching())
         {
@@ -421,7 +422,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     protected abstract void onUpdateVehicle();
 
     @Override
-    public boolean hurt(DamageSource source, float amount)
+    public boolean hurt(@NotNull DamageSource source, float amount)
     {
         if(this.isInvulnerableTo(source))
         {
@@ -530,13 +531,13 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
         this.lerpX = x;
         this.lerpY = y;
         this.lerpZ = z;
-        this.lerpYaw = (double) yaw;
-        this.lerpPitch = (double) pitch;
+        this.lerpYaw = yaw;
+        this.lerpPitch = pitch;
         this.lerpSteps = 10;
     }
 
     @Override
-    protected boolean canRide(Entity entityIn)
+    protected boolean canRide(@NotNull Entity entityIn)
     {
         return true;
     }
@@ -772,7 +773,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket()
+    public @NotNull IPacket<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -808,7 +809,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     }
 
     @Override
-    protected void removePassenger(Entity passenger)
+    protected void removePassenger(@NotNull Entity passenger)
     {
         super.removePassenger(passenger);
         if(!this.level.isClientSide() && passenger instanceof PlayerEntity)
@@ -819,7 +820,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     }
 
     @Override
-    public void addPassenger(Entity passenger)
+    public void addPassenger(@NotNull Entity passenger)
     {
         super.addPassenger(passenger);
         if(this.isControlledByLocalInstance() && this.lerpSteps > 0)
@@ -843,13 +844,13 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     }
 
     @Override
-    protected boolean canAddPassenger(Entity passenger)
+    protected boolean canAddPassenger(@NotNull Entity passenger)
     {
         return this.getPassengers().size() < this.getProperties().getSeats().size();
     }
 
     @Override
-    public void positionRider(Entity passenger)
+    public void positionRider(@NotNull Entity passenger)
     {
         super.positionRider(passenger);
         this.updatePassengerPosition(passenger);
@@ -912,7 +913,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onPassengerTurned(Entity passenger)
+    public void onPassengerTurned(@NotNull Entity passenger)
     {
         this.clampYaw(passenger);
         if(VehicleHelper.canFollowVehicleOrientation(passenger))

@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -38,13 +39,13 @@ public class EntityVehicleRenderer<T extends VehicleEntity> extends EntityRender
     }
 
     @Override
-    public ResourceLocation getTextureLocation(T entity)
+    public @NotNull ResourceLocation getTextureLocation(@NotNull T entity)
     {
         return null;
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light)
+    public void render(T entity, float entityYaw, float partialTicks, @NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer renderTypeBuffer, int light)
     {
         if(!entity.isAlive())
             return;

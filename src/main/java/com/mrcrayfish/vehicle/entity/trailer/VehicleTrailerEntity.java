@@ -14,6 +14,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -38,7 +39,7 @@ public class VehicleTrailerEntity extends TrailerEntity
     }
 
     @Override
-    public void positionRider(Entity passenger)
+    public void positionRider(@NotNull Entity passenger)
     {
         if(passenger instanceof VehicleEntity)
         {
@@ -50,7 +51,7 @@ public class VehicleTrailerEntity extends TrailerEntity
     }
 
     @Override
-    protected boolean canAddPassenger(Entity passenger)
+    protected boolean canAddPassenger(@NotNull Entity passenger)
     {
         return passenger instanceof VehicleEntity && this.getPassengers().size() == 0;
     }

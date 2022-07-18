@@ -5,8 +5,6 @@ import com.mrcrayfish.vehicle.util.ExtraJSONUtils;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.vector.Vector3d;
 
-import java.util.stream.Stream;
-
 /**
  * Author: MrCrayfish
  */
@@ -85,7 +83,9 @@ public class CameraProperties
         LOCKED("locked"),
         SMOOTH("smooth");
 
-        private String id;
+        public static final Type[] VALUES = values();
+
+        private final String id;
 
         Type(String id)
         {
@@ -99,10 +99,15 @@ public class CameraProperties
 
         public static Type fromId(String id)
         {
-            return Stream.of(values())
-                    .filter(type -> type.id.equals(id))
-                    .findFirst()
-                    .orElse(LOCKED);
+            for(Type type : VALUES)
+            {
+                if(type.id.equals(id))
+                {
+                    return type;
+                }
+            }
+
+            return LOCKED;
         }
     }
 

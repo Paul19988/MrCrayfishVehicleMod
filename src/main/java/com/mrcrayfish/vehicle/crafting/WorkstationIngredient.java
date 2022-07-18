@@ -11,6 +11,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +45,7 @@ public class WorkstationIngredient extends Ingredient
     }
 
     @Override
-    public IIngredientSerializer<? extends Ingredient> getSerializer()
+    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer()
     {
         return Serializer.INSTANCE;
     }
@@ -57,7 +58,7 @@ public class WorkstationIngredient extends Ingredient
     }
 
     @Override
-    public JsonElement toJson()
+    public @NotNull JsonElement toJson()
     {
         JsonObject object = this.itemList.serialize();
         object.addProperty("count", this.count);
@@ -89,7 +90,7 @@ public class WorkstationIngredient extends Ingredient
         public static final WorkstationIngredient.Serializer INSTANCE = new WorkstationIngredient.Serializer();
 
         @Override
-        public WorkstationIngredient parse(PacketBuffer buffer)
+        public @NotNull WorkstationIngredient parse(PacketBuffer buffer)
         {
             int itemCount = buffer.readVarInt();
             int count = buffer.readVarInt();
@@ -99,7 +100,7 @@ public class WorkstationIngredient extends Ingredient
         }
 
         @Override
-        public WorkstationIngredient parse(JsonObject object)
+        public @NotNull WorkstationIngredient parse(@NotNull JsonObject object)
         {
             return WorkstationIngredient.fromJson(object);
         }
@@ -132,13 +133,13 @@ public class WorkstationIngredient extends Ingredient
         }
 
         @Override
-        public Collection<ItemStack> getItems()
+        public @NotNull Collection<ItemStack> getItems()
         {
             return Collections.emptyList();
         }
 
         @Override
-        public JsonObject serialize()
+        public @NotNull JsonObject serialize()
         {
             JsonObject object = new JsonObject();
             object.addProperty("item", this.id.toString());

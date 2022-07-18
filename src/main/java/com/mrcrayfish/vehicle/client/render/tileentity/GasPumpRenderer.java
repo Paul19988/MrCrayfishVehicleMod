@@ -30,6 +30,7 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector4f;
 import org.apache.commons.lang3.tuple.Triple;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -44,7 +45,7 @@ public class GasPumpRenderer extends TileEntityRenderer<GasPumpTileEntity>
     }
 
     @Override
-    public void render(GasPumpTileEntity gasPump, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, int overlay)
+    public void render(GasPumpTileEntity gasPump, float partialTicks, @NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer renderTypeBuffer, int light, int overlay)
     {
         BlockState state = gasPump.getBlockState();
         if(state.getBlock() != ModBlocks.GAS_PUMP.get())

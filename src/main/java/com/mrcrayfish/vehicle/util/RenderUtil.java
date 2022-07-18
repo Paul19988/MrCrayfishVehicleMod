@@ -4,6 +4,10 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.blaze3d.vertex.MatrixApplyingVertexBuilder;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.block.Block;
+import net.minecraft.block.BreakableBlock;
+import net.minecraft.block.StainedGlassPaneBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -18,6 +22,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
@@ -26,6 +31,8 @@ import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -38,6 +45,8 @@ import java.util.stream.Collectors;
  */
 public class RenderUtil
 {
+    private static final Minecraft MINECRAFT = Minecraft.getInstance();
+
     /**
      * Draws a textured modal rectangle with more precision than GuiScreen's methods. This will only
      * work correctly if the bound texture is 256x256.
@@ -76,10 +85,10 @@ public class RenderUtil
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.vertex((double)right, (double)top, 0).color(greenEnd, blueEnd, alphaEnd, redEnd).endVertex();
-        bufferbuilder.vertex((double)left, (double)top, 0).color(greenStart, blueStart, alphaStart, redStart).endVertex();
-        bufferbuilder.vertex((double)left, (double)bottom, 0).color(greenStart, blueStart, alphaStart, redStart).endVertex();
-        bufferbuilder.vertex((double)right, (double)bottom, 0).color(greenEnd, blueEnd, alphaEnd, redEnd).endVertex();
+        bufferbuilder.vertex(right, top, 0).color(greenEnd, blueEnd, alphaEnd, redEnd).endVertex();
+        bufferbuilder.vertex(left, top, 0).color(greenStart, blueStart, alphaStart, redStart).endVertex();
+        bufferbuilder.vertex(left, bottom, 0).color(greenStart, blueStart, alphaStart, redStart).endVertex();
+        bufferbuilder.vertex(right, bottom, 0).color(greenEnd, blueEnd, alphaEnd, redEnd).endVertex();
         tessellator.end();
         RenderSystem.shadeModel(7424);
         RenderSystem.disableBlend();
@@ -96,13 +105,13 @@ public class RenderUtil
 
     public static IBakedModel getModel(ItemStack stack)
     {
-        return Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(stack);
+        return MINECRAFT.getItemRenderer().getItemModelShaper().getItemModel(stack);
     }
 
     public static void renderColoredModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, boolean leftHanded, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int color, int lightTexture, int overlayTexture)
     {
         matrixStack.pushPose();
-        net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
+        ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
         matrixStack.translate(-0.5, -0.5, -0.5);
         if(!model.isCustomRenderer())
         {
@@ -115,13 +124,12 @@ public class RenderUtil
     public static void renderDamagedVehicleModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, boolean leftHanded, MatrixStack matrixStack, int stage, int color, int lightTexture, int overlayTexture)
     {
         matrixStack.pushPose();
-        net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
+        ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
         matrixStack.translate(-0.5, -0.5, -0.5);
         if(!model.isCustomRenderer())
         {
-            Minecraft mc = Minecraft.getInstance();
             MatrixStack.Entry entry = matrixStack.last();
-            IVertexBuilder vertexBuilder = new MatrixApplyingVertexBuilder(mc.renderBuffers().crumblingBufferSource().getBuffer(ModelBakery.DESTROY_TYPES.get(stage)), entry.pose(), entry.normal());
+            IVertexBuilder vertexBuilder = new MatrixApplyingVertexBuilder(MINECRAFT.renderBuffers().crumblingBufferSource().getBuffer(ModelBakery.DESTROY_TYPES.get(stage)), entry.pose(), entry.normal());
             renderModel(model, ItemStack.EMPTY, color, lightTexture, overlayTexture, matrixStack, vertexBuilder);
         }
         matrixStack.popPose();
@@ -139,17 +147,53 @@ public class RenderUtil
                 model = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:trident#inventory"));
             }
 
-            model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
+            model = ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
             matrixStack.translate(-0.5, -0.5, -0.5);
             if(!model.isCustomRenderer() && (stack.getItem() != Items.TRIDENT || tridentFlag))
             {
-                RenderType renderType = RenderTypeLookup.getRenderType(stack, false); //TODO test what this flag does
+                boolean fabulous = true;
+                if (transformType != ItemCameraTransforms.TransformType.GUI && !transformType.firstPerson() && stack.getItem() instanceof BlockItem)
+                {
+                    Block block = ((BlockItem)stack.getItem()).getBlock();
+                    fabulous = !(block instanceof BreakableBlock) && !(block instanceof StainedGlassPaneBlock);
+                }
+
+                if(model.isLayered())
+                {
+                    for(Pair<IBakedModel,RenderType> layerModel : model.getLayerModels(stack, fabulous))
+                    {
+                        IBakedModel layer = layerModel.getFirst();
+                        RenderType rendertype = layerModel.getSecond();
+                        ForgeHooksClient.setRenderLayer(rendertype);
+                        IVertexBuilder ivertexbuilder;
+                        if (fabulous)
+                        {
+                            ivertexbuilder = ItemRenderer.getFoilBufferDirect(renderTypeBuffer, rendertype, true, stack.hasFoil());
+                        } else {
+                            ivertexbuilder = ItemRenderer.getFoilBuffer(renderTypeBuffer, rendertype, true, stack.hasFoil());
+                        }
+                        renderModel(layer, stack, -1, lightTexture, overlayTexture, matrixStack, ivertexbuilder);
+                    }
+                    ForgeHooksClient.setRenderLayer(null);
+                }
+
+                RenderType renderType = RenderTypeLookup.getRenderType(stack, fabulous);
                 if(isGui && Objects.equals(renderType, Atlases.translucentCullBlockSheet()))
                 {
                     renderType = Atlases.translucentCullBlockSheet();
                 }
-                IVertexBuilder vertexBuilder = ItemRenderer.getFoilBuffer(renderTypeBuffer, renderType, true, stack.hasFoil());
-                renderModel(model, stack, -1, lightTexture, overlayTexture, matrixStack, vertexBuilder);
+
+                IVertexBuilder buffer;
+                if(fabulous)
+                {
+                    buffer = ItemRenderer.getFoilBufferDirect(renderTypeBuffer, renderType, true, stack.hasFoil());
+                }
+                else
+                {
+                    buffer = ItemRenderer.getFoilBuffer(renderTypeBuffer, renderType, true, stack.hasFoil());
+                }
+
+                renderModel(model, stack, -1, lightTexture, overlayTexture, matrixStack, buffer);
             }
             else
             {
@@ -166,10 +210,10 @@ public class RenderUtil
         for(Direction direction : Direction.values())
         {
             random.setSeed(42L);
-            renderQuads(matrixStack, vertexBuilder, model.getQuads(null, direction, random), stack, color, lightTexture, overlayTexture);
+            renderQuads(matrixStack, vertexBuilder, model.getQuads(null, direction, random, EmptyModelData.INSTANCE), stack, color, lightTexture, overlayTexture);
         }
         random.setSeed(42L);
-        renderQuads(matrixStack, vertexBuilder, model.getQuads(null, null, random), stack, color, lightTexture, overlayTexture);
+        renderQuads(matrixStack, vertexBuilder, model.getQuads(null, null, random, EmptyModelData.INSTANCE), stack, color, lightTexture, overlayTexture);
     }
 
     private static void renderQuads(MatrixStack matrixStack, IVertexBuilder vertexBuilder, List<BakedQuad> quads, ItemStack stack, int color, int lightTexture, int overlayTexture)
@@ -183,7 +227,7 @@ public class RenderUtil
             {
                 if(useItemColor)
                 {
-                    tintColor = Minecraft.getInstance().getItemColors().getColor(stack, quad.getTintIndex());
+                    tintColor = MINECRAFT.getItemColors().getColor(stack, quad.getTintIndex());
                 }
                 else
                 {

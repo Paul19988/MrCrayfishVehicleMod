@@ -70,6 +70,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -222,7 +223,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements IInv
 
         JerryCanItem jerryCan = (JerryCanItem) stack.getItem();
         Optional<IFluidHandlerItem> optional = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).resolve();
-        if(!optional.isPresent())
+        if(optional.isEmpty())
             return;
 
         IFluidHandlerItem handler = optional.get();
@@ -237,7 +238,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements IInv
     }
 
     @Override
-    public ActionResultType interact(PlayerEntity player, Hand hand)
+    public @NotNull ActionResultType interact(PlayerEntity player, @NotNull Hand hand)
     {
         ItemStack stack = player.getItemInHand(hand);
         if(!level.isClientSide)
@@ -802,7 +803,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements IInv
     }
 
     @Override
-    public void onSyncedDataUpdated(DataParameter<?> key)
+    public void onSyncedDataUpdated(@NotNull DataParameter<?> key)
     {
         super.onSyncedDataUpdated(key);
         if(level.isClientSide)
@@ -920,7 +921,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements IInv
     }
 
     @Override
-    public void containerChanged(IInventory inventory)
+    public void containerChanged(@NotNull IInventory inventory)
     {
         this.updateSlots();
     }
@@ -1034,7 +1035,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements IInv
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public @NotNull ITextComponent getDisplayName()
     {
         return this.getName();
     }
@@ -1046,7 +1047,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements IInv
 
     @Nullable
     @Override
-    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity)
+    public Container createMenu(int windowId, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity)
     {
         return new EditVehicleContainer(windowId, this.getVehicleInventory(), this, playerEntity, playerInventory);
     }

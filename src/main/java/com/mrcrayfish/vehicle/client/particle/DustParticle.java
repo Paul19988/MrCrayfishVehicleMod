@@ -9,6 +9,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -49,7 +50,7 @@ public class DustParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public IParticleRenderType getRenderType()
+    public @NotNull IParticleRenderType getRenderType()
     {
         return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
@@ -66,7 +67,7 @@ public class DustParticle extends SpriteTexturedParticle
 
         @Nullable
         @Override
-        public Particle createParticle(BasicParticleType type, ClientWorld world, double x, double y, double z, double xd, double yd, double zd)
+        public Particle createParticle(@NotNull BasicParticleType type, @NotNull ClientWorld world, double x, double y, double z, double xd, double yd, double zd)
         {
             DustParticle particle = new DustParticle(world, x, y, z, xd, yd, zd);
             particle.pickSprite(this.spriteSet);

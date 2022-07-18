@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -24,7 +25,7 @@ public class FluidExtractorRenderer extends TileEntityRenderer<FluidExtractorTil
     }
 
     @Override
-    public void render(FluidExtractorTileEntity fluidExtractor, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, int p_225616_6_)
+    public void render(FluidExtractorTileEntity fluidExtractor, float partialTicks, @NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer renderTypeBuffer, int light, int p_225616_6_)
     {
         FluidTank tank = fluidExtractor.getFluidTank();
         if(tank.isEmpty())

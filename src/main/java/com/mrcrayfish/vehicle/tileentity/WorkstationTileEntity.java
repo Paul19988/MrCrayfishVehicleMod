@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -36,34 +37,34 @@ public class WorkstationTileEntity extends TileEntitySynced implements IStorageB
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound)
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT compound)
     {
         super.load(state, compound);
         ItemStackHelper.loadAllItems(compound, this.inventory);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
+    public @NotNull CompoundNBT save(@NotNull CompoundNBT compound)
     {
         ItemStackHelper.saveAllItems(compound, this.inventory);
         return super.save(compound);
     }
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack)
+    public boolean canPlaceItem(int index, @NotNull ItemStack stack)
     {
         return index != 0 || (stack.getItem() instanceof DyeItem && this.inventory.get(index).getCount() < 1);
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public @NotNull ITextComponent getDisplayName()
     {
         return new TranslationTextComponent("container.vehicle.workstation");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity)
+    public Container createMenu(int windowId, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity)
     {
         return new WorkstationContainer(windowId, playerInventory, this);
     }

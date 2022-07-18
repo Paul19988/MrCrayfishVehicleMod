@@ -6,6 +6,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -23,7 +24,7 @@ public class TileEntitySynced extends TileEntity
     }
 
     @Override
-    public CompoundNBT getUpdateTag()
+    public @NotNull CompoundNBT getUpdateTag()
     {
         return this.save(new CompoundNBT());
     }

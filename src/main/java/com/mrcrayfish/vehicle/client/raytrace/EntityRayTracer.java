@@ -466,7 +466,7 @@ public class EntityRayTracer
             {
                 /* If the hit entity is a raytraceable entity, and if the player's eyes are inside what MC
                  * thinks the player is looking at, then process the hit regardless of what MC thinks */
-                boolean bypass = this.entityRayTraceData.keySet().contains(closestRayTraceResult.getEntity().getType());
+                boolean bypass = this.entityRayTraceData.containsKey(closestRayTraceResult.getEntity().getType());
                 RayTraceResult result = Minecraft.getInstance().hitResult;
                 if(bypass && result != null && result.getType() != RayTraceResult.Type.MISS)
                 {

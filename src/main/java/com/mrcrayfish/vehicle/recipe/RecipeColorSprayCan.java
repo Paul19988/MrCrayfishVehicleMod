@@ -11,6 +11,7 @@ import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class RecipeColorSprayCan extends SpecialRecipe
     }
 
     @Override
-    public boolean matches(CraftingInventory inventory, World worldIn)
+    public boolean matches(CraftingInventory inventory, @NotNull World worldIn)
     {
         ItemStack dyeableItem = ItemStack.EMPTY;
         List<ItemStack> dyes = Lists.newArrayList();
@@ -58,7 +59,7 @@ public class RecipeColorSprayCan extends SpecialRecipe
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inventory)
+    public @NotNull ItemStack assemble(CraftingInventory inventory)
     {
         ItemStack dyeableItem = ItemStack.EMPTY;
         List<DyeItem> dyes = Lists.newArrayList();
@@ -97,7 +98,7 @@ public class RecipeColorSprayCan extends SpecialRecipe
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
+    public @NotNull IRecipeSerializer<?> getSerializer()
     {
         return ModRecipeSerializers.COLOR_SPRAY_CAN.get();
     }

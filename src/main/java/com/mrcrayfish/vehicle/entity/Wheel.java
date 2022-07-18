@@ -166,7 +166,7 @@ public class Wheel
     {
         LEFT(-1), RIGHT(1), NONE(1);
 
-        int offset;
+        final int offset;
 
         Side(int offset)
         {

@@ -11,6 +11,7 @@ import com.mrcrayfish.vehicle.entity.properties.PoweredProperties;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
 import com.mrcrayfish.vehicle.entity.vehicle.OffRoaderEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.EntityType;
@@ -53,7 +54,7 @@ public class OffRoaderRenderer extends AbstractLandVehicleRenderer<OffRoaderEnti
     }
 
     @Override
-    public void applyPlayerModel(OffRoaderEntity entity, PlayerEntity player, PlayerModel model, float partialTicks)
+    public void applyPlayerModel(OffRoaderEntity entity, PlayerEntity player, PlayerModel<AbstractClientPlayerEntity> model, float partialTicks)
     {
         int index = entity.getSeatTracker().getSeatIndex(player.getUUID());
         if(index < 2) //Sitting in the front

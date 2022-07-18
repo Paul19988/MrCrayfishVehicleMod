@@ -97,7 +97,7 @@ public class SeatTracker
             List<Seat> seats = properties.getSeats();
             for(int i = 0; i < seats.size(); i++)
             {
-                if(!this.playerSeatMap.values().contains(i))
+                if(!this.playerSeatMap.containsValue(i))
                 {
                     return i;
                 }

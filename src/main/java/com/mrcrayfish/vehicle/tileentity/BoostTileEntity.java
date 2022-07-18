@@ -4,6 +4,7 @@ import com.mrcrayfish.vehicle.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -29,7 +30,7 @@ public class BoostTileEntity extends TileEntitySynced
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound)
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT compound)
     {
         super.load(state, compound);
         if(compound.contains("SpeedMultiplier", Constants.NBT.TAG_FLOAT))
@@ -39,7 +40,7 @@ public class BoostTileEntity extends TileEntitySynced
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
+    public @NotNull CompoundNBT save(CompoundNBT compound)
     {
         compound.putFloat("SpeedMultiplier", this.speedMultiplier);
         return super.save(compound);

@@ -9,6 +9,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -88,13 +89,13 @@ public class WorkstationRecipeBuilder
         }
 
         @Override
-        public ResourceLocation getId()
+        public @NotNull ResourceLocation getId()
         {
             return this.id;
         }
 
         @Override
-        public IRecipeSerializer<?> getType()
+        public @NotNull IRecipeSerializer<?> getType()
         {
             return this.serializer;
         }

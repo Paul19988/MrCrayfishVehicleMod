@@ -10,10 +10,12 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
  */
+@SuppressWarnings("deprecation")
 public abstract class RotatedObjectBlock extends ObjectBlock
 {
     public static final DirectionProperty DIRECTION = HorizontalBlock.FACING;
@@ -25,25 +27,29 @@ public abstract class RotatedObjectBlock extends ObjectBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(@NotNull BlockItemUseContext context)
     {
-        return super.getStateForPlacement(context).setValue(DIRECTION, context.getHorizontalDirection());
+        BlockState state = this.defaultBlockState();
+
+        return state.setValue(DIRECTION, context.getHorizontalDirection());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.@NotNull Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
         builder.add(DIRECTION);
     }
 
     @Override
+    @NotNull
     public BlockState rotate(BlockState state, Rotation rotation)
     {
         return state.setValue(DIRECTION, rotation.rotate(state.getValue(DIRECTION)));
     }
 
     @Override
+    @NotNull
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return state.rotate(mirror.getRotation(state.getValue(DIRECTION)));

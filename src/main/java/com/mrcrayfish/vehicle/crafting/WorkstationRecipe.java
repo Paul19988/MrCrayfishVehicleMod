@@ -12,6 +12,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -40,13 +41,13 @@ public class WorkstationRecipe implements IRecipe<WorkstationTileEntity>
     }
 
     @Override
-    public boolean matches(WorkstationTileEntity inv, World worldIn)
+    public boolean matches(@NotNull WorkstationTileEntity inv, @NotNull World worldIn)
     {
         return false;
     }
 
     @Override
-    public ItemStack assemble(WorkstationTileEntity inv)
+    public @NotNull ItemStack assemble(@NotNull WorkstationTileEntity inv)
     {
         return ItemStack.EMPTY;
     }
@@ -58,25 +59,25 @@ public class WorkstationRecipe implements IRecipe<WorkstationTileEntity>
     }
 
     @Override
-    public ItemStack getResultItem()
+    public @NotNull ItemStack getResultItem()
     {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public ResourceLocation getId()
+    public @NotNull ResourceLocation getId()
     {
         return this.id;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
+    public @NotNull IRecipeSerializer<?> getSerializer()
     {
         return ModRecipeSerializers.WORKSTATION.get();
     }
 
     @Override
-    public IRecipeType<?> getType()
+    public @NotNull IRecipeType<?> getType()
     {
         return RecipeType.WORKSTATION;
     }

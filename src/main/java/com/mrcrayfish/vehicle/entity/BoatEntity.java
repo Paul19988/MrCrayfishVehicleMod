@@ -110,7 +110,7 @@ public abstract class BoatEntity extends PoweredVehicleEntity
                     if(fluidState.is(FluidTags.WATER))
                     {
                         float waterLevel = (float) y + fluidState.getHeight(this.level, pooledMutable);
-                        this.waterLevel = Math.max((double) waterLevel, this.waterLevel);
+                        this.waterLevel = Math.max(waterLevel, this.waterLevel);
                         inWater |= boundingBox.minY < (double) waterLevel;
                     }
                 }

@@ -36,6 +36,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -241,13 +242,13 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
     }
 
     @Override
-    public ItemStack getItem(int index)
+    public @NotNull ItemStack getItem(int index)
     {
         return this.inventory.get(index);
     }
 
     @Override
-    public ItemStack removeItem(int index, int count)
+    public @NotNull ItemStack removeItem(int index, int count)
     {
         ItemStack stack = ItemStackHelper.removeItem(this.inventory, index, count);
         if(!stack.isEmpty())
@@ -258,13 +259,13 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int index)
+    public @NotNull ItemStack removeItemNoUpdate(int index)
     {
         return ItemStackHelper.takeItem(this.inventory, index);
     }
 
     @Override
-    public void setItem(int index, ItemStack stack)
+    public void setItem(int index, @NotNull ItemStack stack)
     {
         this.inventory.set(index, stack);
         if(stack.getCount() > this.getMaxStackSize())
@@ -275,13 +276,13 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(@NotNull PlayerEntity player)
     {
         return this.level.getBlockEntity(this.worldPosition) == this && player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack)
+    public boolean canPlaceItem(int index, @NotNull ItemStack stack)
     {
         if(index == 0)
         {
@@ -366,7 +367,7 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
     }
 
     @Override
-    public ITextComponent getName()
+    public @NotNull ITextComponent getName()
     {
         return this.getDisplayName();
     }
@@ -378,7 +379,7 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public @NotNull ITextComponent getDisplayName()
     {
         return this.hasCustomName() ? new StringTextComponent(this.customName) : new TranslationTextComponent("container.fluid_extractor");
     }
@@ -395,7 +396,7 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
 
     @Nullable
     @Override
-    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity)
+    public Container createMenu(int windowId, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity)
     {
         return new FluidExtractorContainer(windowId, playerInventory, this);
     }

@@ -31,7 +31,7 @@ public interface IDyeable
         compound.putInt("Color", color);
     }
 
-    public static ItemStack dyeStack(ItemStack stack, List<DyeItem> dyes)
+    static ItemStack dyeStack(ItemStack stack, List<DyeItem> dyes)
     {
         ItemStack resultStack = ItemStack.EMPTY;
         int[] combinedColors = new int[3];

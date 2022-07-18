@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.vector.Vector3d;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class LayerHeldVehicle extends LayerRenderer<AbstractClientPlayerEntity, 
 
     @Override
     @SuppressWarnings("unchecked")
-    public void render(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, AbstractClientPlayerEntity player, float v, float v1, float partialTicks, float v3, float v4, float v5)
+    public void render(@NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer renderTypeBuffer, int light, @NotNull AbstractClientPlayerEntity player, float v, float v1, float partialTicks, float v3, float v4, float v5)
     {
         CompoundNBT tagCompound = HeldVehicleDataHandler.getHeldVehicle(player);
         if(!tagCompound.isEmpty())

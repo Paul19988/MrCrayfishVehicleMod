@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -53,7 +54,7 @@ public class StorageInventory extends Inventory
         return this.itemPredicate.test(stack);
     }
 
-    public ListNBT createTag()
+    public @NotNull ListNBT createTag()
     {
         ListNBT tagList = new ListNBT();
         for(int i = 0; i < this.getContainerSize(); i++)
@@ -86,7 +87,7 @@ public class StorageInventory extends Inventory
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(@NotNull PlayerEntity player)
     {
         Entity entity = this.entityRef.get();
         return entity != null && entity.isAlive();

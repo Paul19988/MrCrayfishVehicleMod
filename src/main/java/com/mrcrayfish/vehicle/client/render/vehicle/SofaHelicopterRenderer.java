@@ -10,6 +10,7 @@ import com.mrcrayfish.vehicle.client.render.Axis;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
 import com.mrcrayfish.vehicle.entity.vehicle.SofacopterEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.EntityType;
@@ -53,7 +54,7 @@ public class SofaHelicopterRenderer extends AbstractHelicopterRenderer<Sofacopte
     }
 
     @Override
-    public void applyPlayerModel(SofacopterEntity entity, PlayerEntity player, PlayerModel model, float partialTicks)
+    public void applyPlayerModel(SofacopterEntity entity, PlayerEntity player, PlayerModel<AbstractClientPlayerEntity> model, float partialTicks)
     {
         model.rightArm.xRot = (float) Math.toRadians(-55F);
         model.rightArm.yRot = (float) Math.toRadians(25F);

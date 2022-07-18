@@ -30,6 +30,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import java.util.Map;
 /**
  * Author: MrCrayfish
  */
+@SuppressWarnings("deprecation")
 public class GasPumpBlock extends RotatedObjectBlock
 {
     public static final BooleanProperty TOP = BooleanProperty.create("top");
@@ -74,13 +76,15 @@ public class GasPumpBlock extends RotatedObjectBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context)
+    @NotNull
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader reader, @NotNull BlockPos pos, @NotNull ISelectionContext context)
     {
         return this.getShape(state);
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult result)
+    @NotNull
+    public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult result)
     {
         if(world.isClientSide())
         {
@@ -93,20 +97,20 @@ public class GasPumpBlock extends RotatedObjectBlock
             if(tileEntity instanceof GasPumpTileEntity)
             {
                 GasPumpTileEntity gasPump = (GasPumpTileEntity) tileEntity;
-                if(gasPump.getFuelingEntity() != null && gasPump.getFuelingEntity().getId() == playerEntity.getId())
+                if(gasPump.getFuelingEntity() != null && gasPump.getFuelingEntity().getId() == player.getId())
                 {
                     gasPump.setFuelingEntity(null);
                     world.playSound(null, pos, ModSounds.BLOCK_GAS_PUMP_NOZZLE_PUT_DOWN.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
                 else if(state.getValue(DIRECTION).getClockWise().equals(result.getDirection()))
                 {
-                    gasPump.setFuelingEntity(playerEntity);
+                    gasPump.setFuelingEntity(player);
                     world.playSound(null, pos, ModSounds.BLOCK_GAS_PUMP_NOZZLE_PICK_UP.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
             }
             return ActionResultType.SUCCESS;
         }
-        else if(FluidUtil.interactWithFluidHandler(playerEntity, hand, world, pos, result.getDirection()))
+        else if(FluidUtil.interactWithFluidHandler(player, hand, world, pos, result.getDirection()))
         {
             return ActionResultType.CONSUME;
         }
@@ -114,19 +118,19 @@ public class GasPumpBlock extends RotatedObjectBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader reader, BlockPos pos)
+    public boolean canSurvive(@NotNull BlockState state, IWorldReader reader, @NotNull BlockPos pos)
     {
         return reader.isEmptyBlock(pos) && reader.isEmptyBlock(pos.above());
     }
 
     @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, @NotNull ItemStack stack)
     {
         worldIn.setBlockAndUpdate(pos.above(), state.setValue(TOP, true));
     }
 
     @Override
-    public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player)
+    public void playerWillDestroy(World world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull PlayerEntity player)
     {
         if (!world.isClientSide())
         {
@@ -144,7 +148,8 @@ public class GasPumpBlock extends RotatedObjectBlock
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    @NotNull
+    public List<ItemStack> getDrops(BlockState state, LootContext.@NotNull Builder builder)
     {
         if (state.getValue(TOP))
         {
@@ -163,7 +168,7 @@ public class GasPumpBlock extends RotatedObjectBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.@NotNull Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
         builder.add(TOP);

@@ -5,6 +5,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -17,13 +18,13 @@ public class FuelSlot extends Slot
     }
 
     @Override
-    public boolean mayPlace(ItemStack stack)
+    public boolean mayPlace(@NotNull ItemStack stack)
     {
         return AbstractFurnaceTileEntity.isFuel(stack) || isBucket(stack);
     }
 
     @Override
-    public int getMaxStackSize(ItemStack stack)
+    public int getMaxStackSize(@NotNull ItemStack stack)
     {
         return isBucket(stack) ? 1 : super.getMaxStackSize(stack);
     }

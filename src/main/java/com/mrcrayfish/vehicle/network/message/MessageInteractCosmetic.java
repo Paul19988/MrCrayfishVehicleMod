@@ -38,7 +38,6 @@ public class MessageInteractCosmetic implements IMessage<MessageInteractCosmetic
     }
 
     @Override
-    @SuppressWarnings("ConstantConditions")
     public void handle(MessageInteractCosmetic message, Supplier<NetworkEvent.Context> supplier)
     {
         supplier.get().enqueueWork(() ->

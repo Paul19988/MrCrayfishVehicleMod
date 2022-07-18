@@ -41,7 +41,6 @@ public class MessageInteractKey implements IMessage<MessageInteractKey>
         return new MessageInteractKey(buffer.readInt());
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void handle(MessageInteractKey message, Supplier<NetworkEvent.Context> supplier)
     {

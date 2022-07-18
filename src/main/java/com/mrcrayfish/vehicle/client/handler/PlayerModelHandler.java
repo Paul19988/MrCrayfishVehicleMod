@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
@@ -30,7 +29,6 @@ public class PlayerModelHandler
      * Applies transformations to the player model when riding a vehicle and performing a wheelie
      */
     @SubscribeEvent
-    @SuppressWarnings("unchecked")
     public void onPreRender(PlayerModelEvent.Render.Pre event)
     {
         PlayerEntity player = event.getPlayer();
@@ -46,7 +44,7 @@ public class PlayerModelHandler
     @SuppressWarnings("unchecked")
     private void applyPassengerTransformations(VehicleEntity vehicle, PlayerEntity player, MatrixStack matrixStack, IVertexBuilder builder, float partialTicks)
     {
-        AbstractVehicleRenderer<VehicleEntity> render = (AbstractVehicleRenderer<VehicleEntity>) VehicleRenderRegistry.getRenderer((EntityType<? extends VehicleEntity>) vehicle.getType());
+        AbstractVehicleRenderer<VehicleEntity> render = (AbstractVehicleRenderer<VehicleEntity>) VehicleRenderRegistry.getRenderer(vehicle.getType());
         if(render != null)
         {
             render.applyPlayerRender(vehicle, player, partialTicks, matrixStack, builder);
@@ -122,7 +120,7 @@ public class PlayerModelHandler
             return;
 
         VehicleEntity vehicle = (VehicleEntity) ridingEntity;
-        AbstractVehicleRenderer<VehicleEntity> render = (AbstractVehicleRenderer<VehicleEntity>) VehicleRenderRegistry.getRenderer((EntityType<? extends VehicleEntity>) vehicle.getType());
+        AbstractVehicleRenderer<VehicleEntity> render = (AbstractVehicleRenderer<VehicleEntity>) VehicleRenderRegistry.getRenderer(vehicle.getType());
         if(render != null)
         {
             render.applyPlayerModel(vehicle, player, model, partialTicks);

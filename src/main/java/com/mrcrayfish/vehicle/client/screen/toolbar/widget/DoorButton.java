@@ -12,6 +12,7 @@ import com.mrcrayfish.vehicle.network.message.MessageInteractCosmetic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -39,7 +40,7 @@ public class DoorButton extends IconButton
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
         int backgroundColor = this.action.isOpen() ? 0xFFFFB64C : 0xFF941400;
