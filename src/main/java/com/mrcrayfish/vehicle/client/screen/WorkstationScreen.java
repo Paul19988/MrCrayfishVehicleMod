@@ -156,20 +156,20 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
                     IEngineType engineType = engineItem.getEngineType();
                     if(properties.getExtended(PoweredProperties.class).getEngineType() == engineType)
                     {
-                        poweredRenderer.setEngineStack(engine);
+                        poweredRenderer.setEngineStack(() -> engine);
                     }
                     else
                     {
                         canCraft = false;
                         this.validEngine = false;
-                        poweredRenderer.setEngineStack(ItemStack.EMPTY);
+                        poweredRenderer.setEngineStack(() -> ItemStack.EMPTY);
                     }
                 }
                 else
                 {
                     canCraft = false;
                     this.validEngine = false;
-                    poweredRenderer.setEngineStack(ItemStack.EMPTY);
+                    poweredRenderer.setEngineStack(() -> ItemStack.EMPTY);
                 }
             }
 
@@ -178,11 +178,11 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
                 ItemStack wheels = this.workstation.getItem(2);
                 if(!wheels.isEmpty() && wheels.getItem() instanceof WheelItem)
                 {
-                    poweredRenderer.setWheelStack(wheels);
+                    poweredRenderer.setWheelStack(() -> wheels);
                 }
                 else
                 {
-                    poweredRenderer.setWheelStack(ItemStack.EMPTY);
+                    poweredRenderer.setWheelStack(() -> ItemStack.EMPTY);
                     canCraft = false;
                 }
             }
@@ -244,8 +244,8 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
         AbstractVehicleRenderer<?> renderer = cachedVehicle.getRenderer();
         if(renderer instanceof AbstractLandVehicleRenderer<?>)
         {
-            ((AbstractLandVehicleRenderer<?>) renderer).setEngineStack(ItemStack.EMPTY);
-            ((AbstractLandVehicleRenderer<?>) renderer).setWheelStack(ItemStack.EMPTY);
+            ((AbstractLandVehicleRenderer<?>) renderer).setEngineStack(() -> ItemStack.EMPTY);
+            ((AbstractLandVehicleRenderer<?>) renderer).setWheelStack(() -> ItemStack.EMPTY);
         }
 
         this.materials.clear();

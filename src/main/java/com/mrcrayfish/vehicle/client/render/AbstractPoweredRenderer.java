@@ -41,19 +41,19 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
         super(type, defaultProperties);
     }
 
-    public void setEngineStack(ItemStack engine)
+    public void setEngineStack(Supplier<ItemStack> engine)
     {
         this.engineStackProperty.setDefaultValue(engine);
     }
 
     public void setRenderFuelPort(boolean renderFuelPort)
     {
-        this.renderFuelPortProperty.setDefaultValue(renderFuelPort);
+        this.renderFuelPortProperty.setDefaultValue(() -> renderFuelPort);
     }
 
     public void setWheelAngle(float angle)
     {
-        this.wheelAngleProperty.setDefaultValue(angle);
+        this.wheelAngleProperty.setDefaultValue(() -> angle);
     }
 
     protected void renderEngine(@Nullable T vehicle, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light)

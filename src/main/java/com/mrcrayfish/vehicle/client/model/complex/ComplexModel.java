@@ -1,4 +1,4 @@
-package com.mrcrayfish.vehicle.client.render.complex;
+package com.mrcrayfish.vehicle.client.model.complex;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
@@ -13,11 +13,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrcrayfish.vehicle.VehicleMod;
 import com.mrcrayfish.vehicle.client.model.IComplexModel;
 import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
-import com.mrcrayfish.vehicle.client.render.complex.transforms.Rotate;
-import com.mrcrayfish.vehicle.client.render.complex.transforms.Transform;
-import com.mrcrayfish.vehicle.client.render.complex.transforms.Translate;
-import com.mrcrayfish.vehicle.client.render.complex.value.Dynamic;
-import com.mrcrayfish.vehicle.client.render.complex.value.Static;
+import com.mrcrayfish.vehicle.client.model.complex.transforms.Rotate;
+import com.mrcrayfish.vehicle.client.model.complex.transforms.Transform;
+import com.mrcrayfish.vehicle.client.model.complex.transforms.Translate;
+import com.mrcrayfish.vehicle.client.model.complex.value.Dynamic;
+import com.mrcrayfish.vehicle.client.model.complex.value.Static;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.client.Minecraft;

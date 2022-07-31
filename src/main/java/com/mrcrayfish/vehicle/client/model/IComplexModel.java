@@ -1,6 +1,6 @@
 package com.mrcrayfish.vehicle.client.model;
 
-import com.mrcrayfish.vehicle.client.render.complex.ComplexModel;
+import com.mrcrayfish.vehicle.client.model.complex.ComplexModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 

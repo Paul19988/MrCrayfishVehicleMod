@@ -12,11 +12,11 @@
                 }, {
                     "type": "rotate",
                     "x": {
-                        "source": "helicopter_forwards",
+                        "source": "vehicle:helicopter_forwards",
                         "scale": 10.0
                     },
                     "z": {
-                        "source": "helicopter_sidewards",
+                        "source": "vehicle:helicopter_sidewards",
                         "inverse": true,
                         "scale": 10.0
                     }
@@ -32,7 +32,7 @@
                 }, {
                     "type": "rotate",
                     "y": {
-                        "source": "helicopter_blades"
+                        "source": "vehicle:helicopter_blades"
                     }
                 }
             ]
@@ -47,7 +47,7 @@
                 }, {
                     "type": "rotate",
                     "x": {
-                        "source": "helicopter_blades"
+                        "source": "vehicle:helicopter_blades"
                     }
                 }
             ]

@@ -3,7 +3,7 @@
     "transforms": [{
         "type": "rotate",
         "z": {
-            "source": "plane_propeller"
+            "source": "vehicle:plane_propeller"
         }
     }]
 }

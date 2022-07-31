@@ -1,4 +1,4 @@
-package com.mrcrayfish.vehicle.client.render.complex.value;
+package com.mrcrayfish.vehicle.client.model.complex.value;
 
 import com.google.gson.*;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;

@@ -98,6 +98,7 @@ public interface IDyeable
         {
             return ((IDyeable) stack.getItem()).getColor(stack);
         }
+
         return -1;
     }
 }

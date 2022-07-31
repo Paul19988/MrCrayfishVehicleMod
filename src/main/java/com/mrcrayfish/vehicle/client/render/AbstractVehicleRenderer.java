@@ -241,8 +241,7 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
                 matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
             }
 
-            int wheelColor = IDyeable.getColorFromStack(stack);
-            RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, OverlayTexture.NO_OVERLAY, light);
+            RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, IDyeable.getColorFromStack(stack), OverlayTexture.NO_OVERLAY, light);
         }
         matrixStack.popPose();
     }
@@ -341,39 +340,39 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
         return true;
     }
 
-    public void setVehicleProperties(VehicleProperties properties)
+    public void setVehicleProperties(Supplier<VehicleProperties> properties)
     {
         this.vehiclePropertiesProperty.setDefaultValue(properties);
     }
 
     public void setColor(int color)
     {
-        this.colorProperty.setDefaultValue(color);
+        this.colorProperty.setDefaultValue(() -> color);
     }
 
     public void setBodyYaw(float yaw)
     {
-        this.bodyYawProperty.setDefaultValue(yaw);
+        this.bodyYawProperty.setDefaultValue(() -> yaw);
     }
 
     public void setBodyPitch(float pitch)
     {
-        this.bodyPitchProperty.setDefaultValue(pitch);
+        this.bodyPitchProperty.setDefaultValue(() -> pitch);
     }
 
     public void setBodyRoll(float roll)
     {
-        this.bodyRollProperty.setDefaultValue(roll);
+        this.bodyRollProperty.setDefaultValue(() -> roll);
     }
 
-    public void setWheelStack(ItemStack wheel)
+    public void setWheelStack(Supplier<ItemStack> wheel)
     {
         this.wheelStackProperty.setDefaultValue(wheel);
     }
 
     public void setWheelRotation(float rotation)
     {
-        this.wheelRotationProperty.setDefaultValue(rotation);
+        this.wheelRotationProperty.setDefaultValue(() -> rotation);
     }
 
     public float getWheelRotation(@Nullable T vehicle, @Nullable Wheel wheel, float partialTicks)
@@ -385,7 +384,7 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
         return this.wheelRotationProperty.get();
     }
 
-    public void setCosmeticTracker(CosmeticTracker tracker)
+    public void setCosmeticTracker(Supplier<CosmeticTracker> tracker)
     {
         this.cosmeticTrackerProperty.setDefaultValue(tracker);
     }
@@ -421,9 +420,9 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
             return vehicle != null ? this.function.apply(vehicle, partialTicks) : this.defaultValue.get();
         }
 
-        protected void setDefaultValue(T value)
+        protected void setDefaultValue(Supplier<T> value)
         {
-            this.defaultValue = () -> value;
+            this.defaultValue = value;
         }
     }
 }

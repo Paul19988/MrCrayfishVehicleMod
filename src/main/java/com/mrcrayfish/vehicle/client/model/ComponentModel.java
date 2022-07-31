@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
-import com.mrcrayfish.vehicle.client.render.complex.ComplexModel;
+import com.mrcrayfish.vehicle.client.model.complex.ComplexModel;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

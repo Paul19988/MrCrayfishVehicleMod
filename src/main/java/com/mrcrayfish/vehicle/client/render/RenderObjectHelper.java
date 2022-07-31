@@ -194,8 +194,9 @@ public class RenderObjectHelper
             float red =  ColorHelper.normalize(ColorHelper.unpackARGBRed(tintColor));
             float green = ColorHelper.normalize(ColorHelper.unpackARGBGreen(tintColor));
             float blue = ColorHelper.normalize(ColorHelper.unpackARGBBlue(tintColor));
+            float alpha = ColorHelper.normalize(ColorHelper.unpackARGBAlpha(tintColor));
 
-            consumer.putBulkData(pose, quad, EMPTY_COLOR, red, green, blue, 1F, light, overlay, true);
+            consumer.putBulkData(pose, quad, EMPTY_COLOR, red, green, blue, alpha, light, overlay, true);
         }
     }
 }

@@ -11,7 +11,7 @@
                 }, {
                     "type": "rotate",
                     "x": {
-                        "source": "plane_elevator",
+                        "source": "vehicle:plane_elevator",
                         "scale": 0.5
                     }
                 }
@@ -26,12 +26,12 @@
                 }, {
                     "type": "rotate",
                     "x": {
-                        "source": "plane_elevator",
+                        "source": "vehicle:plane_elevator",
                         "inverse": true,
                         "scale": 0.25
                     },
                     "z": {
-                        "source": "plane_aileron",
+                        "source": "vehicle:plane_aileron",
                         "inverse": true,
                         "scale": 0.25
                     }
