@@ -25,9 +25,9 @@ import javax.annotation.Nullable;
  */
 public class GoKartRenderer extends AbstractLandVehicleRenderer<GoKartEntity>
 {
-    public GoKartRenderer(EntityType<GoKartEntity> type, VehicleProperties defaultProperties)
+    public GoKartRenderer(EntityType<GoKartEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

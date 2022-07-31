@@ -137,46 +137,6 @@ public class ClientHandler
     }
 
     @SubscribeEvent
-    public static void registerClientReloadListeners(RegisterClientReloadListenersEvent event)
-    {
-        event.registerReloadListener((ResourceManagerReloadListener) ClientHandler::onResourceManagerReload);
-    }
-
-    @SubscribeEvent
-    public static void onRegisterItemColorHandlersEvent(RegisterColorHandlersEvent.Item event)
-    {
-        ItemColor color = (stack, index) ->
-        {
-            if(index != 0 || stack.getTag() == null || !stack.getTag().contains(IDyeable.NBT_KEY))
-            {
-                return 0xFFFFFF;
-            }
-
-            return stack.getTag().getInt(IDyeable.NBT_KEY);
-        };
-
-        for(Item item : ForgeRegistries.ITEMS)
-        {
-            if(item instanceof SprayCanItem || (item instanceof PartItem && ((PartItem) item).isColored()))
-            {
-                event.register(color, item);
-            }
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void registerScreens(RegisterEvent event)
-    {
-        event.register(Registry.MENU_REGISTRY, helper -> {
-            MenuScreens.register(ModContainers.FLUID_EXTRACTOR.get(), FluidExtractorScreen::new);
-            MenuScreens.register(ModContainers.FLUID_MIXER.get(), FluidMixerScreen::new);
-            MenuScreens.register(ModContainers.EDIT_VEHICLE.get(), EditVehicleScreen::new);
-            MenuScreens.register(ModContainers.WORKSTATION.get(), WorkstationScreen::new);
-            MenuScreens.register(ModContainers.STORAGE.get(), StorageScreen::new);
-        });
-    }
-
-    @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
     {
         /* Register Vehicles */
@@ -218,6 +178,46 @@ public class ClientHandler
         event.registerBlockEntityRenderer(ModTileEntities.GAS_PUMP.get(), GasPumpRenderer::new);
         event.registerBlockEntityRenderer(ModTileEntities.GAS_PUMP_TANK.get(), GasPumpTankRenderer::new);
         event.registerBlockEntityRenderer(ModTileEntities.FLUID_PUMP.get(), FluidPumpRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void registerClientReloadListeners(RegisterClientReloadListenersEvent event)
+    {
+        event.registerReloadListener((ResourceManagerReloadListener) ClientHandler::onResourceManagerReload);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterItemColorHandlersEvent(RegisterColorHandlersEvent.Item event)
+    {
+        ItemColor color = (stack, index) ->
+        {
+            if(index != 0 || stack.getTag() == null || !stack.getTag().contains(IDyeable.NBT_KEY))
+            {
+                return 0xFFFFFF;
+            }
+
+            return stack.getTag().getInt(IDyeable.NBT_KEY);
+        };
+
+        for(Item item : ForgeRegistries.ITEMS)
+        {
+            if(item instanceof SprayCanItem || (item instanceof PartItem && ((PartItem) item).isColored()))
+            {
+                event.register(color, item);
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void registerScreens(RegisterEvent event)
+    {
+        event.register(Registry.MENU_REGISTRY, helper -> {
+            MenuScreens.register(ModContainers.FLUID_EXTRACTOR.get(), FluidExtractorScreen::new);
+            MenuScreens.register(ModContainers.FLUID_MIXER.get(), FluidMixerScreen::new);
+            MenuScreens.register(ModContainers.EDIT_VEHICLE.get(), EditVehicleScreen::new);
+            MenuScreens.register(ModContainers.WORKSTATION.get(), WorkstationScreen::new);
+            MenuScreens.register(ModContainers.STORAGE.get(), StorageScreen::new);
+        });
     }
 
     private static void setupInteractableVehicles()

@@ -27,11 +27,11 @@ import javax.annotation.Nullable;
  */
 public class FluidTrailerRenderer extends AbstractTrailerRenderer<FluidTrailerEntity>
 {
-    protected final PropertyFunction<FluidTrailerEntity, FluidTank> fluidTankProperty = new PropertyFunction<>(FluidTrailerEntity::getTank, new FluidTank(FluidType.BUCKET_VOLUME));
+    protected final PropertyFunction<FluidTrailerEntity, FluidTank> fluidTankProperty = new PropertyFunction<>(FluidTrailerEntity::getTank, () -> new FluidTank(FluidType.BUCKET_VOLUME));
 
-    public FluidTrailerRenderer(EntityType<FluidTrailerEntity> type, VehicleProperties defaultProperties)
+    public FluidTrailerRenderer(EntityType<FluidTrailerEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

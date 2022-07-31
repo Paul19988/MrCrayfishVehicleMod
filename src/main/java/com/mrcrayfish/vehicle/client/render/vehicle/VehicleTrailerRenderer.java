@@ -17,9 +17,9 @@ import javax.annotation.Nullable;
  */
 public class VehicleTrailerRenderer extends AbstractTrailerRenderer<VehicleTrailerEntity>
 {
-    public VehicleTrailerRenderer(EntityType<VehicleTrailerEntity> type, VehicleProperties defaultProperties)
+    public VehicleTrailerRenderer(EntityType<VehicleTrailerEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

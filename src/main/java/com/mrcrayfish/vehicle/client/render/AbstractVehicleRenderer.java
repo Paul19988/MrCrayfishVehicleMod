@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Author: MrCrayfish
@@ -48,18 +49,18 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
     protected final EntityType<T> type;
     protected final PropertyFunction<T, VehicleProperties> vehiclePropertiesProperty;
     protected final PropertyFunction<T, CosmeticTracker> cosmeticTrackerProperty;
-    protected final PropertyFunction<T, Integer> colorProperty = new PropertyFunction<>(VehicleEntity::getColor, -1);
-    protected final PropertyFunction<T, Float> bodyYawProperty = new PropertyFunction<>(VehicleEntity::getBodyRotationYaw, 0F);
-    protected final PropertyFunction<T, Float> bodyPitchProperty = new PropertyFunction<>(VehicleEntity::getBodyRotationPitch, 0F);
-    protected final PropertyFunction<T, Float> bodyRollProperty = new PropertyFunction<>(VehicleEntity::getBodyRotationRoll, 0F);
-    protected final PropertyFunction<T, ItemStack> wheelStackProperty = new PropertyFunction<>(VehicleEntity::getWheelStack, ItemStack.EMPTY);
-    protected final PropertyFunction<Pair<T, Wheel>, Float> wheelRotationProperty = new PropertyFunction<>((p, f) -> p.getLeft().getWheelRotation(p.getRight(), f), 0F);
+    protected final PropertyFunction<T, Integer> colorProperty = new PropertyFunction<>(VehicleEntity::getColor, () -> -1);
+    protected final PropertyFunction<T, Float> bodyYawProperty = new PropertyFunction<>(VehicleEntity::getBodyRotationYaw, () -> 0F);
+    protected final PropertyFunction<T, Float> bodyPitchProperty = new PropertyFunction<>(VehicleEntity::getBodyRotationPitch, () -> 0F);
+    protected final PropertyFunction<T, Float> bodyRollProperty = new PropertyFunction<>(VehicleEntity::getBodyRotationRoll, () -> 0F);
+    protected final PropertyFunction<T, ItemStack> wheelStackProperty = new PropertyFunction<>(VehicleEntity::getWheelStack, () -> ItemStack.EMPTY);
+    protected final PropertyFunction<Pair<T, Wheel>, Float> wheelRotationProperty = new PropertyFunction<>((p, f) -> p.getLeft().getWheelRotation(p.getRight(), f), () -> 0F);
 
-    public AbstractVehicleRenderer(EntityType<T> type, VehicleProperties defaultProperties)
+    public AbstractVehicleRenderer(EntityType<T> type, Supplier<VehicleProperties> defaultProperties)
     {
         this.type = type;
         this.vehiclePropertiesProperty = new PropertyFunction<>(VehicleEntity::getProperties, defaultProperties);
-        this.cosmeticTrackerProperty = new PropertyFunction<>(VehicleEntity::getCosmeticTracker, null);
+        this.cosmeticTrackerProperty = new PropertyFunction<>(VehicleEntity::getCosmeticTracker, () -> null);
     }
 
     @Nullable
@@ -379,14 +380,14 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
     protected static class PropertyFunction<V, T>
     {
         protected BiFunction<V, Float, T> function;
-        protected T defaultValue;
+        protected Supplier<T> defaultValue;
 
-        public PropertyFunction(Function<V, T> function, T defaultValue)
+        public PropertyFunction(Function<V, T> function, Supplier<T> defaultValue)
         {
             this((v, p) -> function.apply(v), defaultValue);
         }
 
-        public PropertyFunction(BiFunction<V, Float, T> function, T defaultValue)
+        public PropertyFunction(BiFunction<V, Float, T> function, Supplier<T> defaultValue)
         {
             this.function = function;
             this.defaultValue = defaultValue;
@@ -404,12 +405,12 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
 
         public T get(@Nullable V vehicle, float partialTicks)
         {
-            return vehicle != null ? this.function.apply(vehicle, partialTicks) : this.defaultValue;
+            return vehicle != null ? this.function.apply(vehicle, partialTicks) : this.defaultValue.get();
         }
 
         protected void setDefaultValue(T value)
         {
-            this.defaultValue = value;
+            this.defaultValue = () -> value;
         }
     }
 }

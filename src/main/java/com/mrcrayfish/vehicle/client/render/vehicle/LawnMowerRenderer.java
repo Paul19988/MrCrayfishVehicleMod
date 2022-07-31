@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
  */
 public class LawnMowerRenderer extends AbstractLandVehicleRenderer<LawnMowerEntity>
 {
-    public LawnMowerRenderer(EntityType<LawnMowerEntity> type, VehicleProperties defaultProperties)
+    public LawnMowerRenderer(EntityType<LawnMowerEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

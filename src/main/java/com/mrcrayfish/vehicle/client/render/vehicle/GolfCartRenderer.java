@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
  */
 public class GolfCartRenderer extends AbstractHelicopterRenderer<GolfCartEntity>
 {
-    public GolfCartRenderer(EntityType<GolfCartEntity> type, VehicleProperties defaultProperties)
+    public GolfCartRenderer(EntityType<GolfCartEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

@@ -17,9 +17,9 @@ import javax.annotation.Nullable;
  */
 public class CompactHelicopterRenderer extends AbstractHelicopterRenderer<CompactHelicopterEntity>
 {
-    public CompactHelicopterRenderer(EntityType<CompactHelicopterEntity> type, VehicleProperties defaultProperties)
+    public CompactHelicopterRenderer(EntityType<CompactHelicopterEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

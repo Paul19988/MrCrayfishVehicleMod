@@ -25,11 +25,11 @@ import javax.annotation.Nullable;
  */
 public class FertilizerTrailerRenderer extends AbstractTrailerRenderer<FertilizerTrailerEntity>
 {
-    protected final PropertyFunction<FertilizerTrailerEntity, StorageInventory> storageProperty = new PropertyFunction<>(FertilizerTrailerEntity::getInventory, null);
+    protected final PropertyFunction<FertilizerTrailerEntity, StorageInventory> storageProperty = new PropertyFunction<>(FertilizerTrailerEntity::getInventory, () -> null);
 
-    public FertilizerTrailerRenderer(EntityType<FertilizerTrailerEntity> type, VehicleProperties defaultProperties)
+    public FertilizerTrailerRenderer(EntityType<FertilizerTrailerEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

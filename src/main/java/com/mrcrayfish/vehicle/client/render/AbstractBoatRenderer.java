@@ -8,13 +8,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Author: MrCrayfish
  */
 public abstract class AbstractBoatRenderer<T extends BoatEntity> extends AbstractPoweredRenderer<T>
 {
-    public AbstractBoatRenderer(EntityType<T> type, VehicleProperties defaultProperties)
+    public AbstractBoatRenderer(EntityType<T> type, Supplier<VehicleProperties> defaultProperties)
     {
         super(type, defaultProperties);
     }

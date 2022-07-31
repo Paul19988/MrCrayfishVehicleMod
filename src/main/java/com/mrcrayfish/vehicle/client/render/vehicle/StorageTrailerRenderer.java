@@ -23,9 +23,9 @@ public class StorageTrailerRenderer extends AbstractTrailerRenderer<StorageTrail
 {
     private static final ChestModel CHEST = new ChestModel();
 
-    public StorageTrailerRenderer(EntityType<StorageTrailerEntity> type, VehicleProperties properties)
+    public StorageTrailerRenderer(EntityType<StorageTrailerEntity> type)
     {
-        super(type, properties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

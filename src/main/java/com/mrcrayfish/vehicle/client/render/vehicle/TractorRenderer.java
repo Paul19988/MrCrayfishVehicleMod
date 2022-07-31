@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
  */
 public class TractorRenderer extends AbstractLandVehicleRenderer<TractorEntity>
 {
-    public TractorRenderer(EntityType<TractorEntity> type, VehicleProperties defaultProperties)
+    public TractorRenderer(EntityType<TractorEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
  */
 public class OffRoaderRenderer extends AbstractLandVehicleRenderer<OffRoaderEntity>
 {
-    public OffRoaderRenderer(EntityType<OffRoaderEntity> type, VehicleProperties defaultProperties)
+    public OffRoaderRenderer(EntityType<OffRoaderEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

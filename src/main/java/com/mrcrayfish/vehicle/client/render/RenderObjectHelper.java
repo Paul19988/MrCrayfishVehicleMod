@@ -44,6 +44,7 @@ public class RenderObjectHelper
 {
     protected static final RandomSource RANDOM = new XoroshiroRandomSource(42L);
     private static final float NORM = 1.0F / 127.0F;
+    private static final float[] EMPTY_COLOR = new float[] { 1F, 1F, 1F, 1F };
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
     public static BakedModel getModel(ItemStack stack)
@@ -144,18 +145,19 @@ public class RenderObjectHelper
     private static void renderModel(PoseStack.Pose pose, VertexConsumer consumer, RenderType type, ItemStack stack, BakedModel model, int color, int overlay, int light)
     {
         RandomSource random = RANDOM;
+        int[] lights = new int[] { light, light, light, light };
 
         for(Direction direction : Direction.values())
         {
             random.setSeed(42L);
-            renderQuadList(pose, consumer, model.getQuads(null, direction, random, ModelData.EMPTY, type), stack, color, overlay, light);
+            renderQuadList(pose, consumer, model.getQuads(null, direction, random, ModelData.EMPTY, type), stack, color, overlay, lights);
         }
 
         random.setSeed(42L);
-        renderQuadList(pose, consumer, model.getQuads(null, null, random, ModelData.EMPTY, type), stack, color, overlay, light);
+        renderQuadList(pose, consumer, model.getQuads(null, null, random, ModelData.EMPTY, type), stack, color, overlay, lights);
     }
 
-    protected static void renderQuadList(PoseStack.Pose pose, VertexConsumer consumer, List<BakedQuad> quads, ItemStack stack, int color, int overlay, int light)
+    protected static void renderQuadList(PoseStack.Pose pose, VertexConsumer consumer, List<BakedQuad> quads, ItemStack stack, int color, int overlay, int[] light)
     {
         // This is a very hot allocation, iterate over it manually
         // noinspection ForLoopReplaceableByForEach
@@ -186,9 +188,12 @@ public class RenderObjectHelper
                 }
             }
 
-            renderQuad(consumer, pose, quad, color, overlay, light);
-        }
+            float red =  ColorHelper.normalize(ColorHelper.unpackARGBRed(color));
+            float green = ColorHelper.normalize(ColorHelper.unpackARGBGreen(color));
+            float blue = ColorHelper.normalize(ColorHelper.unpackARGBBlue(color));
 
+            consumer.putBulkData(pose, quad, EMPTY_COLOR, red, green, blue, 1F, light, overlay, true);
+        }
     }
 
     protected static void renderQuad(VertexConsumer consumer, PoseStack.Pose pose,

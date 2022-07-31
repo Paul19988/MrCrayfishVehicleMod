@@ -15,16 +15,17 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Author: MrCrayfish
  */
 public abstract class AbstractLandVehicleRenderer<T extends LandVehicleEntity> extends AbstractPoweredRenderer<T>
 {
-    protected final PropertyFunction<T, Float> wheelieProgressProperty = new PropertyFunction<>(LandVehicleEntity::getWheelieProgress, 0F);
-    protected final PropertyFunction<T, Float> boostStrengthProperty = new PropertyFunction<>(LandVehicleEntity::getBoostStrength, 0F);
+    protected final PropertyFunction<T, Float> wheelieProgressProperty = new PropertyFunction<>(LandVehicleEntity::getWheelieProgress, () -> 0F);
+    protected final PropertyFunction<T, Float> boostStrengthProperty = new PropertyFunction<>(LandVehicleEntity::getBoostStrength, () -> 0F);
 
-    public AbstractLandVehicleRenderer(EntityType<T> type, VehicleProperties defaultProperties)
+    public AbstractLandVehicleRenderer(EntityType<T> type, Supplier<VehicleProperties> defaultProperties)
     {
         super(type, defaultProperties);
     }

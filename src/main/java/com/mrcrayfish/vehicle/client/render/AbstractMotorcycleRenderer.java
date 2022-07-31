@@ -15,13 +15,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Author: MrCrayfish
  */
 public abstract class AbstractMotorcycleRenderer<T extends MotorcycleEntity> extends AbstractLandVehicleRenderer<T>
 {
-    public AbstractMotorcycleRenderer(EntityType<T> type, VehicleProperties defaultProperties)
+    public AbstractMotorcycleRenderer(EntityType<T> type, Supplier<VehicleProperties> defaultProperties)
     {
         super(type, defaultProperties);
     }

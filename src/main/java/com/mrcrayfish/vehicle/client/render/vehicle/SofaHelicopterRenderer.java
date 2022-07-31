@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
  */
 public class SofaHelicopterRenderer extends AbstractHelicopterRenderer<SofacopterEntity>
 {
-    public SofaHelicopterRenderer(EntityType<SofacopterEntity> type, VehicleProperties defaultProperties)
+    public SofaHelicopterRenderer(EntityType<SofacopterEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

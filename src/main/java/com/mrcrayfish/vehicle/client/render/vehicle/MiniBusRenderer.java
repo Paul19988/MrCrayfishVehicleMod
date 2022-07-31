@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
  */
 public class MiniBusRenderer extends AbstractLandVehicleRenderer<MiniBusEntity>
 {
-    public MiniBusRenderer(EntityType<MiniBusEntity> type, VehicleProperties defaultProperties)
+    public MiniBusRenderer(EntityType<MiniBusEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
  */
 public class JetSkiRenderer extends AbstractBoatRenderer<JetSkiEntity>
 {
-    public JetSkiRenderer(EntityType<JetSkiEntity> type, VehicleProperties defaultProperties)
+    public JetSkiRenderer(EntityType<JetSkiEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

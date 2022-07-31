@@ -23,20 +23,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Author: MrCrayfish
  */
 public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> extends AbstractVehicleRenderer<T>
 {
-    protected final PropertyFunction<T, ItemStack> engineStackProperty = new PropertyFunction<>(PoweredVehicleEntity::getEngineStack, ItemStack.EMPTY);
-    protected final PropertyFunction<T, Boolean> renderFuelPortProperty = new PropertyFunction<>(PoweredVehicleEntity::shouldRenderFuelPort, true);
-    protected final PropertyFunction<T, Float> wheelAngleProperty = new PropertyFunction<>(PoweredVehicleEntity::getRenderWheelAngle, 0F);
-    protected final PropertyFunction<T, Boolean> requiresEnergyProperty = new PropertyFunction<>(PoweredVehicleEntity::requiresEnergy, false);
-    protected final PropertyFunction<T, FuelFillerType> fuelFillerTypeProperty = new PropertyFunction<>(PoweredVehicleEntity::getFuelFillerType, FuelFillerType.DEFAULT);
-    protected final PropertyFunction<T, Boolean> needsKeyProperty = new PropertyFunction<>(PoweredVehicleEntity::isKeyNeeded, false);
+    protected final PropertyFunction<T, ItemStack> engineStackProperty = new PropertyFunction<>(PoweredVehicleEntity::getEngineStack, () -> ItemStack.EMPTY);
+    protected final PropertyFunction<T, Boolean> renderFuelPortProperty = new PropertyFunction<>(PoweredVehicleEntity::shouldRenderFuelPort, () -> true);
+    protected final PropertyFunction<T, Float> wheelAngleProperty = new PropertyFunction<>(PoweredVehicleEntity::getRenderWheelAngle, () -> 0F);
+    protected final PropertyFunction<T, Boolean> requiresEnergyProperty = new PropertyFunction<>(PoweredVehicleEntity::requiresEnergy, () -> false);
+    protected final PropertyFunction<T, FuelFillerType> fuelFillerTypeProperty = new PropertyFunction<>(PoweredVehicleEntity::getFuelFillerType, () -> FuelFillerType.DEFAULT);
+    protected final PropertyFunction<T, Boolean> needsKeyProperty = new PropertyFunction<>(PoweredVehicleEntity::isKeyNeeded, () -> false);
 
-    public AbstractPoweredRenderer(EntityType<T> type, VehicleProperties defaultProperties)
+    public AbstractPoweredRenderer(EntityType<T> type, Supplier<VehicleProperties> defaultProperties)
     {
         super(type, defaultProperties);
     }

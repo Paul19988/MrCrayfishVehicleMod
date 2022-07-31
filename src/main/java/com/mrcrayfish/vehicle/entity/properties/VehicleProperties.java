@@ -230,8 +230,9 @@ public class VehicleProperties
 
     public static void loadDefaultProperties()
     {
-        for(ResourceLocation location : VehicleRegistry.getRegisteredVehicles())
+        for(VehicleRegistry.Entry<?> entry : VehicleRegistry.getRegisteredVehicles())
         {
+            ResourceLocation location = entry.name();
             VehicleMod.LOGGER.info("Loading default vehicle {}", location);
             DEFAULT_VEHICLE_PROPERTIES.computeIfAbsent(location, VehicleProperties::loadDefaultProperties);
         }

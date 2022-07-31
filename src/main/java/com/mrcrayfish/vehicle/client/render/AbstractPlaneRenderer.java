@@ -9,17 +9,18 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Author: MrCrayfish
  */
 public abstract class AbstractPlaneRenderer<T extends PlaneEntity> extends AbstractPoweredRenderer<T>
 {
-    protected final PropertyFunction<T, Float> propellerRotationProperty = new PropertyFunction<>(PlaneEntity::getPropellerRotation, 0F);
-    protected final PropertyFunction<T, Float> flapAngleProperty = new PropertyFunction<>(PlaneEntity::getFlapAngle, 0F);
-    protected final PropertyFunction<T, Float> elevatorAngleProperty = new PropertyFunction<>(PlaneEntity::getElevatorAngle, 0F);
+    protected final PropertyFunction<T, Float> propellerRotationProperty = new PropertyFunction<>(PlaneEntity::getPropellerRotation, () -> 0F);
+    protected final PropertyFunction<T, Float> flapAngleProperty = new PropertyFunction<>(PlaneEntity::getFlapAngle, () -> 0F);
+    protected final PropertyFunction<T, Float> elevatorAngleProperty = new PropertyFunction<>(PlaneEntity::getElevatorAngle, () -> 0F);
 
-    public AbstractPlaneRenderer(EntityType<T> type, VehicleProperties defaultProperties)
+    public AbstractPlaneRenderer(EntityType<T> type, Supplier<VehicleProperties> defaultProperties)
     {
         super(type, defaultProperties);
     }

@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
  */
 public class QuadBikeRenderer extends AbstractLandVehicleRenderer<QuadBikeEntity>
 {
-    public QuadBikeRenderer(EntityType<QuadBikeEntity> type, VehicleProperties defaultProperties)
+    public QuadBikeRenderer(EntityType<QuadBikeEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

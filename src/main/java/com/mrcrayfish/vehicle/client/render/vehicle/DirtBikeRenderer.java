@@ -27,9 +27,9 @@ import javax.annotation.Nullable;
  */
 public class DirtBikeRenderer extends AbstractMotorcycleRenderer<DirtBikeEntity>
 {
-    public DirtBikeRenderer(EntityType<DirtBikeEntity> type, VehicleProperties defaultProperties)
+    public DirtBikeRenderer(EntityType<DirtBikeEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

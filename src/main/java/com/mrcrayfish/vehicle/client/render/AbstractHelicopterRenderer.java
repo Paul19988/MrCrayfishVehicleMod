@@ -9,15 +9,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Author: MrCrayfish
  */
 public abstract class AbstractHelicopterRenderer<T extends HelicopterEntity> extends AbstractPoweredRenderer<T>
 {
-    protected final PropertyFunction<T, Float> bladeRotationProperty = new PropertyFunction<>(HelicopterEntity::getBladeRotation, 0F);
+    protected final PropertyFunction<T, Float> bladeRotationProperty = new PropertyFunction<>(HelicopterEntity::getBladeRotation, () -> 0F);
 
-    public AbstractHelicopterRenderer(EntityType<T> type, VehicleProperties defaultProperties)
+    public AbstractHelicopterRenderer(EntityType<T> type, Supplier<VehicleProperties> defaultProperties)
     {
         super(type, defaultProperties);
     }

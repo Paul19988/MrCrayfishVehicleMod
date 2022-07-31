@@ -20,9 +20,9 @@ import javax.annotation.Nullable;
  */
 public class SportsCarRenderer extends AbstractLandVehicleRenderer<SportsCarEntity>
 {
-    public SportsCarRenderer(EntityType<SportsCarEntity> type, VehicleProperties properties)
+    public SportsCarRenderer(EntityType<SportsCarEntity> type)
     {
-        super(type, properties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

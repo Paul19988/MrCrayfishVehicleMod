@@ -19,9 +19,9 @@ import javax.annotation.Nullable;
  */
 public class SportsPlaneRenderer extends AbstractPlaneRenderer<SportsPlaneEntity>
 {
-    public SportsPlaneRenderer(EntityType<SportsPlaneEntity> type, VehicleProperties defaultProperties)
+    public SportsPlaneRenderer(EntityType<SportsPlaneEntity> type)
     {
-        super(type, defaultProperties);
+        super(type, () -> VehicleProperties.get(type));
     }
 
     @Override

@@ -36,13 +36,13 @@ import java.util.function.Function;
 public class MopedRenderer extends AbstractMotorcycleRenderer<MopedEntity>
 {
     private final ChestModel chestModel;
-    protected final PropertyFunction<MopedEntity, Boolean> hasChestProperty = new PropertyFunction<>((Function<MopedEntity, Boolean>) MopedEntity::hasChest, false);
-    protected final PropertyFunction<MopedEntity, Float> openProgressProperty = new PropertyFunction<>(MopedEntity::getOpenProgress, 0F);
-    protected final PropertyFunction<MopedEntity, Float> prevOpenProgressProperty = new PropertyFunction<>(MopedEntity::getPrevOpenProgress, 0F);
+    protected final PropertyFunction<MopedEntity, Boolean> hasChestProperty = new PropertyFunction<>((Function<MopedEntity, Boolean>) MopedEntity::hasChest, () -> false);
+    protected final PropertyFunction<MopedEntity, Float> openProgressProperty = new PropertyFunction<>(MopedEntity::getOpenProgress, () -> 0F);
+    protected final PropertyFunction<MopedEntity, Float> prevOpenProgressProperty = new PropertyFunction<>(MopedEntity::getPrevOpenProgress, () -> 0F);
 
-    public MopedRenderer(EntityType<MopedEntity> type, VehicleProperties properties)
+    public MopedRenderer(EntityType<MopedEntity> type)
     {
-        super(type, properties);
+        super(type, () -> VehicleProperties.get(type));
         this.chestModel = new ChestModel();
     }
 
