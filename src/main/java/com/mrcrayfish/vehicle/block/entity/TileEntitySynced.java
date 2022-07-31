@@ -1,4 +1,4 @@
-package com.mrcrayfish.vehicle.tileentity;
+package com.mrcrayfish.vehicle.block.entity;
 
 import com.mrcrayfish.vehicle.util.TileEntityUtil;
 import net.minecraft.core.BlockPos;

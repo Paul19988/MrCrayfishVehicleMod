@@ -1,4 +1,4 @@
-package com.mrcrayfish.vehicle.tileentity;
+package com.mrcrayfish.vehicle.block.entity;
 
 import com.mrcrayfish.vehicle.block.JackBlock;
 import com.mrcrayfish.vehicle.entity.EntityJack;

@@ -524,6 +524,7 @@ public class EntityRayTracer
             List<MatrixTransform> transforms = new ObjectArrayList<>();
             TransformHelper.createBodyTransforms(transforms, type);
             HashMap<RayTraceData, List<MatrixTransform>> parts = Maps.newHashMap();
+
             RayTraceTransforms rayTraceTransforms = this.entityRayTraceTransformSuppliers.get(type).get();
             rayTraceTransforms.load(this, transforms, parts);
             this.generateEntityTriangles(type, parts);

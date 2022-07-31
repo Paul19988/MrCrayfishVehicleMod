@@ -1,7 +1,7 @@
 package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.Config;
-import com.mrcrayfish.vehicle.tileentity.IndustrialFuelDrumTileEntity;
+import com.mrcrayfish.vehicle.block.entity.IndustrialFuelDrumTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;

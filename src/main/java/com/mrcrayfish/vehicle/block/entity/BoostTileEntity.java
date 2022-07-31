@@ -1,10 +1,11 @@
-package com.mrcrayfish.vehicle.tileentity;
+package com.mrcrayfish.vehicle.block.entity;
 
 import com.mrcrayfish.vehicle.init.ModTileEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -30,7 +31,7 @@ public class BoostTileEntity extends TileEntitySynced
     }
 
     @Override
-    public void load(CompoundTag compound)
+    public void load(@NotNull CompoundTag compound)
     {
         super.load(compound);
 
@@ -41,7 +42,7 @@ public class BoostTileEntity extends TileEntitySynced
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound)
+    protected void saveAdditional(@NotNull CompoundTag compound)
     {
         super.saveAdditional(compound);
 

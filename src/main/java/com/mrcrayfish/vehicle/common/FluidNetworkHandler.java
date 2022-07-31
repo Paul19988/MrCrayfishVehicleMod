@@ -1,8 +1,8 @@
 package com.mrcrayfish.vehicle.common;
 
 import com.mrcrayfish.vehicle.block.FluidPipeBlock;
-import com.mrcrayfish.vehicle.tileentity.PipeTileEntity;
-import com.mrcrayfish.vehicle.tileentity.PumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.PipeTileEntity;
+import com.mrcrayfish.vehicle.block.entity.PumpTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;

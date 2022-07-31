@@ -13,7 +13,7 @@ import com.mrcrayfish.vehicle.client.render.Axis;
 import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.client.util.HermiteInterpolator;
 import com.mrcrayfish.vehicle.init.ModBlocks;
-import com.mrcrayfish.vehicle.tileentity.GasPumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpTileEntity;
 import com.mrcrayfish.vehicle.util.CollisionHelper;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;

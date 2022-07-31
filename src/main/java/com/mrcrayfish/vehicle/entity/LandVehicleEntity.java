@@ -26,21 +26,16 @@ public abstract class LandVehicleEntity extends PoweredVehicleEntity
     protected float traction;
 
     @OnlyIn(Dist.CLIENT)
-    protected float frontWheelRotationSpeed;
+    protected float prevFrontWheelRotation, frontWheelRotation;
+
     @OnlyIn(Dist.CLIENT)
-    protected float frontWheelRotation;
+    protected float prevRearWheelRotation, rearWheelRotation;
+
     @OnlyIn(Dist.CLIENT)
-    protected float prevFrontWheelRotation;
+    protected float rearWheelRotationSpeed, frontWheelRotationSpeed;
+
     @OnlyIn(Dist.CLIENT)
-    protected float rearWheelRotationSpeed;
-    @OnlyIn(Dist.CLIENT)
-    protected float rearWheelRotation;
-    @OnlyIn(Dist.CLIENT)
-    protected float prevRearWheelRotation;
-    @OnlyIn(Dist.CLIENT)
-    protected int wheelieCount;
-    @OnlyIn(Dist.CLIENT)
-    protected int prevWheelieCount;
+    protected int prevWheelieCount, wheelieCount;
 
     public LandVehicleEntity(EntityType<?> entityType, Level worldIn)
     {

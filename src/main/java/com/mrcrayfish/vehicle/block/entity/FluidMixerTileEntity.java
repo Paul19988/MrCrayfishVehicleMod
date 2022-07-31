@@ -1,4 +1,4 @@
-package com.mrcrayfish.vehicle.tileentity;
+package com.mrcrayfish.vehicle.block.entity;
 
 import com.mrcrayfish.vehicle.Config;
 import com.mrcrayfish.vehicle.block.FluidMixerBlock;
@@ -359,13 +359,11 @@ public class FluidMixerTileEntity extends TileEntitySynced implements Container,
         if(compound.contains("TankBlaze", Tag.TAG_COMPOUND))
         {
             CompoundTag tagCompound = compound.getCompound("TankBlaze");
-            //FluidUtils.fixEmptyTag(tagCompound); //TODO might not need
             this.tankBlaze.readFromNBT(tagCompound);
         }
         if(compound.contains("TankEnderSap", Tag.TAG_COMPOUND))
         {
             CompoundTag tagCompound = compound.getCompound("TankEnderSap");
-            //FluidUtils.fixEmptyTag(tagCompound);
             this.tankEnderSap.readFromNBT(tagCompound);
         }
         if(compound.contains("TankFuelium", Tag.TAG_COMPOUND))

@@ -704,6 +704,8 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
         return new AABB(x1 * 0.0625 * scale, y1 * 0.0625 * scale, z1 * 0.0625 * scale, x2 * 0.0625 * scale, y2 * 0.0625 * scale, z2 * 0.0625 * scale);
     }
 
+
+
     @Override
     public void writeSpawnData(FriendlyByteBuf buffer)
     {

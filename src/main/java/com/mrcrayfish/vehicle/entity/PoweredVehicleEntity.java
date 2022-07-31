@@ -22,8 +22,8 @@ import com.mrcrayfish.vehicle.network.message.MessageHandbrake;
 import com.mrcrayfish.vehicle.network.message.MessageHorn;
 import com.mrcrayfish.vehicle.network.message.MessageThrottle;
 import com.mrcrayfish.vehicle.network.message.MessageTurnAngle;
-import com.mrcrayfish.vehicle.tileentity.GasPumpTankTileEntity;
-import com.mrcrayfish.vehicle.tileentity.GasPumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpTankTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpTileEntity;
 import com.mrcrayfish.vehicle.util.CommonUtils;
 import com.mrcrayfish.vehicle.util.InventoryUtil;
 import net.minecraft.client.Minecraft;
@@ -409,7 +409,8 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
         if(this.showWheelParticles())
         {
             /* Uses the same logic when rendering wheels to determine the position, then spawns
-             * particles at the contact of the wheel and the ground. */
+               particles at the contact of the wheel and the ground.
+            */
             VehicleProperties properties = this.getProperties();
             if(properties.getWheels() != null)
             {
@@ -420,7 +421,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
                     Wheel wheel = wheels.get(i);
                     if(!wheel.shouldSpawnParticles())
                         continue;
-                    /* Gets the block under the wheel and spawns a particle */
+                   /* Gets the block under the wheel and spawns a particle */
                     double wheelX = wheelPositions[i * 3];
                     double wheelY = wheelPositions[i * 3 + 1];
                     double wheelZ = wheelPositions[i * 3 + 2];
@@ -456,10 +457,11 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
         {
             //TODO maybe add more control of this
             Vec3 fumePosition = this.getExhaustFumesPosition().scale(0.0625).yRot(-this.getYRot() * 0.017453292F);
-            this.level.addParticle(ParticleTypes.SMOKE, this.getX() + fumePosition.x, this.getY() + fumePosition.y, this.getZ() + fumePosition.z, -this.getDeltaMovement().x, 0.0D, -this.getDeltaMovement().z);
+
+            this.level.addParticle(ParticleTypes.SMOKE, this.getX() + fumePosition.x(), this.getY() + fumePosition.y(), this.getZ() + fumePosition.z(), -this.getDeltaMovement().x, 0.0D, -this.getDeltaMovement().z);
             if(this.charging && this.isMoving())
             {
-                this.level.addParticle(ParticleTypes.CRIT, this.getX() + fumePosition.x, this.getY() + fumePosition.y, this.getZ() + fumePosition.z, -this.getDeltaMovement().x, 0.0D, -this.getDeltaMovement().z);
+                this.level.addParticle(ParticleTypes.CRIT, this.getX() + fumePosition.x(), this.getY() + fumePosition.y(), this.getZ() + fumePosition.z(), -this.getDeltaMovement().x, 0.0D, -this.getDeltaMovement().z);
             }
         }
     }

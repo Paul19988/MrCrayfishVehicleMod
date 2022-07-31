@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import com.mrcrayfish.vehicle.init.ModSounds;
-import com.mrcrayfish.vehicle.tileentity.BoostTileEntity;
+import com.mrcrayfish.vehicle.block.entity.BoostTileEntity;
 import com.mrcrayfish.vehicle.util.StateHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 /**
  * Author: MrCrayfish
  */
+@SuppressWarnings("deprecation")
 public class BoostPadBlock extends RotatedObjectBlock implements EntityBlock
 {
     public static final BooleanProperty LEFT = BooleanProperty.create("left");
@@ -43,18 +44,21 @@ public class BoostPadBlock extends RotatedObjectBlock implements EntityBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
+    @NotNull
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext ctx)
+    {
         return SHAPE;
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState p_60572_, BlockGetter p_60573_, BlockPos p_60574_, CollisionContext p_60575_)
+    @NotNull
+    public VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext ctx)
     {
         return Shapes.empty();
     }
 
     @Override
-    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn)
+    public void entityInside(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Entity entityIn)
     {
         if(entityIn instanceof PoweredVehicleEntity && entityIn.getControllingPassenger() != null)
         {
@@ -80,7 +84,8 @@ public class BoostPadBlock extends RotatedObjectBlock implements EntityBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos pos, BlockPos facingPos)
+    @NotNull
+    public BlockState updateShape(@NotNull BlockState state, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor worldIn, @NotNull BlockPos pos, @NotNull BlockPos facingPos)
     {
         return this.getBoostPadState(state, state.getValue(DIRECTION), worldIn, pos);
     }
@@ -111,7 +116,7 @@ public class BoostPadBlock extends RotatedObjectBlock implements EntityBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
 
@@ -121,7 +126,7 @@ public class BoostPadBlock extends RotatedObjectBlock implements EntityBlock
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
         return new BoostTileEntity(pos, state, 0.5F);
     }
