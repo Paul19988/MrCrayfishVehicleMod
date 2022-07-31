@@ -20,17 +20,20 @@ public class ModDataKeys
     public static final SyncedDataKey<Player, Integer> TRAILER = SyncedDataKey.builder(SyncedClassKey.PLAYER, Serializers.INTEGER)
             .id(new ResourceLocation(Reference.MOD_ID, "trailer"))
             .defaultValueSupplier(() -> -1)
+            .saveToFile()
             .resetOnDeath()
             .build();
 
     public static final SyncedDataKey<Player, Optional<BlockPos>> GAS_PUMP = SyncedDataKey.builder(SyncedClassKey.PLAYER, com.mrcrayfish.vehicle.common.data.Serializers.OPTIONAL_BLOCK_POS)
             .id(new ResourceLocation(Reference.MOD_ID, "gas_pump"))
             .defaultValueSupplier(Optional::empty)
+            .saveToFile()
             .resetOnDeath()
             .build();
 
     public static final SyncedDataKey<Player, CompoundTag> HELD_VEHICLE = SyncedDataKey.builder(SyncedClassKey.PLAYER, Serializers.TAG_COMPOUND)
             .id(new ResourceLocation(Reference.MOD_ID, "held_vehicle"))
+            .saveToFile()
             .defaultValueSupplier(CompoundTag::new)
             .build();
 

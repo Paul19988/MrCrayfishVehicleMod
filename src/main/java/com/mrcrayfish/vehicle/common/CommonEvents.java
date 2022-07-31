@@ -162,7 +162,7 @@ public class CommonEvents
 
         // Saves the vehicle to a compound tag
         CompoundTag heldTag = new CompoundTag();
-        heldTag.putString("id", getEntityId(vehicle).toString());
+        heldTag.putString("id", getEntityId(vehicle));
         vehicle.saveWithoutId(heldTag);
 
         // Updates the held vehicle capability
@@ -339,6 +339,7 @@ public class CommonEvents
             {
                 PacketHandler.getPlayChannel().sendToServer(new MessageThrowVehicle());
             }
+
             if(event.isCancelable())
             {
                 event.setCanceled(true);
@@ -349,7 +350,7 @@ public class CommonEvents
 
     private static String getEntityId(Entity entity)
     {
-        return entity.getType().getDescriptionId();
+        return ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString();
     }
 
     @SubscribeEvent

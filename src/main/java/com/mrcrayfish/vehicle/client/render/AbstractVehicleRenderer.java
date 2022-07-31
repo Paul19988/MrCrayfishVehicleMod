@@ -203,33 +203,47 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
         {
             VehicleProperties properties = this.vehiclePropertiesProperty.get(vehicle);
             matrixStack.pushPose();
-            matrixStack.translate(0.0, -8 * 0.0625, 0.0);
-            matrixStack.translate(0.0, -properties.getAxleOffset() * 0.0625F, 0.0);
-            BakedModel wheelModel = RenderObjectHelper.getModel(wheelStack);
-            properties.getWheels().forEach(wheel -> this.renderWheel(vehicle, wheel, wheelStack, wheelModel, partialTicks, matrixStack, renderTypeBuffer, light));
+            {
+                matrixStack.translate(0.0, -8 * 0.0625, 0.0);
+                matrixStack.translate(0.0, -properties.getAxleOffset() * 0.0625F, 0.0);
+                BakedModel wheelModel = RenderObjectHelper.getModel(wheelStack);
+
+                for(Wheel wheel : properties.getWheels())
+                {
+                    if(!wheel.shouldRender())
+                    {
+                        return;
+                    }
+
+                    this.renderWheel(vehicle, wheel, wheelStack, wheelModel, partialTicks, matrixStack, renderTypeBuffer, light);
+                }
+            }
             matrixStack.popPose();
         }
     }
 
     protected void renderWheel(@Nullable T vehicle, Wheel wheel, ItemStack stack, BakedModel model, float partialTicks, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light)
     {
-        if(!wheel.shouldRender())
-            return;
-
         matrixStack.pushPose();
-        matrixStack.translate((wheel.getOffsetX() * 0.0625) * wheel.getSide().getOffset(), wheel.getOffsetY() * 0.0625, wheel.getOffsetZ() * 0.0625);
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
-        if(wheel.getSide() != Wheel.Side.NONE)
         {
-            matrixStack.translate((((wheel.getWidth() * wheel.getScaleX()) / 2) * 0.0625) * wheel.getSide().getOffset(), 0.0, 0.0);
+            matrixStack.translate((wheel.getOffsetX() * 0.0625) * wheel.getSide().getOffset(), wheel.getOffsetY() * 0.0625, wheel.getOffsetZ() * 0.0625);
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
+
+            if(wheel.getSide() != Wheel.Side.NONE)
+            {
+                matrixStack.translate((((wheel.getWidth() * wheel.getScaleX()) / 2) * 0.0625) * wheel.getSide().getOffset(), 0.0, 0.0);
+            }
+
+            matrixStack.scale(wheel.getScaleX(), wheel.getScaleY(), wheel.getScaleZ());
+
+            if(wheel.getSide() == Wheel.Side.RIGHT)
+            {
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
+            }
+
+            int wheelColor = IDyeable.getColorFromStack(stack);
+            RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, OverlayTexture.NO_OVERLAY, light);
         }
-        matrixStack.scale(wheel.getScaleX(), wheel.getScaleY(), wheel.getScaleZ());
-        if(wheel.getSide() == Wheel.Side.RIGHT)
-        {
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
-        }
-        int wheelColor = IDyeable.getColorFromStack(stack);
-        RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, OverlayTexture.NO_OVERLAY, light);
         matrixStack.popPose();
     }
 

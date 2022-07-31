@@ -17,18 +17,6 @@ import java.util.UUID;
  */
 public class HeldVehicleHandler
 {
-    private static boolean setupExtraLayers = false;
-
-    @SubscribeEvent
-    public void onRenderPlayer(RenderPlayerEvent.Pre event)
-    {
-        if(!setupExtraLayers)
-        {
-            event.getRenderer().addLayer(new LayerHeldVehicle(event.getRenderer()));
-            setupExtraLayers = true;
-        }
-    }
-
     public static final Map<UUID, AnimationCounter> idToCounter = new HashMap<>();
 
     @SubscribeEvent
