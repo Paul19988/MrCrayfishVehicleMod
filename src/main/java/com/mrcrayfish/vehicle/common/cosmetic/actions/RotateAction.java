@@ -2,14 +2,13 @@ package com.mrcrayfish.vehicle.common.cosmetic.actions;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mrcrayfish.vehicle.entity.PlaneEntity;
+import com.mrcrayfish.vehicle.common.cosmetic.actions.source.RotateActionSource;
+import com.mrcrayfish.vehicle.common.cosmetic.actions.source.RotateActionSourceRegistry;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.util.Axis;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 /**
@@ -17,11 +16,11 @@ import java.util.function.Supplier;
  */
 public class RotateAction extends Action
 {
-    private final Source source;
+    private final RotateActionSource source;
     private final Axis axis;
     private final float scale;
 
-    public RotateAction(Source source, Axis axis, float scale)
+    public RotateAction(RotateActionSource source, Axis axis, float scale)
     {
         this.source = source;
         this.axis = axis;
@@ -31,50 +30,23 @@ public class RotateAction extends Action
     @Override
     public void beforeRender(PoseStack stack, VehicleEntity vehicle, float partialTicks)
     {
-        stack.mulPose(this.axis.getAxis().rotationDegrees(this.source.valueFunction.apply(vehicle, partialTicks)));
+        stack.mulPose(this.axis.getAxis().rotationDegrees(this.source.valueFunction().apply(vehicle, partialTicks)));
     }
 
     @Override
     public void serialize(JsonObject object)
     {
-        object.addProperty("source", this.source.getKey());
+        object.addProperty("source", this.source.key().toString());
         object.addProperty("axis", this.axis.getKey());
         object.addProperty("scale", this.scale);
     }
 
     public static Supplier<RotateAction> createSupplier(JsonObject object)
     {
-        Source source = Source.fromKey(GsonHelper.getAsString(object, "source"));
+        RotateActionSource source = RotateActionSourceRegistry.getSource(new ResourceLocation(GsonHelper.getAsString(object, "source"))).orElseThrow(RuntimeException::new);
+
         Axis axis = Axis.fromKey(GsonHelper.getAsString(object, "axis"));
         float scale = GsonHelper.getAsFloat(object, "scale", 1.0F);
         return () -> new RotateAction(source, axis, scale);
-    }
-
-    public enum Source
-    {
-        PROPELLER("propeller", (vehicle, partialTicks) -> {
-            return vehicle instanceof PlaneEntity ? ((PlaneEntity) vehicle).getPropellerRotation(partialTicks) : 0F;
-        });
-        //TODO add more eventually
-
-        private final String key;
-        private final BiFunction<VehicleEntity, Float, Float> valueFunction;
-
-        Source(String key, BiFunction<VehicleEntity, Float, Float> valueFunction)
-        {
-            this.key = key;
-            this.valueFunction = valueFunction;
-        }
-
-        public String getKey()
-        {
-            return this.key;
-        }
-
-        @Nullable
-        public static Source fromKey(@Nullable String key)
-        {
-            return Arrays.stream(values()).filter(axis -> axis.key.equals(key)).findFirst().orElse(null);
-        }
     }
 }

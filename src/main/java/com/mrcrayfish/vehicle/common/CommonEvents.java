@@ -32,6 +32,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
@@ -264,10 +265,10 @@ public class CommonEvents
 
                 if(player.isCrouching())
                 {
-                    //Vector3d clickedVec = event.getHitVec(); //TODO WHY DID FORGE REMOVE THIS. GOING TO CREATE A PATCH
-                    HitResult result = player.pick(10.0, 0.0F, false);
-                    Vec3 clickedVec = result.getLocation();
-                    if(clickedVec == null || event.getFace() != Direction.UP)
+                    BlockHitResult result = event.getHitVec();
+                    BlockPos pos = result.getBlockPos();
+
+                    if(event.getFace() != Direction.UP)
                     {
                         event.setCanceled(true);
                         return;
@@ -285,7 +286,7 @@ public class CommonEvents
                             float rotation = (player.getYHeadRot() + 90F) % 360.0F;
                             Vec3 heldOffset = ((VehicleEntity) entity).getProperties().getHeldOffset().yRot((float) Math.toRadians(-player.getYHeadRot()));
 
-                            entity.absMoveTo(clickedVec.x + heldOffset.x * 0.0625D, clickedVec.y, clickedVec.z + heldOffset.z * 0.0625D, rotation, 0F);
+                            entity.absMoveTo(pos.getX() + heldOffset.x * 0.0625D, pos.getY(), pos.getZ() + heldOffset.z * 0.0625D, rotation, 0F);
                             entity.fallDistance = 0.0F;
 
                             //Checks if vehicle intersects with any blocks
@@ -436,6 +437,7 @@ public class CommonEvents
     public void onRightClick(PlayerInteractEvent.RightClickBlock event)
     {
         BlockState state = event.getLevel().getBlockState(event.getPos());
+
         if(state.getBlock() != ModBlocks.GAS_PUMP.get() && SyncedEntityData.instance().get(event.getEntity(), ModDataKeys.GAS_PUMP).isPresent())
         {
             event.setCanceled(true);
@@ -443,6 +445,7 @@ public class CommonEvents
         else if(event.getItemStack().getItem() instanceof FluidPipeItem)
         {
             BlockEntity relativeTileEntity = event.getLevel().getBlockEntity(event.getPos());
+
             if(relativeTileEntity != null && relativeTileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, event.getFace()).isPresent())
             {
                 event.setUseBlock(Event.Result.DENY);

@@ -30,7 +30,7 @@
           "axis": "z",
           "id": "vehicle:rotate",
           "scale": 1.0,
-          "source": "propeller"
+          "source": "vehicle:propeller"
         }
       ],
       "id": "vehicle:propeller",

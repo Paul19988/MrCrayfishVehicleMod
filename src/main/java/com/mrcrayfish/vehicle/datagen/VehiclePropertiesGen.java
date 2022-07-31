@@ -7,6 +7,7 @@ import com.mrcrayfish.vehicle.common.cosmetic.CosmeticProperties;
 import com.mrcrayfish.vehicle.common.cosmetic.StandardCosmetics;
 import com.mrcrayfish.vehicle.common.cosmetic.actions.OpenableAction;
 import com.mrcrayfish.vehicle.common.cosmetic.actions.RotateAction;
+import com.mrcrayfish.vehicle.common.cosmetic.actions.source.RotateActionSourceRegistry;
 import com.mrcrayfish.vehicle.common.entity.Transform;
 import com.mrcrayfish.vehicle.entity.EngineType;
 import com.mrcrayfish.vehicle.entity.FuelFillerType;
@@ -606,7 +607,7 @@ public class VehiclePropertiesGen extends VehiclePropertiesProvider
                 .addCosmetic(CosmeticProperties.builder(StandardCosmetics.PROPELLER)
                         .addModelLocation(VehicleModels.SPORTS_PLANE_PROPELLER.getModelLocation())
                         .setOffset(0, 14, 31)
-                        .addAction(new RotateAction(RotateAction.Source.PROPELLER, Axis.Z, 1.0F))
+                        .addAction(new RotateAction(RotateActionSourceRegistry.PROPELLER, Axis.Z, 1.0F))
                         .build())
         );
 
