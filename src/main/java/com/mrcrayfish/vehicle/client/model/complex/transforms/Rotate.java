@@ -29,6 +29,7 @@ public record Rotate(IValue x, IValue y, IValue z) implements Transform
         IValue x = get(object, "x", ctx);
         IValue y = get(object, "y", ctx);
         IValue z = get(object, "z", ctx);
+
         return new Rotate(x, y, z);
     }
 
@@ -48,6 +49,7 @@ public record Rotate(IValue x, IValue y, IValue z) implements Transform
         {
             return ctx.deserialize(e, Static.class);
         }
+
         throw new JsonParseException("Rotate values can only be a number or object");
     }
 

@@ -4,16 +4,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.mrcrayfish.vehicle.client.model.complex.ComplexModel;
 import com.mrcrayfish.vehicle.client.model.complex.ComplexModelDynamicSourceRegistry;
-import com.mrcrayfish.vehicle.entity.HelicopterEntity;
-import com.mrcrayfish.vehicle.entity.PlaneEntity;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.function.BiFunction;
 
 /**
@@ -43,8 +38,8 @@ public record Dynamic(BiFunction<VehicleEntity, Float, Double> source, boolean i
 
     public double getValue(VehicleEntity entity, float partialTicks)
     {
-        double value = this.source.apply(entity, partialTicks);
-        value *= this.scale;
+        double value = this.source.apply(entity, partialTicks) * this.scale;
+
         return this.inverse ? -value : value;
     }
 }

@@ -17,7 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class ModRecipeSerializers
 {
-    public static final DeferredRegister<RecipeSerializer<?>> REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Reference.MOD_ID);
+    public static final DeferredRegister<RecipeSerializer<?>> REGISTER = DeferredRegister.create(ForgeRegistries.Keys.RECIPE_SERIALIZERS, Reference.MOD_ID);
 
     public static final RegistryObject<SimpleRecipeSerializer<RecipeColorSprayCan>> COLOR_SPRAY_CAN = REGISTER.register("color_spray_can", () -> new SimpleRecipeSerializer<>(RecipeColorSprayCan::new));
     public static final RegistryObject<SimpleRecipeSerializer<RecipeRefillSprayCan>> REFILL_SPRAY_CAN = REGISTER.register("refill_spray_can", () -> new SimpleRecipeSerializer<>(RecipeRefillSprayCan::new));

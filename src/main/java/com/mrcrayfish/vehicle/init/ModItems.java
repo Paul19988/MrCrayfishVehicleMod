@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  */
 public class ModItems
 {
-    public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
+    public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.Keys.ITEMS, Reference.MOD_ID);
 
     public static final RegistryObject<Item> PANEL = register("panel", () -> new Item(new Item.Properties().tab(VehicleMod.CREATIVE_TAB)));
     public static final RegistryObject<Item> STANDARD_WHEEL = register("standard_wheel", () -> new WheelItem(WheelType.STANDARD, new Item.Properties().tab(VehicleMod.CREATIVE_TAB)).setColored());

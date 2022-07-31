@@ -62,15 +62,22 @@ public class ComplexModel
     public static ComplexModel fromJson(JsonObject object, JsonDeserializationContext ctx)
     {
         ResourceLocation location = new ResourceLocation(GsonHelper.getAsString(object, "model"));
+
         List<Transform> transforms = Collections.emptyList();
         if(object.has("transforms") && object.get("transforms").isJsonArray())
         {
             transforms = new ArrayList<>();
+
             JsonArray transformArray = GsonHelper.getAsJsonArray(object, "transforms");
             for(JsonElement e : transformArray)
             {
-                if(!e.isJsonObject()) throw new JsonParseException("Transforms array can only contain objects");
+                if(!e.isJsonObject())
+                {
+                    throw new JsonParseException("Transforms array can only contain objects");
+                }
+
                 JsonObject transformObj = e.getAsJsonObject();
+
                 String transformType = GsonHelper.getAsString(transformObj, "type");
                 switch (transformType) {
                     case "translate" -> transforms.add(ctx.deserialize(transformObj, Translate.class));
@@ -78,18 +85,25 @@ public class ComplexModel
                 }
             }
         }
+
         List<ComplexModel> children = Collections.emptyList();
         if(object.has("children") && object.get("children").isJsonArray())
         {
             children = new ArrayList<>();
+
             JsonArray childrenArray = GsonHelper.getAsJsonArray(object, "children");
             for(JsonElement e : childrenArray)
             {
-                if(!e.isJsonObject()) throw new JsonParseException("Children array can only contain objects");
+                if(!e.isJsonObject())
+                {
+                    throw new JsonParseException("Children array can only contain objects");
+                }
+
                 JsonObject childrenObj = e.getAsJsonObject();
                 children.add(ctx.deserialize(childrenObj, ComplexModel.class));
             }
         }
+
         return new ComplexModel(location, transforms, children.toArray(ComplexModel[]::new));
     }
 
@@ -100,6 +114,7 @@ public class ComplexModel
         {
             ResourceLocation modelLocation = model.getModelLocation();
             ResourceLocation complexLocation = new ResourceLocation(modelLocation.getNamespace(), "models/" + modelLocation.getPath() + ".complex");
+
             Optional<Resource> resource = minecraft.getResourceManager().getResource(complexLocation);
             if(resource.isPresent())
             {
@@ -113,6 +128,7 @@ public class ComplexModel
         {
             VehicleMod.LOGGER.error("Unable to load complex model", ex);
         }
+
         return null;
     }
 
@@ -131,8 +147,11 @@ public class ComplexModel
     public void render(VehicleEntity entity, PoseStack matrices, MultiBufferSource buffers, float delta, int color, int light)
     {
         this.transforms.forEach(transform -> transform.apply(entity, matrices, delta));
+
         RenderObjectHelper.renderColoredModel(this.getModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, color, OverlayTexture.NO_OVERLAY, light);
 
+        // This is a very potential hot allocation depending on how many children this model has, iterate over it manually
+        // noinspection ForLoopReplaceableByForEach
         for(int idx = 0; idx < this.children.length; idx++)
         {
             ComplexModel child = this.children[idx];
@@ -151,6 +170,7 @@ public class ComplexModel
         {
             this.cachedModel = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
         }
+
         return this.cachedModel;
     }
 

@@ -2,12 +2,17 @@ package com.mrcrayfish.vehicle.client.render.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.level.BlockAndTintGetter;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -48,6 +53,14 @@ public class RenderUtil
         Minecraft mc = Minecraft.getInstance();
         int scale = (int) mc.getWindow().getGuiScale();
         GL11.glScissor(x * scale, mc.getWindow().getScreenHeight() - y * scale - height * scale, Math.max(0, width * scale), Math.max(0, height * scale));
+    }
+
+    public static int getTransformedLight(Matrix4f pos, BlockAndTintGetter level, BlockPos.MutableBlockPos mpos, float x, float y, float z)
+    {
+        Vector4f vec = new Vector4f(x, y, z, 1F);
+        vec.transform(pos);
+
+        return LevelRenderer.getLightColor(level, mpos.set(vec.x(), vec.y(), vec.z()));
     }
 
     public static List<Component> lines(FormattedText text, int maxWidth)

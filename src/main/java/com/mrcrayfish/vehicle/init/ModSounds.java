@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class ModSounds
 {
-    public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Reference.MOD_ID);
+    public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(ForgeRegistries.Keys.SOUND_EVENTS, Reference.MOD_ID);
 
     public static final RegistryObject<SoundEvent> BLOCK_BOOST_PAD_BOOST = register("block.boost_pad.boost");
     public static final RegistryObject<SoundEvent> BLOCK_GAS_PUMP_NOZZLE_PICK_UP = register("block.gas_pump.nozzle.pick_up");

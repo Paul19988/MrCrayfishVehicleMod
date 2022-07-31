@@ -50,6 +50,7 @@ public class LayerHeldVehicle<T extends Player, M extends EntityModel<T> & Armed
                 {
                     EntityType<?> entityType = optional.get();
                     Entity entity = entityType.create(player.level);
+
                     if(entity instanceof VehicleEntity)
                     {
                         entity.load(tagCompound);

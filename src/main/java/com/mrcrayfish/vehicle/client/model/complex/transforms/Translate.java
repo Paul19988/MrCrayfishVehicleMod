@@ -29,6 +29,7 @@ public record Translate(IValue x, IValue y, IValue z) implements Transform
         IValue x = get(object, "x", ctx);
         IValue y = get(object, "y", ctx);
         IValue z = get(object, "z", ctx);
+
         return new Translate(x, y, z);
     }
 
@@ -48,6 +49,7 @@ public record Translate(IValue x, IValue y, IValue z) implements Transform
         {
             return ctx.deserialize(e, Static.class);
         }
+
         throw new JsonParseException("Translate values can only be a number or object");
     }
 

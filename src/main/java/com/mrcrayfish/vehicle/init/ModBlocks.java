@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 public class ModBlocks
 {
-    public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
+    public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.Keys.BLOCKS, Reference.MOD_ID);
 
     public static final RegistryObject<Block> TRAFFIC_CONE = register("traffic_cone", TrafficConeBlock::new);
     public static final RegistryObject<Block> FLUID_EXTRACTOR = register("fluid_extractor", FluidExtractorBlock::new);
