@@ -1,16 +1,15 @@
 package com.mrcrayfish.vehicle.fluid;
 
-import com.mrcrayfish.vehicle.Reference;
 import com.mrcrayfish.vehicle.init.ModBlocks;
+import com.mrcrayfish.vehicle.init.ModFluidTypes;
 import com.mrcrayfish.vehicle.init.ModFluids;
 import com.mrcrayfish.vehicle.init.ModItems;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,11 +20,8 @@ public abstract class EnderSap extends ForgeFlowingFluid
 {
     public EnderSap()
     {
-        super(new Properties(ModFluids.ENDER_SAP, ModFluids.FLOWING_ENDER_SAP, FluidAttributes.
-                builder(new ResourceLocation(Reference.MOD_ID, "block/ender_sap_still"),
-                        new ResourceLocation(Reference.MOD_ID, "block/ender_sap_flowing"))
-                .viscosity(3000)
-                .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)).block(ModBlocks.ENDER_SAP));
+        super(new Properties(ModFluidTypes.ENDER_SAP, ModFluids.ENDER_SAP, ModFluids.FLOWING_ENDER_SAP)
+                .block(ModBlocks.ENDER_SAP));
     }
 
     @Override
@@ -69,6 +65,17 @@ public abstract class EnderSap extends ForgeFlowingFluid
         public boolean isSource(@NotNull FluidState state)
         {
             return false;
+        }
+    }
+
+    public static class FluidType extends net.minecraftforge.fluids.FluidType
+    {
+        public FluidType()
+        {
+            super(FluidType.Properties.create()
+                    .viscosity(3000)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY));
         }
     }
 }

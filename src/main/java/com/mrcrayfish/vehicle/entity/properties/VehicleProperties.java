@@ -14,6 +14,7 @@ import com.mrcrayfish.vehicle.datagen.VehiclePropertiesProvider;
 import com.mrcrayfish.vehicle.common.entity.Wheel;
 import com.mrcrayfish.vehicle.network.HandshakeMessages;
 import com.mrcrayfish.vehicle.util.ExtraJSONUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.glfw.GLFW;
 
@@ -284,7 +286,7 @@ public class VehicleProperties
 
     public static VehicleProperties get(EntityType<?> entityType)
     {
-        return get(entityType.getRegistryName());
+        return get(ForgeRegistries.ENTITY_TYPES.getKey(entityType));
     }
 
     public static VehicleProperties get(ResourceLocation id)
@@ -335,7 +337,7 @@ public class VehicleProperties
     }
 
     @SubscribeEvent
-    public static void onClientDisconnect(ClientPlayerNetworkEvent.LoggedOutEvent event)
+    public static void onClientDisconnect(ClientPlayerNetworkEvent.LoggingOut event)
     {
         NETWORK_VEHICLE_PROPERTIES.clear();
     }
@@ -354,7 +356,7 @@ public class VehicleProperties
     }
 
     @SubscribeEvent
-    public static void onKeyPress(InputEvent.KeyInputEvent event)
+    public static void onKeyPress(InputEvent.Key event)
     {
         if(FMLEnvironment.production)
             return;

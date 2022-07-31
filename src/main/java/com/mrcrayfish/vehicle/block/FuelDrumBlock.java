@@ -11,8 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -90,7 +88,7 @@ public class FuelDrumBlock extends Block implements EntityBlock
     {
         if(Screen.hasShiftDown())
         {
-            tooltips.addAll(RenderUtil.lines(new TranslatableComponent(ModBlocks.FUEL_DRUM.get().getDescriptionId() + ".info"), 150));
+            tooltips.addAll(RenderUtil.lines(Component.translatable(ModBlocks.FUEL_DRUM.get().getDescriptionId() + ".info"), 150));
         }
         else
         {
@@ -105,12 +103,12 @@ public class FuelDrumBlock extends Block implements EntityBlock
                     int amount = blockEntityTag.getInt("amount");
                     if(fluid != null && amount > 0)
                     {
-                        tooltips.add(new TranslatableComponent(fluid.getAttributes().getTranslationKey()).withStyle(ChatFormatting.BLUE));
-                        tooltips.add(new TextComponent(amount + " / " + this.getCapacity() + "mb").withStyle(ChatFormatting.GRAY));
+                        tooltips.add(Component.translatable(fluid.getFluidType().getDescriptionId()).withStyle(ChatFormatting.BLUE));
+                        tooltips.add(Component.literal(amount + " / " + this.getCapacity() + "mb").withStyle(ChatFormatting.GRAY));
                     }
                 }
             }
-            tooltips.add(new TranslatableComponent("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
+            tooltips.add(Component.translatable("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
         }
     }
 

@@ -46,7 +46,7 @@ public abstract class AbstractMotorcycleRenderer<T extends MotorcycleEntity> ext
             Vec3 towBarOffset = properties.getTowBarOffset().scale(bodyPosition.getScale());
             matrixStack.translate(towBarOffset.x * 0.0625, towBarOffset.y * 0.0625 + 0.5, towBarOffset.z * 0.0625);
             matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
-            RenderUtil.renderColoredModel(this.getTowBarModel().getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
+            RenderObjectHelper.renderColoredModel(this.getTowBarModel().getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
             matrixStack.popPose();
         }
 

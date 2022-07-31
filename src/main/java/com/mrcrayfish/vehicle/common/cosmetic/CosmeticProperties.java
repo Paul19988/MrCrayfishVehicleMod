@@ -16,13 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -126,13 +120,15 @@ public class CosmeticProperties
 
     public static void deserializeModels(ResourceLocation cosmeticLocation, ResourceManager manager, Map<ResourceLocation, List<Pair<ResourceLocation, List<ResourceLocation>>>> modelMap)
     {
-        try(Resource resource = manager.getResource(cosmeticLocation))
+        try
         {
-            deserializeModels(resource.getInputStream(), modelMap);
+            Resource resource = manager.getResourceOrThrow(cosmeticLocation);
+
+            deserializeModels(resource.open(), modelMap);
         }
-        catch(IOException e)
+        catch(IOException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 

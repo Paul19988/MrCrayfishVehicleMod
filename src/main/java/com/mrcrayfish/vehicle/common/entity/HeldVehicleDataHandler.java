@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
@@ -53,7 +53,7 @@ public class HeldVehicleDataHandler
         CompoundTag vehicleTag = getHeldVehicle(event.getOriginal());
         if(!vehicleTag.isEmpty())
         {
-            setHeldVehicle(event.getPlayer(), vehicleTag);
+            setHeldVehicle(event.getOriginal(), vehicleTag);
         }
     }
 
@@ -63,15 +63,15 @@ public class HeldVehicleDataHandler
         if(event.getTarget() instanceof Player player)
         {
             CompoundTag vehicleTag = getHeldVehicle(player);
-            PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getPlayer()), new MessageSyncHeldVehicle(player.getId(), vehicleTag));
+            PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getTarget()), new MessageSyncHeldVehicle(player.getId(), vehicleTag));
         }
     }
 
     @SubscribeEvent
-    public void onPlayerJoinWorld(EntityJoinWorldEvent event)
+    public void onPlayerJoinWorld(EntityJoinLevelEvent event)
     {
         Entity entity = event.getEntity();
-        if(entity instanceof Player player && !event.getWorld().isClientSide)
+        if(entity instanceof Player player && !event.getLevel().isClientSide)
         {
             CompoundTag vehicleTag = getHeldVehicle(player);
             PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new MessageSyncHeldVehicle(player.getId(), vehicleTag));

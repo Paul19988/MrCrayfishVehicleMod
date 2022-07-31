@@ -7,7 +7,6 @@ import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -76,10 +75,10 @@ public class OverlayHandler
     private void addStat(String label, String value)
     {
         this.stats.add(
-                new TextComponent(label + ": ")
+                Component.literal(label + ": ")
                         .withStyle(ChatFormatting.BOLD)
                         .withStyle(ChatFormatting.RESET)
-                        .append(new TextComponent(value)
+                        .append(Component.literal(value)
                                 .withStyle(ChatFormatting.YELLOW)));
     }
 

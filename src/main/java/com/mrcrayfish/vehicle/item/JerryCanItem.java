@@ -9,8 +9,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -19,6 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -52,7 +51,7 @@ public class JerryCanItem extends Item
     @Override
     public void fillItemCategory(@NotNull CreativeModeTab group, @NotNull NonNullList<ItemStack> items)
     {
-        if(this.allowdedIn(group))
+        if(this.allowedIn(group))
         {
             ItemStack stack = new ItemStack(this);
             items.add(stack);
@@ -64,7 +63,7 @@ public class JerryCanItem extends Item
     {
         if(Screen.hasShiftDown())
         {
-            tooltips.addAll(RenderUtil.lines(new TranslatableComponent(this.getDescriptionId() + ".info"), 150));
+            tooltips.addAll(RenderUtil.lines(Component.translatable(this.getDescriptionId() + ".info"), 150));
         }
         else if(level != null)
         {
@@ -73,16 +72,16 @@ public class JerryCanItem extends Item
                 FluidStack fluidStack = handler.getFluidInTank(0);
                 if(!fluidStack.isEmpty())
                 {
-                    tooltips.add(new TranslatableComponent(fluidStack.getTranslationKey()).withStyle(ChatFormatting.BLUE));
-                    tooltips.add(new TextComponent(this.getCurrentFuel(stack) + " / " + this.capacitySupplier.get() + "mb").withStyle(ChatFormatting.GRAY));
+                    tooltips.add(Component.translatable(fluidStack.getTranslationKey()).withStyle(ChatFormatting.BLUE));
+                    tooltips.add(Component.literal(this.getCurrentFuel(stack) + " / " + this.capacitySupplier.get() + "mb").withStyle(ChatFormatting.GRAY));
                 }
                 else
                 {
-                    tooltips.add(new TranslatableComponent("item.vehicle.jerry_can.empty").withStyle(ChatFormatting.RED));
+                    tooltips.add(Component.translatable("item.vehicle.jerry_can.empty").withStyle(ChatFormatting.RED));
                 }
             });
 
-            tooltips.add(new TextComponent(ChatFormatting.YELLOW + I18n.get("vehicle.info_help")));
+            tooltips.add(Component.literal(ChatFormatting.YELLOW + I18n.get("vehicle.info_help")));
         }
     }
 
@@ -152,7 +151,8 @@ public class JerryCanItem extends Item
     {
         Optional<IFluidHandlerItem> optional = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).resolve();
         return optional.map(handler -> {
-            int color = handler.getFluidInTank(0).getFluid().getAttributes().getColor();
+            IClientFluidTypeExtensions.of(handler.getFluidInTank(0).getFluid()).getTintColor();
+            int color = IClientFluidTypeExtensions.of(handler.getFluidInTank(0).getFluid()).getTintColor();
             if(color == 0xFFFFFFFF) color = FluidUtils.getAverageFluidColor(handler.getFluidInTank(0).getFluid());
             return color;
         }).orElse(0);

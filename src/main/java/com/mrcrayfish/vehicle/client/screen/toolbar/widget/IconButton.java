@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -22,7 +21,7 @@ public class IconButton extends Button implements IToolbarLabel
 
     public IconButton(int width, int height, @Nullable IconProvider icon, Component label, Button.OnPress onPress)
     {
-        super(0, 0, width, height, TextComponent.EMPTY, onPress);
+        super(0, 0, width, height, Component.empty(), onPress);
         this.icon = icon;
         this.label = label;
     }
@@ -52,8 +51,8 @@ public class IconButton extends Button implements IToolbarLabel
         Minecraft mc = Minecraft.getInstance();
         Font font = mc.font;
         int combinedWidth = this.icon != null ? 10 : 0;
-        String message = this.getMessage().getContents().trim();
-        if(!message.isEmpty())
+        Component message = this.getMessage();
+        if(!message.equals(Component.empty()))
         {
             combinedWidth += font.width(message);
             if(this.icon != null)
@@ -66,7 +65,8 @@ public class IconButton extends Button implements IToolbarLabel
             RenderSystem.setShaderTexture(0, this.icon.getTextureLocation());
             this.drawIcon(this.x + this.width / 2 - combinedWidth / 2, this.y + 5, this.icon.getU(), this.icon.getV());
         }
-        if(!message.isEmpty())
+
+        if(!message.equals(Component.empty()))
         {
             font.drawShadow(matrixStack, message, this.x + this.width / 2 - combinedWidth / 2 + 10 + (this.icon == null ? 0 : 4), this.y + 6, 0xFFFFFF);
         }

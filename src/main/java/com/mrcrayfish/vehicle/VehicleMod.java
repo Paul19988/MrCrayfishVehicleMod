@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -36,7 +37,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -107,8 +107,8 @@ public class VehicleMod
     private void onGatherData(GatherDataEvent event)
     {
         DataGenerator generator = event.getGenerator();
-        generator.addProvider(new LootTableGen(generator));
-        generator.addProvider(new RecipeGen(generator));
-        generator.addProvider(new VehiclePropertiesGen(generator));
+        generator.addProvider(false, new LootTableGen(generator));
+        generator.addProvider(false, new RecipeGen(generator));
+        generator.addProvider(false, new VehiclePropertiesGen(generator));
     }
 }

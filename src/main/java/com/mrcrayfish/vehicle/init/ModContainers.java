@@ -25,7 +25,7 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class ModContainers
 {
-    public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Reference.MOD_ID);
 
     public static final RegistryObject<MenuType<FluidExtractorContainer>> FLUID_EXTRACTOR = register("fluid_extractor", (windowId, playerInventory, data) -> {
         FluidExtractorTileEntity fluidExtractor = (FluidExtractorTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());

@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.model.TransformationHelper;
+import net.minecraftforge.common.util.TransformationHelper;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
@@ -210,11 +210,6 @@ public class CameraHelper
             else
             {
                 quaternion.mul(Vector3f.XP.rotationDegrees(Mth.lerp(partialTicks, player.xRotO, player.xRot)));
-            }
-
-            if(Config.CLIENT.shouldFollowRoll.get())
-            {
-                rotation.mul(Vector3f.ZP.rotationDegrees(vehicle.getBodyRotationRoll(partialTicks)));
             }
 
             // If the player is in third person, applies additional vehicle specific camera rotations

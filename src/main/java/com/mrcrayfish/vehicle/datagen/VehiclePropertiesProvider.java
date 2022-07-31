@@ -1,17 +1,22 @@
 package com.mrcrayfish.vehicle.datagen;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
+import it.unimi.dsi.fastutil.Hash;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +38,7 @@ import java.util.Objects;
 public abstract class VehiclePropertiesProvider implements DataProvider
 {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final HashFunction HASH = Hashing.sha256();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(VehicleProperties.class, new VehicleProperties.Serializer()).create();
 
     private final DataGenerator generator;
@@ -51,7 +57,7 @@ public abstract class VehiclePropertiesProvider implements DataProvider
 
     protected final void add(EntityType<? extends VehicleEntity> type, VehicleProperties.Builder builder)
     {
-        this.add(type.getRegistryName(), builder);
+        this.add(ForgeRegistries.ENTITY_TYPES.getKey(type), builder);
     }
 
     protected final void add(ResourceLocation id, VehicleProperties.Builder builder)
@@ -67,7 +73,7 @@ public abstract class VehiclePropertiesProvider implements DataProvider
     public abstract void registerProperties();
 
     @Override
-    public void run(@NotNull HashCache cache) throws IOException
+    public void run(@NotNull CachedOutput cache) throws IOException
     {
         this.vehiclePropertiesMap.clear();
         this.registerProperties();
@@ -78,17 +84,11 @@ public abstract class VehiclePropertiesProvider implements DataProvider
             Path path = this.generator.getOutputFolder().resolve("data/" + modId + "/vehicles/properties/" + vehicleId + ".json");
             try
             {
-                String rawJson = GSON.toJson(properties);
-                String hash = SHA1.hashUnencodedChars(rawJson).toString();
-                if(!Objects.equals(cache.getHash(path), hash) || !Files.exists(path))
+                if(!Files.exists(path))
                 {
                     Files.createDirectories(path.getParent());
-                    try(BufferedWriter writer = Files.newBufferedWriter(path))
-                    {
-                        writer.write(rawJson);
-                    }
                 }
-                cache.putNew(path, hash);
+                DataProvider.saveStable(cache, GSON.toJsonTree(properties), path);
             }
             catch(IOException e)
             {
@@ -127,17 +127,13 @@ public abstract class VehiclePropertiesProvider implements DataProvider
                     validModels.add(cosmeticId.toString(), array);
                 });
                 object.add("valid_models", validModels);
-                String rawJson = GSON.toJson(object);
-                String hash = SHA1.hashUnencodedChars(rawJson).toString();
-                if(!Objects.equals(cache.getHash(path), hash) || !Files.exists(path))
+
+                if(!Files.exists(path))
                 {
                     Files.createDirectories(path.getParent());
-                    try(BufferedWriter writer = Files.newBufferedWriter(path))
-                    {
-                        writer.write(rawJson);
-                    }
                 }
-                cache.putNew(path, hash);
+
+                DataProvider.saveStable(cache, object, path);
             }
             catch(IOException e)
             {

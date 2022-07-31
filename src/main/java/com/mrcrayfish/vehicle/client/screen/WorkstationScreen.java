@@ -39,8 +39,6 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -90,12 +88,12 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
         this.inventoryLabelY = this.imageHeight - 93;
         this.materials = new ArrayList<>();
         this.vehicleTypes = this.getVehicleTypes(playerInventory.player.level);
-        this.vehicleTypes.sort(Comparator.comparing(type -> type.getRegistryName().getPath()));
+        this.vehicleTypes.sort(Comparator.comparing(EntityType::getDescriptionId));
     }
 
     private List<EntityType<?>> getVehicleTypes(Level world)
     {
-        return world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == RecipeTypes.WORKSTATION).map(recipe -> (WorkstationRecipe) recipe).map(WorkstationRecipe::getVehicle).filter(entityType -> !Config.SERVER.disabledVehicles.get().contains(Objects.requireNonNull(entityType.getRegistryName()).toString())).collect(Collectors.toList());
+        return world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == RecipeTypes.WORKSTATION).map(recipe -> (WorkstationRecipe) recipe).map(WorkstationRecipe::getVehicle).filter(entityType -> !Config.SERVER.disabledVehicles.get().contains(Objects.requireNonNull(entityType.getDescriptionId()))).collect(Collectors.toList());
     }
 
     @Override
@@ -103,24 +101,24 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
     {
         super.init();
 
-        this.addRenderableWidget(new Button(this.leftPos + 9, this.topPos + 18, 15, 20, new TextComponent("<"), button -> {
+        this.addRenderableWidget(new Button(this.leftPos + 9, this.topPos + 18, 15, 20, Component.literal("<"), button -> {
             this.loadVehicle(Math.floorMod(currentVehicle - 1,  this.vehicleTypes.size()));
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         }));
 
-        this.addRenderableWidget(new Button(this.leftPos + 153, this.topPos + 18, 15, 20, new TextComponent(">"), button -> {
+        this.addRenderableWidget(new Button(this.leftPos + 153, this.topPos + 18, 15, 20, Component.literal(">"), button -> {
             this.loadVehicle(Math.floorMod(currentVehicle + 1,  this.vehicleTypes.size()));
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         }));
 
-        this.btnCraft = this.addRenderableWidget(new Button(this.leftPos + 172, this.topPos + 6, 97, 20, new TranslatableComponent("gui.vehicle.craft"), button -> {
-            ResourceLocation registryName = this.vehicleTypes.get(currentVehicle).getRegistryName();
+        this.btnCraft = this.addRenderableWidget(new Button(this.leftPos + 172, this.topPos + 6, 97, 20, Component.translatable("gui.vehicle.craft"), button -> {
+            String registryName = this.vehicleTypes.get(currentVehicle).getDescriptionId();
             Objects.requireNonNull(registryName, "Vehicle registry name must not be null!");
-            PacketHandler.getPlayChannel().sendToServer(new MessageCraftVehicle(registryName.toString()));
+            PacketHandler.getPlayChannel().sendToServer(new MessageCraftVehicle(registryName));
         }));
 
         this.btnCraft.active = false;
-        this.checkBoxMaterials = this.addRenderableWidget(new CheckBox(this.leftPos + 172, this.topPos + 51,  new TranslatableComponent("gui.vehicle.show_remaining")));
+        this.checkBoxMaterials = this.addRenderableWidget(new CheckBox(this.leftPos + 172, this.topPos + 51, Component.translatable("gui.vehicle.show_remaining")));
         this.checkBoxMaterials.setToggled(WorkstationScreen.showRemaining);
         this.loadVehicle(currentVehicle);
     }
@@ -295,30 +293,30 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
         VehicleProperties properties = cachedVehicle.getProperties();
         if(properties.canBePainted())
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(new TranslatableComponent("vehicle.tooltip.optional").withStyle(ChatFormatting.AQUA), new TranslatableComponent("vehicle.tooltip.paint_color").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
+            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.optional").withStyle(ChatFormatting.AQUA), Component.translatable("vehicle.tooltip.paint_color").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
         }
         else
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(new TranslatableComponent("vehicle.tooltip.paint_color"), new TranslatableComponent("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
+            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.paint_color"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
         }
 
         if(properties.getExtended(PoweredProperties.class).getEngineType() != EngineType.NONE)
         {
             Component engineName = properties.getExtended(PoweredProperties.class).getEngineType().getEngineName();
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(new TranslatableComponent("vehicle.tooltip.required").withStyle(ChatFormatting.RED), engineName), startX, startY, 192, 29, mouseX, mouseY, 1);
+            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.required").withStyle(ChatFormatting.RED), engineName), startX, startY, 192, 29, mouseX, mouseY, 1);
         }
         else
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(new TranslatableComponent("vehicle.tooltip.engine"), new TranslatableComponent("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 192, 29, mouseX, mouseY, 1);
+            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.engine"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 192, 29, mouseX, mouseY, 1);
         }
 
         if(properties.canChangeWheels())
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(new TranslatableComponent("vehicle.tooltip.required").withStyle(ChatFormatting.RED), new TranslatableComponent("vehicle.tooltip.wheels")), startX, startY, 212, 29, mouseX, mouseY, 2);
+            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.required").withStyle(ChatFormatting.RED), Component.translatable("vehicle.tooltip.wheels")), startX, startY, 212, 29, mouseX, mouseY, 2);
         }
         else
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(new TranslatableComponent("vehicle.tooltip.wheels"), new TranslatableComponent("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 212, 29, mouseX, mouseY, 2);
+            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.wheels"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 212, 29, mouseX, mouseY, 2);
         }
     }
 

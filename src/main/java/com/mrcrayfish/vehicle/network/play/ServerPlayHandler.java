@@ -113,11 +113,11 @@ public class ServerPlayHandler
         if(Config.SERVER.disabledVehicles.get().contains(entityId.toString()))
             return;
 
-        EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(entityId);
+        EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(entityId);
         if(entityType == null)
             return;
 
-        if(!VehicleRegistry.getRegisteredVehicles().contains(entityType.getRegistryName()))
+        if(!VehicleRegistry.getRegisteredVehicles().contains(ForgeRegistries.ENTITY_TYPES.getKey(entityType)))
             return;
 
         WorkstationRecipe recipe = WorkstationRecipes.getRecipe(entityType, world);
@@ -501,7 +501,7 @@ public class ServerPlayHandler
             }
         }
 
-        NetworkHooks.openGui(player, new SimpleMenuProvider((windowId, playerInventory, playerEntity) -> {
+        NetworkHooks.openScreen(player, new SimpleMenuProvider((windowId, playerInventory, playerEntity) -> {
             return new StorageContainer(windowId, playerInventory, inventory, playerEntity);
         }, inventory.getDisplayName()), buffer -> {
             buffer.writeVarInt(message.getEntityId());

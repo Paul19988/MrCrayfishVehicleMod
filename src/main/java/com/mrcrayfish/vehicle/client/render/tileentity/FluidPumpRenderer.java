@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
@@ -84,7 +83,7 @@ public class FluidPumpRenderer implements BlockEntityRenderer<PumpTileEntity>
         matrices.scale(-0.015F, -0.015F, 0.015F);
         Matrix4f matrix4f = matrices.last().pose();
         Font fontRenderer = this.font;
-        Component text = new TranslatableComponent(entity.getPowerMode().getKey());
+        Component text = Component.translatable(entity.getPowerMode().getKey());
         float x = (float)(-fontRenderer.width(text) / 2);
         fontRenderer.drawInBatch(text, x, 0, -1, true, matrix4f, buffers, true, 0, 15728880);
         matrices.popPose();

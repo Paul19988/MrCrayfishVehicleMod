@@ -24,13 +24,13 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class VehicleHelper
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
     private static final WeakHashMap<PoweredVehicleEntity, EnumMap<SoundType, TickableSoundInstance>> SOUND_TRACKER = new WeakHashMap<>();
 
-    public static void tryPlayEngineSound(PoweredVehicleEntity vehicle)
+    public static void tryPlayEngineSound(PoweredVehicleEntity vehicle, RandomSource source)
     {
         if(vehicle.getEngineSound() != null && vehicle.getControllingPassenger() != null && vehicle.isEnginePowered())
         {
@@ -52,14 +52,14 @@ public class VehicleHelper
             TickableSoundInstance sound = soundMap.get(SoundType.ENGINE);
             if(sound == null || sound.isStopped() || !MINECRAFT.getSoundManager().isActive(sound))
             {
-                sound = new MovingEngineSound(MINECRAFT.player, vehicle);
+                sound = new MovingEngineSound(MINECRAFT.player, vehicle, source);
                 soundMap.put(SoundType.ENGINE, sound);
                 MINECRAFT.getSoundManager().play(sound);
             }
         }
     }
 
-    public static void tryPlayHornSound(PoweredVehicleEntity vehicle)
+    public static void tryPlayHornSound(PoweredVehicleEntity vehicle, RandomSource source)
     {
         if(vehicle.hasHorn() && vehicle.getHornSound() != null)
         {
@@ -67,7 +67,7 @@ public class VehicleHelper
             TickableSoundInstance sound = soundMap.get(SoundType.HORN);
             if(sound == null || sound.isStopped() || !MINECRAFT.getSoundManager().isActive(sound))
             {
-                sound = new MovingHornSound(MINECRAFT.player, vehicle);
+                sound = new MovingHornSound(MINECRAFT.player, vehicle, source);
                 soundMap.put(SoundType.HORN, sound);
                 MINECRAFT.getSoundManager().play(sound);
             }
@@ -76,27 +76,13 @@ public class VehicleHelper
 
     public static void playSound(SoundEvent soundEvent, BlockPos pos, float volume, float pitch)
     {
-        SoundInstance sound = new SimpleSoundInstance(soundEvent, SoundSource.BLOCKS, volume, pitch, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+        SoundInstance sound = new SimpleSoundInstance(soundEvent, SoundSource.BLOCKS, volume, pitch, RandomSource.createNewThreadLocalInstance(), pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
         MINECRAFT.submitAsync(() -> MINECRAFT.getSoundManager().play(sound));
     }
 
     public static void playSound(SoundEvent soundEvent, float volume, float pitch)
     {
         MINECRAFT.submitAsync(() -> MINECRAFT.getSoundManager().play(SimpleSoundInstance.forUI(soundEvent, volume, pitch)));
-    }
-
-    //@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public void onFogDensity(EntityViewRenderEvent.FogDensity event)
-    {
-        /*if(event.getEntity().isInsideOfMaterial(ModMaterials.FUELIUM))
-        {
-            event.setDensity(0.5F);
-        }
-        else
-        {
-            event.setDensity(0.01F);
-        }
-        event.setCanceled(true);*/
     }
 
     @OnlyIn(Dist.CLIENT)

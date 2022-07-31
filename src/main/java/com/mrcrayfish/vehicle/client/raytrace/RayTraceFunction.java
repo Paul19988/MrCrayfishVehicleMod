@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -59,7 +60,7 @@ public interface RayTraceFunction
 
             FluidTank tank = gasPumpTank.getFluidTank();
             FluidStack stack = tank.getFluid();
-            if(stack.isEmpty() || !Config.SERVER.validFuels.get().contains(stack.getFluid().getRegistryName().toString()))
+            if(stack.isEmpty() || !Config.SERVER.validFuels.get().contains(ForgeRegistries.FLUIDS.getKey(stack.getFluid()).toString()))
                 break gasPump;
 
             if(rayTracer.getContinuousInteractionTickCounter() % 2 == 0)
@@ -81,7 +82,7 @@ public interface RayTraceFunction
 
             IFluidHandlerItem handler = optional.get();
             FluidStack fluidStack = handler.getFluidInTank(0);
-            if(fluidStack.isEmpty() || !Config.SERVER.validFuels.get().contains(fluidStack.getFluid().getRegistryName().toString()))
+            if(fluidStack.isEmpty() || !Config.SERVER.validFuels.get().contains(ForgeRegistries.FLUIDS.getKey(fluidStack.getFluid()).toString()))
                 continue;
 
             if(rayTracer.getContinuousInteractionTickCounter() % 2 == 0)

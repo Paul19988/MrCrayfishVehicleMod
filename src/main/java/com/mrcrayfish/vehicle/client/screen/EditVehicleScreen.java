@@ -23,7 +23,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -264,11 +263,11 @@ public class EditVehicleScreen extends AbstractContainerScreen<EditVehicleContai
             {
                 if(this.cachedVehicle.getProperties().getExtended(PoweredProperties.class).getEngineType() != EngineType.NONE)
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Collections.singletonList(new TextComponent("Engine")), Component::getVisualOrderText), mouseX, mouseY); //TODO localise
+                    this.renderTooltip(matrixStack, Lists.transform(Collections.singletonList(Component.literal("Engine")), Component::getVisualOrderText), mouseX, mouseY); //TODO localise
                 }
                 else
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Arrays.asList(new TextComponent("Engine"), new TextComponent(ChatFormatting.GRAY + "Not applicable")), Component::getVisualOrderText), mouseX, mouseY); //TODO localise
+                    this.renderTooltip(matrixStack, Lists.transform(Arrays.asList(Component.literal("Engine"),  Component.literal(ChatFormatting.GRAY + "Not applicable")), Component::getVisualOrderText), mouseX, mouseY); //TODO localise
                 }
             }
         }
@@ -279,11 +278,11 @@ public class EditVehicleScreen extends AbstractContainerScreen<EditVehicleContai
             {
                 if(this.cachedVehicle.getProperties().canChangeWheels())
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Collections.singletonList(new TextComponent("Wheels")), Component::getVisualOrderText), mouseX, mouseY);
+                    this.renderTooltip(matrixStack, Lists.transform(Collections.singletonList(Component.literal("Wheels")), Component::getVisualOrderText), mouseX, mouseY);
                 }
                 else
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Arrays.asList(new TextComponent("Wheels"), new TextComponent(ChatFormatting.GRAY + "Not applicable")), Component::getVisualOrderText), mouseX, mouseY);
+                    this.renderTooltip(matrixStack, Lists.transform(Arrays.asList(Component.literal("Wheels"), Component.literal(ChatFormatting.GRAY + "Not applicable")), Component::getVisualOrderText), mouseX, mouseY);
                 }
             }
         }

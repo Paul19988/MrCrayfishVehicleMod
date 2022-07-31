@@ -13,8 +13,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -71,7 +69,7 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
                 case 0 -> extractionProgress;
                 case 1 -> remainingFuel;
                 case 2 -> fuelMaxProgress;
-                case 3 -> tank.getFluid().getFluid().getRegistryName().hashCode();
+                case 3 -> ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid()).hashCode();
                 case 4 -> tank.getFluidAmount();
                 default -> 0;
             };
@@ -379,7 +377,7 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
     @Override
     public Component getDisplayName()
     {
-        return this.hasCustomName() ? new TextComponent(this.customName) : new TranslatableComponent("container.fluid_extractor");
+        return this.hasCustomName() ? Component.literal(this.customName) : Component.translatable("container.fluid_extractor");
     }
 
     private void shrinkItem(int index)
@@ -406,7 +404,7 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
 
     public void updateFluid(FluidTank tank, int fluidHash)
     {
-        Optional<Fluid> optional = ForgeRegistries.FLUIDS.getValues().stream().filter(fluid -> fluid.getRegistryName().hashCode() == fluidHash).findFirst();
+        Optional<Fluid> optional = ForgeRegistries.FLUIDS.getValues().stream().filter(fluid -> ForgeRegistries.FLUIDS.getKey(fluid).hashCode() == fluidHash).findFirst();
         optional.ifPresent(fluid -> tank.setFluid(new FluidStack(fluid, tank.getFluidAmount())));
     }
 

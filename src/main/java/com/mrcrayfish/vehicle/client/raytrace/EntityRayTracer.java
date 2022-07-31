@@ -37,11 +37,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -243,13 +244,12 @@ public class EntityRayTracer
         List<Triangle> triangles = new ArrayList<>();
         try
         {
-            Random random = new Random();
-            random.setSeed(42L);
-            createTrianglesFromBakedModel(model.getQuads(null, null, random, EmptyModelData.INSTANCE), matrix, triangles);
+            XoroshiroRandomSource random = new XoroshiroRandomSource(42L);
+            createTrianglesFromBakedModel(model.getQuads(null, null, random, ModelData.EMPTY, RenderType.lines()), matrix, triangles);
             for(Direction facing : Direction.values())
             {
                 random.setSeed(42L);
-                createTrianglesFromBakedModel(model.getQuads(null, facing, random, EmptyModelData.INSTANCE), matrix, triangles);
+                createTrianglesFromBakedModel(model.getQuads(null, facing, random, ModelData.EMPTY, RenderType.lines()), matrix, triangles);
             }
         }
         catch(Exception ignored){}
@@ -358,14 +358,14 @@ public class EntityRayTracer
     }
 
     @SubscribeEvent
-    public void onClientConnect(ClientPlayerNetworkEvent.LoggedInEvent event)
+    public void onClientConnect(ClientPlayerNetworkEvent.LoggingIn event)
     {
         // Clear cache when player logs in as the server may have datapacks
         this.clearDataForReregistration();
     }
 
     @SubscribeEvent
-    public void onClientTick(InputEvent.KeyInputEvent event)
+    public void onClientTick(InputEvent.Key event)
     {
         Minecraft mc = Minecraft.getInstance();
         if(mc.player == null)
@@ -381,7 +381,7 @@ public class EntityRayTracer
      * @param event mouse event
      */
     @SubscribeEvent
-    public void onMouseEvent(InputEvent.RawMouseEvent event)
+    public void onMouseEvent(InputEvent.MouseButton event)
     {
         Minecraft mc = Minecraft.getInstance();
         if(mc.getOverlay() != null || mc.screen != null || mc.player == null || !mc.mouseHandler.isMouseGrabbed())
@@ -461,7 +461,7 @@ public class EntityRayTracer
             }
             else
             {
-                VehicleMod.LOGGER.warn("The vehicle '" + type.getRegistryName() + "' does not have any registered ray trace transforms.");
+                VehicleMod.LOGGER.warn("The vehicle '" + type.getDescriptionId() + "' does not have any registered ray trace transforms.");
             }
         }
         if(closestRayTraceResult != null)

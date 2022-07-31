@@ -21,7 +21,7 @@ public record FluidEntry(Fluid fluid, int amount)
 
     public static FluidEntry read(FriendlyByteBuf buffer)
     {
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(buffer.readUtf(256)));
+        Fluid fluid = ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation());
         int amount = buffer.readInt();
         return new FluidEntry(fluid, amount);
     }
@@ -57,14 +57,14 @@ public record FluidEntry(Fluid fluid, int amount)
     public JsonObject toJson()
     {
         JsonObject object = new JsonObject();
-        object.addProperty("fluid", this.fluid.getRegistryName().toString());
+        object.addProperty("fluid", ForgeRegistries.FLUIDS.getKey(this.fluid).toString());
         object.addProperty("amount", this.amount);
         return object;
     }
 
     public void write(FriendlyByteBuf buffer)
     {
-        buffer.writeUtf(this.fluid.getRegistryName().toString(), 256);
+        buffer.writeResourceLocation(ForgeRegistries.FLUIDS.getKey(this.fluid));
         buffer.writeInt(this.amount);
     }
 }

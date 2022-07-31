@@ -1,8 +1,6 @@
 package com.mrcrayfish.vehicle.entity;
 
-
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -16,6 +14,6 @@ public interface IEngineType
 
     default Component getEngineName()
     {
-        return new TranslatableComponent(this.getId().getNamespace() + ".engine_type." + this.getId().getPath() + ".name");
+        return Component.translatable(this.getId().getNamespace() + ".engine_type." + this.getId().getPath() + ".name");
     }
 }

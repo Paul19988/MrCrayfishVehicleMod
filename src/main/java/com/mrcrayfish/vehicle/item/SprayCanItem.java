@@ -8,8 +8,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -37,7 +35,7 @@ public class SprayCanItem extends Item implements IDyeable
     @Override
     public void fillItemCategory(@NotNull CreativeModeTab group, @NotNull NonNullList<ItemStack> items)
     {
-        if (this.allowdedIn(group))
+        if (this.allowedIn(group))
         {
             ItemStack stack = new ItemStack(this);
             this.refill(stack);
@@ -50,20 +48,20 @@ public class SprayCanItem extends Item implements IDyeable
     {
         if(Screen.hasShiftDown())
         {
-            tooltips.addAll(RenderUtil.lines(new TranslatableComponent(this.getDescriptionId() + ".info"), 150));
+            tooltips.addAll(RenderUtil.lines(Component.translatable(this.getDescriptionId() + ".info"), 150));
         }
         else
         {
             if(this.hasColor(stack))
             {
-                tooltips.add(new TextComponent(String.format("#%06X", this.getColor(stack))).withStyle(ChatFormatting.BLUE));
+                tooltips.add(Component.literal(String.format("#%06X", this.getColor(stack))).withStyle(ChatFormatting.BLUE));
             }
             else
             {
-                tooltips.add(new TranslatableComponent(this.getDescriptionId() + ".empty").withStyle(ChatFormatting.RED));
+                tooltips.add(Component.translatable(this.getDescriptionId() + ".empty").withStyle(ChatFormatting.RED));
             }
 
-            tooltips.add(new TranslatableComponent("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
+            tooltips.add(Component.translatable("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
         }
     }
 

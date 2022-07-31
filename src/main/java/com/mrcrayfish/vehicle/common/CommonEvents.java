@@ -20,7 +20,6 @@ import com.mrcrayfish.vehicle.tileentity.JackTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -36,13 +35,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.MissingMappingsEvent;
 
 import java.util.List;
 import java.util.Optional;
@@ -78,12 +78,12 @@ public class CommonEvents
     }
 
     @SubscribeEvent
-    public void onMissingItem(RegistryEvent.MissingMappings<Item> event)
+    public void onMissingItem(MissingMappingsEvent event)
     {
-        ImmutableList<RegistryEvent.MissingMappings.Mapping<Item>> mappings = ImmutableList.copyOf(event.getMappings().stream().filter(e -> e.key.getNamespace().equals(Reference.MOD_ID)).collect(Collectors.toList()));
-        for(RegistryEvent.MissingMappings.Mapping<Item> missing : mappings)
+        ImmutableList<MissingMappingsEvent.Mapping<Item>> mappings = ImmutableList.copyOf(event.getMappings(ForgeRegistries.ITEMS.getRegistryKey(), Reference.MOD_ID).stream().filter(e -> e.getKey().getNamespace().equals(Reference.MOD_ID)).collect(Collectors.toList()));
+        for(MissingMappingsEvent.Mapping<Item> missing : mappings)
         {
-            if(missing.key.getNamespace().equals(Reference.MOD_ID) && IGNORE_ITEMS.contains(missing.key.getPath()))
+            if(missing.getKey().getNamespace().equals(Reference.MOD_ID) && IGNORE_ITEMS.contains(missing.getKey().getPath()))
             {
                 missing.ignore();
             }
@@ -91,12 +91,12 @@ public class CommonEvents
     }
 
     @SubscribeEvent
-    public void onMissingSound(RegistryEvent.MissingMappings<SoundEvent> event)
+    public void onMissingSound(MissingMappingsEvent event)
     {
-        ImmutableList<RegistryEvent.MissingMappings.Mapping<SoundEvent>> mappings = ImmutableList.copyOf(event.getMappings().stream().filter(e -> e.key.getNamespace().equals(Reference.MOD_ID)).collect(Collectors.toList()));
-        for(RegistryEvent.MissingMappings.Mapping<SoundEvent> missing : mappings)
+        ImmutableList<MissingMappingsEvent.Mapping<SoundEvent>> mappings = ImmutableList.copyOf(event.getMappings(ForgeRegistries.SOUND_EVENTS.getRegistryKey(), Reference.MOD_ID).stream().filter(e -> e.getKey().getNamespace().equals(Reference.MOD_ID)).collect(Collectors.toList()));
+        for(MissingMappingsEvent.Mapping<SoundEvent> missing : mappings)
         {
-            if(missing.key.getNamespace().equals(Reference.MOD_ID) && IGNORE_SOUNDS.contains(missing.key.getPath()))
+            if(missing.getKey().getNamespace().equals(Reference.MOD_ID) && IGNORE_SOUNDS.contains(missing.getKey().getPath()))
             {
                 missing.ignore();
             }
@@ -104,12 +104,12 @@ public class CommonEvents
     }
 
     @SubscribeEvent
-    public void onMissingEntity(RegistryEvent.MissingMappings<EntityType<?>> event)
+    public void onMissingEntity(MissingMappingsEvent event)
     {
-        ImmutableList<RegistryEvent.MissingMappings.Mapping<EntityType<?>>> mappings = ImmutableList.copyOf(event.getMappings().stream().filter(e -> e.key.getNamespace().equals(Reference.MOD_ID)).collect(Collectors.toList()));
-        for(RegistryEvent.MissingMappings.Mapping<EntityType<?>> missing : mappings)
+        ImmutableList<MissingMappingsEvent.Mapping<EntityType<?>>> mappings = ImmutableList.copyOf(event.getMappings(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), Reference.MOD_ID).stream().filter(e -> e.getKey().getNamespace().equals(Reference.MOD_ID)).collect(Collectors.toList()));
+        for(MissingMappingsEvent.Mapping<EntityType<?>> missing : mappings)
         {
-            if(missing.key.getNamespace().equals(Reference.MOD_ID) && IGNORE_ENTITIES.contains(missing.key.getPath()))
+            if(missing.getKey().getNamespace().equals(Reference.MOD_ID) && IGNORE_ENTITIES.contains(missing.getKey().getPath()))
             {
                 missing.ignore();
             }
@@ -119,7 +119,7 @@ public class CommonEvents
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.EntityInteractSpecific event)
     {
-        if(handleVehicleInteraction(event.getWorld(), event.getPlayer(), event.getHand(), event.getTarget()))
+        if(handleVehicleInteraction(event.getLevel(), event.getEntity(), event.getHand(), event.getTarget()))
         {
             event.setCanceled(true);
         }
@@ -216,8 +216,8 @@ public class CommonEvents
         if(event.getHand() == InteractionHand.OFF_HAND)
             return;
 
-        Player player = event.getPlayer();
-        Level world = event.getWorld();
+        Player player = event.getEntity();
+        Level world = event.getLevel();
         if(!world.isClientSide())
         {
             if(HeldVehicleDataHandler.isHoldingVehicle(player))
@@ -225,7 +225,7 @@ public class CommonEvents
                 if(event.getFace() == Direction.UP)
                 {
                     BlockPos pos = event.getPos();
-                    BlockEntity tileEntity = event.getWorld().getBlockEntity(pos);
+                    BlockEntity tileEntity = world.getBlockEntity(pos);
                     if(tileEntity instanceof JackTileEntity jack)
                     {
                         if(jack.getJack() == null)
@@ -319,14 +319,14 @@ public class CommonEvents
         if(event.getHand() == InteractionHand.OFF_HAND)
             return;
 
-        Level world = event.getWorld();
+        Level world = event.getLevel();
         if(!world.isClientSide())
             return;
 
         if(!(event instanceof PlayerInteractEvent.RightClickEmpty || event instanceof PlayerInteractEvent.RightClickItem))
             return;
 
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         float reach = (float) player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
         reach = player.isCreative() ? reach : reach - 0.5F;
         HitResult result = player.pick(reach, 0.0F, false);
@@ -347,15 +347,15 @@ public class CommonEvents
         }
     }
 
-    private static ResourceLocation getEntityId(Entity entity)
+    private static String getEntityId(Entity entity)
     {
-        return entity.getType().getRegistryName();
+        return entity.getType().getDescriptionId();
     }
 
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event)
     {
-        Entity entity = event.getEntityLiving();
+        Entity entity = event.getEntity();
         if(entity instanceof Player player)
         {
             this.dropVehicle(player);
@@ -425,7 +425,7 @@ public class CommonEvents
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickItem event)
     {
-        if(SyncedEntityData.instance().get(event.getPlayer(), ModDataKeys.GAS_PUMP).isPresent())
+        if(SyncedEntityData.instance().get(event.getEntity(), ModDataKeys.GAS_PUMP).isPresent())
         {
             event.setCanceled(true);
         }
@@ -434,14 +434,14 @@ public class CommonEvents
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickBlock event)
     {
-        BlockState state = event.getWorld().getBlockState(event.getPos());
-        if(state.getBlock() != ModBlocks.GAS_PUMP.get() && SyncedEntityData.instance().get(event.getPlayer(), ModDataKeys.GAS_PUMP).isPresent())
+        BlockState state = event.getLevel().getBlockState(event.getPos());
+        if(state.getBlock() != ModBlocks.GAS_PUMP.get() && SyncedEntityData.instance().get(event.getEntity(), ModDataKeys.GAS_PUMP).isPresent())
         {
             event.setCanceled(true);
         }
         else if(event.getItemStack().getItem() instanceof FluidPipeItem)
         {
-            BlockEntity relativeTileEntity = event.getWorld().getBlockEntity(event.getPos());
+            BlockEntity relativeTileEntity = event.getLevel().getBlockEntity(event.getPos());
             if(relativeTileEntity != null && relativeTileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, event.getFace()).isPresent())
             {
                 event.setUseBlock(Event.Result.DENY);

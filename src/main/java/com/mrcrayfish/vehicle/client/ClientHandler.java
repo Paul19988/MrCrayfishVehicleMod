@@ -47,7 +47,6 @@ import com.mrcrayfish.vehicle.util.VehicleUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -55,7 +54,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -120,6 +119,7 @@ public class ClientHandler
 
     private static void setupRenderLayers()
     {
+        //TODO: Add towards models
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WORKSTATION.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.FLUID_EXTRACTOR.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.GAS_PUMP.get(), RenderType.cutout());
@@ -221,10 +221,9 @@ public class ClientHandler
     }
 
     @SubscribeEvent
-    public static void registerParticleFactories(ParticleFactoryRegisterEvent event)
+    public static void registerParticleFactories(RegisterParticleProvidersEvent event)
     {
-        ParticleEngine manager = Minecraft.getInstance().particleEngine;
-        manager.register(ModParticleTypes.TYRE_SMOKE.get(), TyreSmokeParticle.Factory::new);
-        manager.register(ModParticleTypes.DUST.get(), DustParticle.Factory::new);
+        event.register(ModParticleTypes.TYRE_SMOKE.get(), TyreSmokeParticle.Factory::new);
+        event.register(ModParticleTypes.DUST.get(), DustParticle.Factory::new);
     }
 }

@@ -31,9 +31,9 @@ public class ModBlocks
     public static final RegistryObject<Block> VEHICLE_CRATE = register("vehicle_crate", VehicleCrateBlock::new);
     public static final RegistryObject<Block> JACK = register("jack", JackBlock::new);
     public static final RegistryObject<Block> JACK_HEAD = register("jack_head", JackHeadBlock::new);
-    public static final RegistryObject<LiquidBlock> FUELIUM = register("fuelium", () -> new LiquidBlock(ModFluids.FLOWING_FUELIUM, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<LiquidBlock> ENDER_SAP = register("ender_sap", () -> new LiquidBlock(ModFluids.FLOWING_ENDER_SAP, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<LiquidBlock> BLAZE_JUICE = register("blaze_juice", () -> new LiquidBlock(ModFluids.FLOWING_BLAZE_JUICE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<LiquidBlock> FUELIUM = register("fuelium", () -> new LiquidBlock(ModFluids.FLOWING_FUELIUM, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<LiquidBlock> ENDER_SAP = register("ender_sap", () -> new LiquidBlock(ModFluids.FLOWING_ENDER_SAP, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<LiquidBlock> BLAZE_JUICE = register("blaze_juice", () -> new LiquidBlock(ModFluids.FLOWING_BLAZE_JUICE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
     //public static final Block BOOST_PAD = registerConstructor(new BlockBoostPad(), null);
     //public static final Block BOOST_RAMP = registerConstructor(new BlockBoostRamp(), null); //ItemBoostRamp::new
     //public static final Block STEEP_BOOST_RAMP = registerConstructor(new BlockSteepBoostRamp(), null);

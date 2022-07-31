@@ -8,7 +8,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -16,7 +15,7 @@ import javax.annotation.Nullable;
 /**
  * Author: MrCrayfish
  */
-public class FluidMixerRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FluidMixerRecipe>
+public class FluidMixerRecipeSerializer implements RecipeSerializer<FluidMixerRecipe>
 {
     @Override
     @NotNull

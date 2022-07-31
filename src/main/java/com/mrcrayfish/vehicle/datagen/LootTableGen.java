@@ -75,7 +75,7 @@ public class LootTableGen extends LootTableProvider
         @Override
         protected Iterable<Block> getKnownBlocks()
         {
-            return ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block.getRegistryName() != null && Reference.MOD_ID.equals(block.getRegistryName().getNamespace())).collect(Collectors.toSet());
+            return ForgeRegistries.BLOCKS.getValues().stream().filter(block -> ForgeRegistries.BLOCKS.getKey(block) != null && Reference.MOD_ID.equals(ForgeRegistries.BLOCKS.getKey(block).getNamespace())).collect(Collectors.toSet());
         }
 
         protected static LootTable.Builder createFluidTankDrop(Block block)

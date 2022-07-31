@@ -20,6 +20,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -395,7 +396,7 @@ public class RecipeGen extends RecipeProvider
 
     private static void workstationCrafting(Consumer<FinishedRecipe> consumer, EntityType<? extends VehicleEntity> type, WorkstationIngredient ... materials)
     {
-        ResourceLocation entityId = Objects.requireNonNull(type.getRegistryName());
+        ResourceLocation entityId = Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(type));
         WorkstationRecipeBuilder.crafting(entityId, Arrays.asList(materials))
                 .save(consumer, new ResourceLocation(entityId.getNamespace(), entityId.getPath() + "_crafting"));
     }
@@ -409,14 +410,14 @@ public class RecipeGen extends RecipeProvider
 
     private static void fluidExtracting(Consumer<FinishedRecipe> consumer, ItemLike provider, FluidEntry output)
     {
-        ResourceLocation id = Objects.requireNonNull(output.fluid().getRegistryName());
+        ResourceLocation id = Objects.requireNonNull(ForgeRegistries.FLUIDS.getKey(output.fluid()));
         FluidExtractorRecipeBuilder.extracting(Ingredient.of(provider), output)
                 .save(consumer, new ResourceLocation(id.getNamespace(), id.getPath() + "_extracting"));
     }
 
     private static void fluidMixing(Consumer<FinishedRecipe> consumer, FluidEntry inputOne, FluidEntry inputTwo, ItemLike provider, FluidEntry output)
     {
-        ResourceLocation id = Objects.requireNonNull(output.fluid().getRegistryName());
+        ResourceLocation id = Objects.requireNonNull(ForgeRegistries.FLUIDS.getKey(output.fluid()));
         FluidMixerRecipeBuilder.mixing(inputOne, inputTwo, Ingredient.of(provider), output).save(consumer, new ResourceLocation(id.getNamespace(), id.getPath() + "_mixing"));
     }
 }

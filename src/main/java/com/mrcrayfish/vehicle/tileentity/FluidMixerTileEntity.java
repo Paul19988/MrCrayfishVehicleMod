@@ -16,8 +16,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -80,9 +78,9 @@ public class FluidMixerTileEntity extends TileEntitySynced implements Container,
                 case 3 -> tankBlaze.getFluidAmount();
                 case 4 -> tankEnderSap.getFluidAmount();
                 case 5 -> tankFuelium.getFluidAmount();
-                case 6 -> tankBlaze.getFluid().getFluid().getRegistryName().hashCode();
-                case 7 -> tankEnderSap.getFluid().getFluid().getRegistryName().hashCode();
-                case 8 -> tankFuelium.getFluid().getFluid().getRegistryName().hashCode();
+                case 6 -> tankBlaze.getFluid().getFluid().getFluidType().getDescriptionId().hashCode();
+                case 7 -> tankEnderSap.getFluid().getFluid().getFluidType().getDescriptionId().hashCode();
+                case 8 -> tankFuelium.getFluid().getFluid().getFluidType().getDescriptionId().hashCode();
                 default -> 0;
             };
         }
@@ -444,7 +442,7 @@ public class FluidMixerTileEntity extends TileEntitySynced implements Container,
     @Override
     public Component getDisplayName()
     {
-        return this.hasCustomName() ? new TextComponent(this.getName()) : new TranslatableComponent(this.getName());
+        return this.hasCustomName() ? Component.literal(this.getName()) : Component.translatable(this.getName());
     }
 
     @Nullable
@@ -509,7 +507,7 @@ public class FluidMixerTileEntity extends TileEntitySynced implements Container,
 
     public void updateFluid(FluidTank tank, int fluidHash)
     {
-        Optional<Fluid> optional = ForgeRegistries.FLUIDS.getValues().stream().filter(fluid -> fluid.getRegistryName().hashCode() == fluidHash).findFirst();
+        Optional<Fluid> optional = ForgeRegistries.FLUIDS.getValues().stream().filter(fluid -> fluid.getFluidType().getDescriptionId().hashCode() == fluidHash).findFirst();
         optional.ifPresent(fluid -> tank.setFluid(new FluidStack(fluid, tank.getFluidAmount())));
     }
 

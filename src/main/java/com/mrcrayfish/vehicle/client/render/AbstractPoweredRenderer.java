@@ -71,7 +71,7 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
                     matrixStack.mulPose(Vector3f.ZP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
                     matrixStack.mulPose(Vector3f.YP.rotationDegrees(-0.5F * (vehicle.tickCount % 2)));
                 }
-                BakedModel engineModel = RenderUtil.getModel(this.engineStackProperty.get(vehicle));
+                BakedModel engineModel = RenderObjectHelper.getModel(this.engineStackProperty.get(vehicle));
                 Transform engineTransform = properties.getExtended(PoweredProperties.class).getEngineTransform();
                 matrixStack.translate(0.0, 0.5 * engineTransform.getScale(), 0.0);
                 this.renderPart(engineTransform, engineModel, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
@@ -112,7 +112,7 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
             this.renderPart(properties.getExtended(PoweredProperties.class).getIgnitionTransform(), this.getKeyHoleModel().getBaseModel(), matrixStack, renderTypeBuffer, vehicle.getColor(), light, OverlayTexture.NO_OVERLAY);
             if(!vehicle.getKeyStack().isEmpty())
             {
-                this.renderKey(properties.getExtended(PoweredProperties.class).getIgnitionTransform(), vehicle.getKeyStack(), RenderUtil.getModel(vehicle.getKeyStack()), matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
+                this.renderKey(properties.getExtended(PoweredProperties.class).getIgnitionTransform(), vehicle.getKeyStack(), RenderObjectHelper.getModel(vehicle.getKeyStack()), matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
             }
         }
     }
@@ -141,7 +141,7 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
             matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
         }
         int wheelColor = IDyeable.getColorFromStack(stack);
-        RenderUtil.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, light, OverlayTexture.NO_OVERLAY);
+        RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, light, OverlayTexture.NO_OVERLAY);
         matrixStack.popPose();
     }
 

@@ -8,6 +8,7 @@ import com.mrcrayfish.vehicle.client.raytrace.RayTraceTransforms;
 import com.mrcrayfish.vehicle.client.raytrace.TransformHelper;
 import com.mrcrayfish.vehicle.client.render.AbstractMotorcycleRenderer;
 import com.mrcrayfish.vehicle.client.render.Axis;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.client.render.model.ChestModel;
 import com.mrcrayfish.vehicle.common.entity.Wheel;
 import com.mrcrayfish.vehicle.entity.properties.PoweredProperties;
@@ -89,9 +90,9 @@ public class MopedRenderer extends AbstractMotorcycleRenderer<MopedEntity>
                 matrixStack.translate(wheel.getOffsetX() * 0.0625, wheel.getOffsetY() * 0.0625, wheel.getOffsetZ() * 0.0625);
                 matrixStack.mulPose(Axis.POSITIVE_X.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
                 matrixStack.scale(wheel.getScaleX(), wheel.getScaleY(), wheel.getScaleZ());
-                BakedModel wheelModel = RenderUtil.getModel(wheelStack);
+                BakedModel wheelModel = RenderObjectHelper.getModel(wheelStack);
                 int wheelColor = IDyeable.getColorFromStack(wheelStack);
-                RenderUtil.renderColoredModel(wheelModel, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, light, OverlayTexture.NO_OVERLAY);
+                RenderObjectHelper.renderColoredModel(wheelModel, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, OverlayTexture.NO_OVERLAY, light);
             }
             matrixStack.popPose();
         }

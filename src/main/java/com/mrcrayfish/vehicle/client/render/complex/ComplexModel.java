@@ -12,6 +12,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrcrayfish.vehicle.VehicleMod;
 import com.mrcrayfish.vehicle.client.model.IComplexModel;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.client.render.complex.transforms.Rotate;
 import com.mrcrayfish.vehicle.client.render.complex.transforms.Transform;
 import com.mrcrayfish.vehicle.client.render.complex.transforms.Translate;
@@ -30,6 +31,7 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.GsonHelper;
 
 import javax.annotation.Nullable;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -37,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A special type of model that is fully data driven. Complex models can be made up of multiple models
@@ -101,11 +104,11 @@ public class ComplexModel
         {
             ResourceLocation modelLocation = model.getModelLocation();
             ResourceLocation complexLocation = new ResourceLocation(modelLocation.getNamespace(), "models/" + modelLocation.getPath() + ".complex");
-            if(minecraft.getResourceManager().hasResource(complexLocation))
+            Optional<Resource> resource = minecraft.getResourceManager().getResource(complexLocation);
+            if(resource.isPresent())
             {
-                try(Resource resource = minecraft.getResourceManager().getResource(complexLocation))
+                try(BufferedReader reader = resource.get().openAsReader())
                 {
-                    Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
                     return GsonHelper.fromJson(GSON, reader, ComplexModel.class);
                 }
             }
@@ -132,7 +135,7 @@ public class ComplexModel
     public void render(VehicleEntity entity, PoseStack matrices, MultiBufferSource buffers, float delta, int color, int light)
     {
         this.transforms.forEach(transform -> transform.apply(entity, matrices, delta));
-        RenderUtil.renderColoredModel(this.getModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, color, light, OverlayTexture.NO_OVERLAY);
+        RenderObjectHelper.renderColoredModel(this.getModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, color, OverlayTexture.NO_OVERLAY, light);
 
         for(int idx = 0; idx < this.children.length; idx++)
         {

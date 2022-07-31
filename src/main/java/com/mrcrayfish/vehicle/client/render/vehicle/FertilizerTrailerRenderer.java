@@ -7,6 +7,7 @@ import com.mrcrayfish.vehicle.client.raytrace.RayTraceTransforms;
 import com.mrcrayfish.vehicle.client.raytrace.TransformHelper;
 import com.mrcrayfish.vehicle.client.render.AbstractTrailerRenderer;
 import com.mrcrayfish.vehicle.client.render.Axis;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.common.inventory.StorageInventory;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
 import com.mrcrayfish.vehicle.entity.trailer.FertilizerTrailerEntity;
@@ -65,7 +66,7 @@ public class FertilizerTrailerRenderer extends AbstractTrailerRenderer<Fertilize
                             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(47F * index));
                             matrixStack.mulPose(Vector3f.XP.rotationDegrees(2F * layerIndex));
                             matrixStack.translate(layer * 0.001, layer * 0.001, layer * 0.001); // Fixes Z fighting
-                            MINECRAFT.getItemRenderer().render(stack, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(stack));
+                            MINECRAFT.getItemRenderer().render(stack, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, RenderObjectHelper.getModel(stack));
                         }
                         matrixStack.popPose();
                         index++;
@@ -86,7 +87,7 @@ public class FertilizerTrailerRenderer extends AbstractTrailerRenderer<Fertilize
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90F));
             matrixStack.mulPose(Axis.POSITIVE_X.rotationDegrees(-this.getWheelRotation(vehicle, null, partialTicks)));
             matrixStack.scale((float) 1.25, (float) 1.25, (float) 1.25);
-            RenderUtil.renderColoredModel(VehicleModels.SEED_SPIKER.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
+            RenderObjectHelper.renderColoredModel(VehicleModels.SEED_SPIKER.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, OverlayTexture.NO_OVERLAY, light);
         }
         matrixStack.popPose();
     }

@@ -2,7 +2,6 @@ package com.mrcrayfish.vehicle.client.screen.toolbar.widget;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
@@ -45,7 +44,7 @@ public class EnumButton<T extends Enum<?>> extends IconButton
     private void updateLabel()
     {
         String enumName = StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(this.enumClass.getSimpleName()), "_").toLowerCase(Locale.ENGLISH);
-        this.setMessage(new TranslatableComponent(".enum." + enumName + "." + this.currentEnum.name().toLowerCase()));
+        this.setMessage(Component.translatable(".enum." + enumName + "." + this.currentEnum.name().toLowerCase()));
         if(this.currentEnum instanceof IconProvider)
         {
             this.setIcon((IconProvider) this.currentEnum);

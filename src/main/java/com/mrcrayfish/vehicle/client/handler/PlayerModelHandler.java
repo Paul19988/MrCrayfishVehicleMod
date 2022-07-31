@@ -32,7 +32,7 @@ public class PlayerModelHandler
     @SuppressWarnings("unchecked")
     public void onPreRender(PlayerModelEvent.Render.Pre event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         Entity ridingEntity = player.getVehicle();
         if(ridingEntity instanceof VehicleEntity vehicle)
         {
@@ -88,7 +88,7 @@ public class PlayerModelHandler
     @SubscribeEvent
     public void onSetupAngles(PlayerModelEvent.Pose.Post event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         PlayerModel<?> model = event.getPlayerModel();
 
         if(player.equals(Minecraft.getInstance().player) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON)

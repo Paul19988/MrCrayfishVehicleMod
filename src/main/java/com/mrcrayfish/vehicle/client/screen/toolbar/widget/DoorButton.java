@@ -10,7 +10,7 @@ import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.network.PacketHandler;
 import com.mrcrayfish.vehicle.network.message.MessageInteractCosmetic;
 import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -32,7 +32,7 @@ public class DoorButton extends IconButton
 
     public DoorButton(VehicleEntity entity, CosmeticProperties properties, OpenableAction action)
     {
-        super(20, 20, ICON_MAP.getOrDefault(properties.getId(), DashboardScreen.Icons.LEFT_DOOR), new TranslatableComponent(properties.getId().getNamespace() + ".toolbar.label." + properties.getId().getPath()), onPress -> {
+        super(20, 20, ICON_MAP.getOrDefault(properties.getId(), DashboardScreen.Icons.LEFT_DOOR), Component.translatable(properties.getId().getNamespace() + ".toolbar.label." + properties.getId().getPath()), onPress -> {
             PacketHandler.getPlayChannel().sendToServer(new MessageInteractCosmetic(entity.getId(), properties.getId()));
         });
         this.action = action;

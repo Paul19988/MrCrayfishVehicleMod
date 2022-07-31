@@ -11,7 +11,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -20,7 +19,7 @@ import java.util.Optional;
 /**
  * Author: MrCrayfish
  */
-public class WorkstationRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<WorkstationRecipe>
+public class WorkstationRecipeSerializer implements RecipeSerializer<WorkstationRecipe>
 {
     @Override
     @NotNull
@@ -54,7 +53,7 @@ public class WorkstationRecipeSerializer extends ForgeRegistryEntry<RecipeSerial
     @Override
     public WorkstationRecipe fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer)
     {
-        EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(buffer.readResourceLocation());
+        EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(buffer.readResourceLocation());
         ImmutableList.Builder<WorkstationIngredient> builder = ImmutableList.builder();
 
         int size = buffer.readVarInt();
@@ -69,7 +68,7 @@ public class WorkstationRecipeSerializer extends ForgeRegistryEntry<RecipeSerial
     @Override
     public void toNetwork(FriendlyByteBuf buffer, WorkstationRecipe recipe)
     {
-        buffer.writeResourceLocation(recipe.getVehicle().getRegistryName());
+        buffer.writeResourceLocation(ForgeRegistries.ENTITY_TYPES.getKey(recipe.getVehicle()));
         buffer.writeVarInt(recipe.getMaterials().size());
 
         for(WorkstationIngredient stack : recipe.getMaterials())

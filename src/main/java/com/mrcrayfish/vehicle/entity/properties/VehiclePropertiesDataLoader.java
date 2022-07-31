@@ -40,55 +40,63 @@ public class VehiclePropertiesDataLoader extends SimplePreparableReloadListener<
     private final Map<ResourceLocation, VehicleProperties> vehicleProperties = new HashMap<>();
 
     @Override
-
+    @NotNull
     protected Map<ResourceLocation, VehicleProperties> prepare(ResourceManager manager, @NotNull ProfilerFiller profiler)
     {
         Map<ResourceLocation, VehicleProperties> propertiesMap = new HashMap<>();
-        manager.listResources(PROPERTIES_DIRECTORY, location -> location.endsWith(FILE_SUFFIX))
-                .stream()
-                .filter(location -> VehicleProperties.DEFAULT_VEHICLE_PROPERTIES.containsKey(format(location, PROPERTIES_DIRECTORY)))
-                .forEach(location -> {
-                    try(Resource resource = manager.getResource(location))
-                    {
-                        InputStream stream = resource.getInputStream();
 
-                        VehicleProperties properties = loadPropertiesFromStream(stream);
-                        propertiesMap.put(format(location, PROPERTIES_DIRECTORY), properties);
-                    }
-                    catch(IOException e)
-                    {
-                        VehicleMod.LOGGER.error("Couldn't parse vehicle properties {}", location);
-                    }
-                });
-
-        propertiesMap.forEach((id, properties) ->
+        for(Map.Entry<ResourceLocation, Resource> entry : manager.listResources(PROPERTIES_DIRECTORY, location -> location.getPath().endsWith(FILE_SUFFIX)).entrySet())
         {
-            // Skips if vehicle has not cosmetics
-            if(properties.getCosmetics().isEmpty())
-                return;
+            if(VehicleProperties.DEFAULT_VEHICLE_PROPERTIES.containsKey(format(entry.getKey(), PROPERTIES_DIRECTORY)))
+            {
+                ResourceLocation key = entry.getKey();
 
-            // Loads the cosmetics json for applicable vehicles
-            Map<ResourceLocation, List<Pair<ResourceLocation, List<ResourceLocation>>>> modelMap = new HashMap<>();
-            manager.listResources(COSMETICS_DIRECTORY, fileName -> {
-                return fileName.equals(id.getPath() + FILE_SUFFIX);
-            }).stream().sorted(Comparator.comparing(ResourceLocation::getNamespace, (n1, n2) -> {
-                return n1.equals(n2) ? 0 : n1.equals(Reference.MOD_ID) ? 1 : -1;
-            })).forEach(location -> {
-                ResourceLocation vehicleId = format(location, COSMETICS_DIRECTORY);
-                if(!vehicleId.getNamespace().equals(id.getNamespace()))
-                    return;
-                CosmeticProperties.deserializeModels(location, manager, modelMap);
-            });
+                try
+                {
+                    InputStream stream = entry.getValue().open();
 
-            // Applies the list of valid model locations to the corresponding cosmetic
-            modelMap.forEach((cosmeticId, models) -> {
-                CosmeticProperties cosmetic = properties.getCosmetics().get(cosmeticId);
-                if(cosmetic == null)
-                    return;
-                cosmetic.setModelLocations(models.stream().map(Pair::getLeft).collect(Collectors.toList()));
-                cosmetic.setDisabledCosmetics(models.stream().collect(Collectors.toMap(Pair::getLeft, Pair::getRight)));
-            });
-        });
+                    VehicleProperties properties = loadPropertiesFromStream(stream);
+                    propertiesMap.put(format(key, PROPERTIES_DIRECTORY), properties);
+                }
+                catch(IOException ex)
+                {
+                    VehicleMod.LOGGER.error("Couldn't parse vehicle properties {}", key);
+                }
+            }
+        }
+
+        for(Map.Entry<ResourceLocation, VehicleProperties> entry : propertiesMap.entrySet())
+        {
+            ResourceLocation key = entry.getKey();
+            VehicleProperties properties = entry.getValue();
+
+            if(!properties.getCosmetics().isEmpty())
+            {
+                // Loads the cosmetics json for applicable vehicles
+                Map<ResourceLocation, List<Pair<ResourceLocation, List<ResourceLocation>>>> modelMap = new HashMap<>();
+
+                for(Map.Entry<ResourceLocation, Resource> cosmeticEntry : manager.listResources(COSMETICS_DIRECTORY, fileName -> fileName.equals(key.getPath() + FILE_SUFFIX)).entrySet())
+                {
+                    ResourceLocation cosmeticKey = cosmeticEntry.getKey();
+
+                    ResourceLocation vehicleId = format(cosmeticKey, COSMETICS_DIRECTORY);
+                    if(vehicleId.getNamespace().equals(key.getNamespace()))
+                    {
+                        CosmeticProperties.deserializeModels(cosmeticKey, manager, modelMap);
+                    }
+                }
+
+                // Applies the list of valid model locations to the corresponding cosmetic
+                modelMap.forEach((cosmeticId, models) -> {
+                    CosmeticProperties cosmetic = properties.getCosmetics().get(cosmeticId);
+                    if(cosmetic == null)
+                        return;
+                    cosmetic.setModelLocations(models.stream().map(Pair::getLeft).collect(Collectors.toList()));
+                    cosmetic.setDisabledCosmetics(models.stream().collect(Collectors.toMap(Pair::getLeft, Pair::getRight)));
+                });
+            }
+        }
+        
         return propertiesMap;
     }
 

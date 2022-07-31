@@ -12,7 +12,6 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
@@ -43,7 +42,7 @@ public abstract class AbstractToolbarScreen extends Screen
         List<AbstractWidget> widgets = new ArrayList<>();
         if(this.parent != null)
         {
-            widgets.add(new IconButton(20, 20, DashboardScreen.Icons.BACK, new TextComponent("vehicle.toolbar.label.back"), onPress -> this.minecraft.setScreen(this.parent)));
+            widgets.add(new IconButton(20, 20, DashboardScreen.Icons.BACK, Component.translatable("vehicle.toolbar.label.back"), onPress -> this.minecraft.setScreen(this.parent)));
             widgets.add(Spacer.of(5));
         }
         this.loadWidgets(widgets);

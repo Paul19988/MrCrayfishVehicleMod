@@ -20,7 +20,7 @@ group = project.maven_group
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 minecraft {
-    mappings channel: "official", version: "1.18.2"
+    mappings channel: project.property('mappings.channel'), version: project.property('mappings.version')
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
@@ -77,13 +77,13 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.54'
+    minecraft 'net.minecraftforge:forge:1.19.1-42.0.1'
 
-    implementation fg.deobf("curse.maven:posture-${project.posture_file}:${project.posture_project}")
-    implementation fg.deobf("curse.maven:framework-${project.framework_file}:${project.framework_project}")
-    implementation fg.deobf("curse.maven:controllable-${project.controllable_file}:${project.controllable_project}")
-    implementation fg.deobf("curse.maven:configured-${project.configured_file}:${project.configured_project}")
-    implementation fg.deobf("curse.maven:catalogue-${project.catalogue_file}:${project.catalogue_project}")
+    implementation fg.deobf("curse.maven:posture-${project.posture_project}:${project.posture_file}")
+    implementation fg.deobf("curse.maven:framework-${project.framework_project}:${project.framework_file}")
+    implementation fg.deobf("curse.maven:controllable-${project.controllable_project}:${project.controllable_file}")
+    implementation fg.deobf("curse.maven:configured-${project.configured_project}:${project.configured_file}")
+    implementation fg.deobf("curse.maven:catalogue-${project.catalogue_project}:${project.catalogue_file}")
 
     implementation ("org.spongepowered:mixin:0.8.5") {
         exclude module: "asm-commons"

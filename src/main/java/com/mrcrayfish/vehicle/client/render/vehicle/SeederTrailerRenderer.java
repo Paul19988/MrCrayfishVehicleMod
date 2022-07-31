@@ -7,6 +7,7 @@ import com.mrcrayfish.vehicle.client.raytrace.RayTraceTransforms;
 import com.mrcrayfish.vehicle.client.raytrace.TransformHelper;
 import com.mrcrayfish.vehicle.client.render.AbstractTrailerRenderer;
 import com.mrcrayfish.vehicle.client.render.Axis;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.common.inventory.StorageInventory;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
 import com.mrcrayfish.vehicle.entity.trailer.SeederTrailerEntity;
@@ -106,7 +107,7 @@ public class SeederTrailerRenderer extends AbstractTrailerRenderer<SeederTrailer
         matrixStack.translate(offsetX, -0.65, 0.0);
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(-this.getWheelRotation(vehicle, null, partialTicks)));
         matrixStack.scale(0.75F, 0.75F, 0.75F);
-        RenderUtil.renderColoredModel(VehicleModels.SEED_SPIKER.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
+        RenderObjectHelper.renderColoredModel(VehicleModels.SEED_SPIKER.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, OverlayTexture.NO_OVERLAY, light);
         matrixStack.popPose();
     }
 

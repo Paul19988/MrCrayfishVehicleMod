@@ -3,7 +3,7 @@ package com.mrcrayfish.vehicle.network;
 import com.mrcrayfish.framework.api.network.HandshakeMessage;
 import com.mrcrayfish.vehicle.VehicleMod;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -50,7 +50,7 @@ public class HandshakeHandler
         else
         {
             VehicleMod.LOGGER.error("Failed to synchronize vehicle properties from server");
-            c.get().getNetworkManager().disconnect(new TextComponent("Connection closed - [MrCrayfish's Vehicle Mod] Failed to synchronize vehicle properties from server"));
+            c.get().getNetworkManager().disconnect(Component.literal("Connection closed - [MrCrayfish's Vehicle Mod] Failed to synchronize vehicle properties from server"));
         }
     }
 }

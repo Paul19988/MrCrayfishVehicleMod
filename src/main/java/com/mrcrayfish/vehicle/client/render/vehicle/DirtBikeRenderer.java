@@ -6,12 +6,12 @@ import com.mrcrayfish.vehicle.client.raytrace.RayTraceTransforms;
 import com.mrcrayfish.vehicle.client.raytrace.TransformHelper;
 import com.mrcrayfish.vehicle.client.render.AbstractMotorcycleRenderer;
 import com.mrcrayfish.vehicle.client.render.Axis;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.common.entity.Wheel;
 import com.mrcrayfish.vehicle.entity.properties.PoweredProperties;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
 import com.mrcrayfish.vehicle.entity.vehicle.DirtBikeEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
-import com.mrcrayfish.vehicle.util.RenderUtil;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -66,7 +66,7 @@ public class DirtBikeRenderer extends AbstractMotorcycleRenderer<DirtBikeEntity>
                 matrixStack.mulPose(Axis.POSITIVE_X.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
                 matrixStack.scale(wheel.getScaleX(), wheel.getScaleY(), wheel.getScaleZ());
                 matrixStack.mulPose(Axis.POSITIVE_Y.rotationDegrees(180F));
-                RenderUtil.renderColoredModel(RenderUtil.getModel(wheelStack), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
+                RenderObjectHelper.renderColoredModel(RenderObjectHelper.getModel(wheelStack), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, OverlayTexture.NO_OVERLAY, light);
                 matrixStack.popPose();
             }
         }

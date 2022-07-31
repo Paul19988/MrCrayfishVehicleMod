@@ -151,7 +151,7 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
         {
             if(vehicle.getDestroyedStage() > 0)
             {
-                RenderUtil.renderDamagedVehicleModel(model.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, vehicle.getDestroyedStage(), this.colorProperty.get(vehicle), light, OverlayTexture.NO_OVERLAY);
+                RenderObjectHelper.renderDamagedVehicleModel(model.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, vehicle.getDestroyedStage(), this.colorProperty.get(vehicle), OverlayTexture.NO_OVERLAY, light);
             }
         }
         else
@@ -177,7 +177,7 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
         matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) position.getRotX()));
         matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) position.getRotY()));
         matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) position.getRotZ()));
-        RenderUtil.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, color, lightTexture, overlayTexture);
+        RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, color, overlayTexture, lightTexture);
         matrixStack.popPose();
     }
 
@@ -192,7 +192,7 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
         matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) position.getRotY()));
         matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) position.getRotZ()));
         matrixStack.translate(0.0, 0.0, -0.05);
-        RenderUtil.renderModel(stack, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, lightTexture, overlayTexture, model);
+        RenderObjectHelper.renderModel(stack, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, overlayTexture, lightTexture, model);
         matrixStack.popPose();
     }
 
@@ -205,7 +205,7 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
             matrixStack.pushPose();
             matrixStack.translate(0.0, -8 * 0.0625, 0.0);
             matrixStack.translate(0.0, -properties.getAxleOffset() * 0.0625F, 0.0);
-            BakedModel wheelModel = RenderUtil.getModel(wheelStack);
+            BakedModel wheelModel = RenderObjectHelper.getModel(wheelStack);
             properties.getWheels().forEach(wheel -> this.renderWheel(vehicle, wheel, wheelStack, wheelModel, partialTicks, matrixStack, renderTypeBuffer, light));
             matrixStack.popPose();
         }
@@ -229,7 +229,7 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
             matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
         }
         int wheelColor = IDyeable.getColorFromStack(stack);
-        RenderUtil.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, light, OverlayTexture.NO_OVERLAY);
+        RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, OverlayTexture.NO_OVERLAY, light);
         matrixStack.popPose();
     }
 

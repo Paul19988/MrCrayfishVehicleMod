@@ -11,14 +11,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
+import net.minecraftforge.fluids.capability.FluidHandlerBlockEntity;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class TileFluidHandlerSynced extends TileFluidHandler
+public class TileFluidHandlerSynced extends FluidHandlerBlockEntity
 {
     public TileFluidHandlerSynced(@Nonnull BlockEntityType<?> tileEntityTypeIn, int capacity, BlockPos pos, BlockState state)
     {

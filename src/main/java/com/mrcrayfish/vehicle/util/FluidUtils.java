@@ -17,9 +17,11 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class FluidUtils
     @OnlyIn(Dist.CLIENT)
     public static int getAverageFluidColor(Fluid fluid)
     {
-        Integer cachedColor = CACHE_FLUID_COLOR.get(fluid.getRegistryName());
+        Integer cachedColor = CACHE_FLUID_COLOR.get(ForgeRegistries.FLUIDS.getKey(fluid));
         if(cachedColor != null)
         {
             return cachedColor;
@@ -49,7 +51,7 @@ public class FluidUtils
         else
         {
             int fluidColor = -1;
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluid.getAttributes().getStillTexture());
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluid).getStillTexture());
             if(sprite != null)
             {
                 long totalRed = 0;
@@ -72,7 +74,7 @@ public class FluidUtils
                 }
                 fluidColor = (((int) Math.sqrt(totalRed / pixelCount) & 255) << 16) | (((int) Math.sqrt(totalGreen / pixelCount) & 255) << 8) | (((int) Math.sqrt(totalBlue / pixelCount) & 255));
             }
-            CACHE_FLUID_COLOR.put(fluid.getRegistryName(), fluidColor);
+            CACHE_FLUID_COLOR.put(ForgeRegistries.FLUIDS.getKey(fluid), fluidColor);
             return fluidColor;
         }
     }
@@ -98,7 +100,7 @@ public class FluidUtils
         if(fluid == null || fluid.isEmpty())
             return;
 
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluid.getFluid().getAttributes().getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture());
         if(sprite != null)
         {
             float minU = sprite.getU0();
@@ -143,7 +145,7 @@ public class FluidUtils
             return;
 
         TextureAtlasSprite sprite = ForgeHooksClient.getFluidSprites(world, pos, tank.getFluid().getFluid().defaultFluidState())[0];
-        int waterColor = tank.getFluid().getFluid().getAttributes().getColor(world, pos);
+        int waterColor = IClientFluidTypeExtensions.of(tank.getFluid().getFluid()).getTintColor(tank.getFluid().getFluid().defaultFluidState(), world, pos);
         float red = (float) (waterColor >> 16 & 255) / 255.0F;
         float green = (float) (waterColor >> 8 & 255) / 255.0F;
         float blue = (float) (waterColor & 255) / 255.0F;

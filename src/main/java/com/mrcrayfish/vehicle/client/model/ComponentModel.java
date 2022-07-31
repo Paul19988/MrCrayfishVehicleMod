@@ -1,6 +1,7 @@
 package com.mrcrayfish.vehicle.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.client.render.complex.ComplexModel;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.util.RenderUtil;
@@ -70,7 +71,7 @@ public class ComponentModel implements IComplexModel
         }
         else
         {
-            RenderUtil.renderColoredModel(this.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, color, light, OverlayTexture.NO_OVERLAY);
+            RenderObjectHelper.renderColoredModel(this.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, color, OverlayTexture.NO_OVERLAY, light);
         }
     }
 }

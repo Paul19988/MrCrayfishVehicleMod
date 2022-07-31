@@ -47,7 +47,7 @@ public interface IStorage
         if(inventory == null)
             return;
 
-        NetworkHooks.openGui(player, new SimpleMenuProvider((windowId, playerInventory, playerEntity) -> {
+        NetworkHooks.openScreen(player, new SimpleMenuProvider((windowId, playerInventory, playerEntity) -> {
             return new StorageContainer(windowId, playerInventory, inventory, playerEntity);
         }, inventory.getDisplayName()), buffer -> {
             buffer.writeVarInt(storage.getId());

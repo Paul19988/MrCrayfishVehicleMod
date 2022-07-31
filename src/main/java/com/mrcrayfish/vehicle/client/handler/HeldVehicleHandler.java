@@ -35,7 +35,7 @@ public class HeldVehicleHandler
     public void onSetupAngles(PlayerModelEvent.Pose.Post event)
     {
         PlayerModel<?> model = event.getPlayerModel();
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
 
         boolean holdingVehicle = HeldVehicleDataHandler.isHoldingVehicle(player);
         if(holdingVehicle && !idToCounter.containsKey(player.getUUID()))

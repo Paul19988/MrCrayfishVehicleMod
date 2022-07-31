@@ -57,6 +57,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -534,7 +535,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
         if(this.isControlledByLocalInstance())
         {
             this.lerpSteps = 0;
-            this.setPacketCoordinates(this.getX(), this.getY(), this.getZ());
+            this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
         }
 
         if(this.lerpSteps > 0)
@@ -786,7 +787,7 @@ public abstract class VehicleEntity extends Entity implements IEntityAdditionalS
     @Override
     public ItemStack getPickedResult(HitResult target)
     {
-        ResourceLocation entityId = this.getType().getRegistryName();
+        ResourceLocation entityId = ForgeRegistries.ENTITY_TYPES.getKey(this.getType());
         if(entityId != null)
         {
             ItemStack wheel = ItemStack.EMPTY;

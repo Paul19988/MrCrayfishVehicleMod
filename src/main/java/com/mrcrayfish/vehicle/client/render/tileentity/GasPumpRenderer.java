@@ -11,6 +11,7 @@ import com.mrcrayfish.vehicle.block.GasPumpBlock;
 import com.mrcrayfish.vehicle.client.model.VehicleModels;
 import com.mrcrayfish.vehicle.client.raytrace.MatrixTransform;
 import com.mrcrayfish.vehicle.client.render.Axis;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.client.util.HermiteInterpolator;
 import com.mrcrayfish.vehicle.init.ModBlocks;
 import com.mrcrayfish.vehicle.tileentity.GasPumpTileEntity;
@@ -116,7 +117,7 @@ public class GasPumpRenderer implements BlockEntityRenderer<GasPumpTileEntity>
             matrices.mulPose(Axis.POSITIVE_Y.rotationDegrees(180F));
             matrices.mulPose(Axis.POSITIVE_X.rotationDegrees(90F));
             matrices.scale(0.8F, 0.8F, 0.8F);
-            RenderUtil.renderColoredModel(VehicleModels.NOZZLE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, light, OverlayTexture.NO_OVERLAY);
+            RenderObjectHelper.renderColoredModel(VehicleModels.NOZZLE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, OverlayTexture.NO_OVERLAY, light);
             matrices.popPose();
         }
 

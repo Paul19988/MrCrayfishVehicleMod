@@ -19,7 +19,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -228,12 +227,12 @@ public class VehicleCrateBlock extends RotatedEntityObjectBlock
 
         if(Screen.hasShiftDown())
         {
-            tooltips.addAll(RenderUtil.lines(new TranslatableComponent(this.getDescriptionId() + ".info", vehicleName), 150));
+            tooltips.addAll(RenderUtil.lines(Component.translatable(this.getDescriptionId() + ".info", vehicleName), 150));
         }
         else
         {
             tooltips.add(vehicleName.copy().withStyle(ChatFormatting.BLUE));
-            tooltips.add(new TranslatableComponent("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
+            tooltips.add(Component.translatable("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
         }
     }
 

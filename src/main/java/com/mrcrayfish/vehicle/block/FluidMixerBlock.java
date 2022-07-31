@@ -52,7 +52,7 @@ public class FluidMixerBlock extends RotatedEntityObjectBlock
                 if(tileEntity instanceof MenuProvider)
                 {
                     TileEntityUtil.sendUpdatePacket(tileEntity, (ServerPlayer) player);
-                    NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, pos);
+                    NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, pos);
                 }
             }
             return InteractionResult.SUCCESS;

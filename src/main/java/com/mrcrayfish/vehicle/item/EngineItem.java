@@ -5,8 +5,6 @@ import com.mrcrayfish.vehicle.entity.IEngineTier;
 import com.mrcrayfish.vehicle.entity.IEngineType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -35,8 +33,8 @@ public class EngineItem extends PartItem
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, List<Component> tooltips, @NotNull TooltipFlag flag)
     {
-        tooltips.add(new TranslatableComponent("vehicle.engine_info.acceleration").append(": ").withStyle(ChatFormatting.YELLOW).append(new TextComponent(this.tier.getPowerMultiplier() + "x").withStyle(ChatFormatting.GRAY)));
-        tooltips.add(new TranslatableComponent("vehicle.engine_info.additional_max_speed").append(": ").withStyle(ChatFormatting.YELLOW).append(new TextComponent((this.tier.getAdditionalMaxSpeed()) + "bps").withStyle(ChatFormatting.GRAY)));
+        tooltips.add(Component.translatable("vehicle.engine_info.acceleration").append(": ").withStyle(ChatFormatting.YELLOW).append(Component.literal(this.tier.getPowerMultiplier() + "x").withStyle(ChatFormatting.GRAY)));
+        tooltips.add(Component.translatable("vehicle.engine_info.additional_max_speed").append(": ").withStyle(ChatFormatting.YELLOW).append(Component.literal((this.tier.getAdditionalMaxSpeed()) + "bps").withStyle(ChatFormatting.GRAY)));
     }
 
     public IEngineType getEngineType()

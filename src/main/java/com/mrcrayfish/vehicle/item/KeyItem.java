@@ -4,7 +4,6 @@ import com.mrcrayfish.vehicle.util.RenderUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,11 +28,11 @@ public class KeyItem extends Item
     {
         if(Screen.hasShiftDown())
         {
-            tooltips.addAll(RenderUtil.lines(new TranslatableComponent(this.getDescriptionId() + ".info"), 150));
+            tooltips.addAll(RenderUtil.lines(Component.translatable(this.getDescriptionId() + ".info"), 150));
         }
         else
         {
-            tooltips.add(new TranslatableComponent("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
+            tooltips.add(Component.translatable("vehicle.info_help").withStyle(ChatFormatting.YELLOW));
         }
     }
 }

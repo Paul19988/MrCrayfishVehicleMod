@@ -4,6 +4,7 @@ import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,9 +20,9 @@ public class MovingHornSound extends AbstractTickableSoundInstance
     private final WeakReference<Player> playerRef;
     private final WeakReference<PoweredVehicleEntity> vehicleRef;
 
-    public MovingHornSound(Player player, PoweredVehicleEntity vehicle)
+    public MovingHornSound(Player player, PoweredVehicleEntity vehicle, RandomSource source)
     {
-        super(vehicle.getHornSound(), SoundSource.NEUTRAL);
+        super(vehicle.getHornSound(), SoundSource.NEUTRAL, source);
         this.playerRef = new WeakReference<>(player);
         this.vehicleRef = new WeakReference<>(vehicle);
         this.volume = 0.0F;

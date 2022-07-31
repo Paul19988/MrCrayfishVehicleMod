@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.client.screen.toolbar.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Author: MrCrayfish
@@ -14,7 +14,7 @@ public class NumberWidget extends EditBox
 
     public NumberWidget(int width)
     {
-        super(Minecraft.getInstance().font, 0, 0, width, 20, TextComponent.EMPTY);
+        super(Minecraft.getInstance().font, 0, 0, width, 20, Component.empty());
         this.setFilter(s ->
         {
             try

@@ -199,7 +199,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
 
             FluidTank tank = gasPumpTank.getFluidTank();
             FluidStack stack = tank.getFluid();
-            if(stack.isEmpty() || !Config.SERVER.validFuels.get().contains(stack.getFluid().getRegistryName().toString()))
+            if(stack.isEmpty() || !Config.SERVER.validFuels.get().contains(ForgeRegistries.FLUIDS.getKey(stack.getFluid()).toString()))
                 return;
 
             stack = tank.drain(200, IFluidHandler.FluidAction.EXECUTE);
@@ -225,7 +225,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
         IFluidHandlerItem handler = optional.get();
         FluidStack fluidStack = handler.getFluidInTank(0);
 
-        if(fluidStack.isEmpty() || !Config.SERVER.validFuels.get().contains(fluidStack.getFluid().getRegistryName().toString()))
+        if(fluidStack.isEmpty() || !Config.SERVER.validFuels.get().contains(ForgeRegistries.FLUIDS.getKey(fluidStack.getFluid()).toString()))
             return;
 
         int transferAmount = Math.min(handler.getFluidInTank(0).getAmount(), jerryCan.getFillRate());
@@ -498,11 +498,11 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
             PacketHandler.getPlayChannel().sendToServer(new MessageTurnAngle(steeringAngle));
         }
 
-        VehicleHelper.tryPlayEngineSound(this);
+        VehicleHelper.tryPlayEngineSound(this, this.level.getRandom());
 
         if(this.getHorn())
         {
-            VehicleHelper.tryPlayHornSound(this);
+            VehicleHelper.tryPlayHornSound(this, this.level.getRandom());
         }
     }
 
@@ -837,7 +837,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
     {
         if(player instanceof ServerPlayer)
         {
-            NetworkHooks.openGui((ServerPlayer) player, this, buffer -> buffer.writeInt(this.getId()));
+            NetworkHooks.openScreen((ServerPlayer) player, this, buffer -> buffer.writeInt(this.getId()));
         }
     }
 
@@ -1017,7 +1017,7 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
             wheel = this.getWheelStack();
         }
 
-        ResourceLocation entityId = this.getType().getRegistryName();
+        ResourceLocation entityId = ForgeRegistries.ENTITY_TYPES.getKey(this.getType());
         if(entityId != null)
         {
             return VehicleCrateBlock.create(entityId, this.getColor(), engine, wheel);

@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -83,7 +84,7 @@ public class FluidMixerRecipe implements Recipe<FluidMixerTileEntity>
     {
         if(this.hashCode == 0)
         {
-            this.hashCode = Objects.hash(this.inputs[0].fluid().getRegistryName(), this.inputs[1].fluid().getRegistryName(), this.ingredient.getItem().getRegistryName());
+            this.hashCode = Objects.hash(ForgeRegistries.FLUIDS.getKey(this.inputs[0].fluid()), ForgeRegistries.FLUIDS.getKey(this.inputs[1].fluid()), ForgeRegistries.ITEMS.getKey(this.ingredient.getItem()));
         }
         return this.hashCode;
     }

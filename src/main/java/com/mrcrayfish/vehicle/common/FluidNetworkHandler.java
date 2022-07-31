@@ -50,7 +50,7 @@ public class FluidNetworkHandler
     }
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.WorldTickEvent event)
+    public void onServerTick(TickEvent.LevelTickEvent event)
     {
         if(!this.dirty)
             return;
@@ -58,17 +58,17 @@ public class FluidNetworkHandler
         if(event.phase != TickEvent.Phase.END)
             return;
 
-        Set<BlockPos> positions = this.pipeUpdateMap.remove(event.world.dimension());
+        Set<BlockPos> positions = this.pipeUpdateMap.remove(event.level.dimension());
         if(positions != null)
         {
             positions.forEach(pos ->
             {
-                BlockEntity tileEntity = event.world.getBlockEntity(pos);
+                BlockEntity tileEntity = event.level.getBlockEntity(pos);
                 if(tileEntity instanceof PipeTileEntity pipeTileEntity)
                 {
                     BlockState state = pipeTileEntity.getBlockState();
-                    boolean disabled = pipeTileEntity.getPumps().isEmpty() || event.world.hasNeighborSignal(pos);
-                    event.world.setBlock(pos, state.setValue(FluidPipeBlock.DISABLED, disabled), (1 << 0) | (1 << 1));
+                    boolean disabled = pipeTileEntity.getPumps().isEmpty() || event.level.hasNeighborSignal(pos);
+                    event.level.setBlock(pos, state.setValue(FluidPipeBlock.DISABLED, disabled), (1 << 0) | (1 << 1));
                 }
             });
         }

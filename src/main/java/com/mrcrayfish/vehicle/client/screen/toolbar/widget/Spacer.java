@@ -4,7 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author: MrCrayfish
@@ -13,7 +14,7 @@ public class Spacer extends AbstractWidget
 {
     public Spacer(int widthIn)
     {
-        super(0, 0, widthIn, 20, TextComponent.EMPTY);
+        super(0, 0, widthIn, 20, Component.empty());
     }
 
     public static Spacer of(int width)
@@ -22,9 +23,9 @@ public class Spacer extends AbstractWidget
     }
 
     @Override
-    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(@NotNull PoseStack matrices, int mouseX, int mouseY, float partialTicks)
     {
-        Gui.fill(matrixStack, this.x + this.width / 2, this.y, this.x + this.width / 2 + 1, this.y + this.height, 0xFF888888);
+        Gui.fill(matrices, this.x + this.width / 2, this.y, this.x + this.width / 2 + 1, this.y + this.height, 0xFF888888);
     }
 
     @Override
@@ -40,7 +41,6 @@ public class Spacer extends AbstractWidget
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
-
-    }
+    public void updateNarration(@NotNull NarrationElementOutput output)
+    {}
 }

@@ -14,9 +14,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.FOVModifierEvent;
+import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,7 +57,7 @@ public class CameraHandler
         if(!Config.CLIENT.autoPerspective.get())
             return;
 
-        if(!event.getWorldObj().isClientSide())
+        if(!event.getLevel().isClientSide())
             return;
 
         if(!event.getEntityMounting().equals(Minecraft.getInstance().player))
@@ -87,7 +87,7 @@ public class CameraHandler
     }
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent.KeyInputEvent event)
+    public void onKeyInput(InputEvent.Key event)
     {
         if(!Config.CLIENT.autoPerspective.get())
             return;
@@ -120,7 +120,7 @@ public class CameraHandler
     }
 
     @SubscribeEvent
-    public void onFovUpdate(FOVModifierEvent event)
+    public void onFovUpdate(ComputeFovModifierEvent event)
     {
         Player player = Minecraft.getInstance().player;
         if(player == null)
@@ -129,7 +129,7 @@ public class CameraHandler
         Entity ridingEntity = player.getVehicle();
         if(ridingEntity instanceof VehicleEntity)
         {
-            event.setNewfov(1.0F);
+            event.setNewFovModifier(1.0F);
         }
     }
 
@@ -176,9 +176,9 @@ public class CameraHandler
     }
 
     @SubscribeEvent
-    public void onCameraSetup(EntityViewRenderEvent.CameraSetup event)
+    public void onCameraSetup(ViewportEvent.ComputeCameraAngles event)
     {
-        this.setupVanillaCamera(event.getCamera(), (float) event.getPartialTicks());
+        this.setupVanillaCamera(event.getCamera(), (float) event.getPartialTick());
     }
 
     public void setupVanillaCamera(Camera info, float partialTicks)
@@ -231,7 +231,7 @@ public class CameraHandler
     }
 
     @SubscribeEvent
-    public void onMouseScroll(InputEvent.MouseScrollEvent event)
+    public void onMouseScroll(InputEvent.MouseScrollingEvent event)
     {
         if(!Config.CLIENT.debugCamera.get())
             return;
@@ -251,7 +251,7 @@ public class CameraHandler
     }
 
     @SubscribeEvent
-    public void onKeyPress(InputEvent.KeyInputEvent event)
+    public void onKeyPress(InputEvent.Key event)
     {
         if(!Config.CLIENT.debugCamera.get())
             return;

@@ -16,7 +16,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nullable;
@@ -26,7 +27,7 @@ import javax.annotation.Nullable;
  */
 public class FluidTrailerRenderer extends AbstractTrailerRenderer<FluidTrailerEntity>
 {
-    protected final PropertyFunction<FluidTrailerEntity, FluidTank> fluidTankProperty = new PropertyFunction<>(FluidTrailerEntity::getTank, new FluidTank(FluidAttributes.BUCKET_VOLUME));
+    protected final PropertyFunction<FluidTrailerEntity, FluidTank> fluidTankProperty = new PropertyFunction<>(FluidTrailerEntity::getTank, new FluidTank(FluidType.BUCKET_VOLUME));
 
     public FluidTrailerRenderer(EntityType<FluidTrailerEntity> type, VehicleProperties defaultProperties)
     {
@@ -49,9 +50,11 @@ public class FluidTrailerRenderer extends AbstractTrailerRenderer<FluidTrailerEn
         if(fluid == Fluids.EMPTY)
             return;
 
-        TextureAtlasSprite sprite = MINECRAFT.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluid.getAttributes().getStillTexture());
+        IClientFluidTypeExtensions.of(fluid).getStillTexture();
 
-        int fluidColor = vehicle != null ? fluid.getAttributes().getColor(vehicle.getCommandSenderWorld(), vehicle.blockPosition()) : 0xFF3F76E4;
+        TextureAtlasSprite sprite = MINECRAFT.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluid).getStillTexture());
+
+        int fluidColor = vehicle != null ? IClientFluidTypeExtensions.of(fluid).getTintColor(fluid.defaultFluidState(), vehicle.getCommandSenderWorld(), vehicle.blockPosition()) : 0xFF3F76E4;
         float red = (float) (fluidColor >> 16 & 255) / 255.0F;
         float green = (float) (fluidColor >> 8 & 255) / 255.0F;
         float blue = (float) (fluidColor & 255) / 255.0F;

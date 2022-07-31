@@ -62,7 +62,7 @@ public class WorkstationBlock extends RotatedEntityObjectBlock
             BlockEntity tileEntity = level.getBlockEntity(pos);
             if(tileEntity instanceof MenuProvider)
             {
-                NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, pos);
+                NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, pos);
                 return InteractionResult.SUCCESS;
             }
         }

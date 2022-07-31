@@ -3,7 +3,7 @@ package com.mrcrayfish.vehicle.util;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.vehicle.Config;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -36,7 +36,7 @@ public class CommonUtils
     {
         if(player instanceof ServerPlayer)
         {
-            player.displayClientMessage(new TranslatableComponent(message), true);
+            player.displayClientMessage(Component.translatable(message), true);
         }
     }
 

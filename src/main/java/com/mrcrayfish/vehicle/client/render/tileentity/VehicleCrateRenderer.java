@@ -5,6 +5,7 @@ import com.mrcrayfish.vehicle.block.RotatedObjectBlock;
 import com.mrcrayfish.vehicle.client.model.VehicleModels;
 import com.mrcrayfish.vehicle.client.raytrace.EntityRayTracer;
 import com.mrcrayfish.vehicle.client.render.Axis;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.init.ModBlocks;
 import com.mrcrayfish.vehicle.tileentity.VehicleCrateTileEntity;
@@ -81,7 +82,7 @@ public class VehicleCrateRenderer implements BlockEntityRenderer<VehicleCrateTil
             matrices.translate(0.0, 0.5, 0.0);
             matrices.translate(0, 0, -1.999 * 0.0625);
             //if(i % 2 == 0) matrixStack.scale(-1, 1, 1);
-            RenderUtil.renderColoredModel(VehicleModels.VEHICLE_CRATE_SIDE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, light, OverlayTexture.NO_OVERLAY);
+            RenderObjectHelper.renderColoredModel(VehicleModels.VEHICLE_CRATE_SIDE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, OverlayTexture.NO_OVERLAY, light);
             matrices.popPose();
         }
 
@@ -92,7 +93,7 @@ public class VehicleCrateRenderer implements BlockEntityRenderer<VehicleCrateTil
             matrices.translate(0.5, 0.5, 0.5);
             matrices.mulPose(Axis.POSITIVE_X.rotationDegrees(-90F));
             matrices.translate(0, 0, (6.001 * 0.0625));
-            RenderUtil.renderColoredModel(VehicleModels.VEHICLE_CRATE_TOP.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, light, OverlayTexture.NO_OVERLAY);
+            RenderObjectHelper.renderColoredModel(VehicleModels.VEHICLE_CRATE_TOP.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, OverlayTexture.NO_OVERLAY, light);
             matrices.popPose();
         }
 
@@ -101,7 +102,7 @@ public class VehicleCrateRenderer implements BlockEntityRenderer<VehicleCrateTil
         matrices.translate(0.5, 0.5, 0.5);
         matrices.mulPose(Axis.POSITIVE_X.rotationDegrees(90F));
         matrices.translate(0, 0, (6 * 0.0625) * 0.998);
-        RenderUtil.renderColoredModel(VehicleModels.VEHICLE_CRATE_SIDE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, light, OverlayTexture.NO_OVERLAY);
+        RenderObjectHelper.renderColoredModel(VehicleModels.VEHICLE_CRATE_SIDE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrices, buffers, -1, OverlayTexture.NO_OVERLAY, light);
         matrices.popPose();
 
         matrices.popPose();

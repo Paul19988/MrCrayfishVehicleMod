@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
  */
 public class FluidTrailerEntity extends TrailerEntity implements IEntityAdditionalSpawnData
 {
-    protected FluidTank tank = new FluidTank(FluidAttributes.BUCKET_VOLUME * 100)
+    protected FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 100)
     {
         @Override
         protected void onContentsChanged()

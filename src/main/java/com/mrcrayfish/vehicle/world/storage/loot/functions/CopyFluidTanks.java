@@ -16,8 +16,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.FluidHandlerBlockEntity;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 /**
@@ -40,7 +40,7 @@ public class CopyFluidTanks extends LootItemConditionalFunction
             if(tileEntity != null)
             {
                 CompoundTag tileEntityTag = new CompoundTag();
-                if(tileEntity instanceof TileFluidHandler)
+                if(tileEntity instanceof FluidHandlerBlockEntity)
                 {
                     LazyOptional<IFluidHandler> handler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
                     handler.ifPresent(h ->

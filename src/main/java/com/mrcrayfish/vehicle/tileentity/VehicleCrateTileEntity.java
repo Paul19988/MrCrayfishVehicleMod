@@ -116,7 +116,7 @@ public class VehicleCrateTileEntity extends TileEntitySynced
             {
                 BlockState state = this.level.getBlockState(this.worldPosition);
                 Direction facing = state.getValue(VehicleCrateBlock.DIRECTION);
-                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(this.entityId);
+                EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(this.entityId);
                 if(entityType != null)
                 {
                     Entity entity = entityType.create(this.level);
@@ -156,7 +156,7 @@ public class VehicleCrateTileEntity extends TileEntitySynced
 
             if(this.entityId != null && this.entity == null)
             {
-                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(this.entityId);
+                EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(this.entityId);
                 if(entityType != null)
                 {
                     this.entity = entityType.create(this.level);

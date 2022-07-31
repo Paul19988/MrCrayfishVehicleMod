@@ -9,10 +9,9 @@ import com.mrcrayfish.vehicle.client.raytrace.EntityRayTracer;
 import com.mrcrayfish.vehicle.client.raytrace.RayTraceFunction;
 import com.mrcrayfish.vehicle.client.raytrace.VehicleRayTraceResult;
 import com.mrcrayfish.vehicle.client.render.Axis;
+import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.init.ModDataKeys;
 import com.mrcrayfish.vehicle.init.ModSounds;
-import com.mrcrayfish.vehicle.item.SprayCanItem;
-import com.mrcrayfish.vehicle.util.RenderUtil;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -25,7 +24,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.TickEvent;
@@ -122,12 +120,12 @@ public class FuelingHandler
                 HumanoidArm handSide = mainHand ? player.getMainArm() : player.getMainArm().getOpposite();
                 int handOffset = handSide == HumanoidArm.RIGHT ? 1 : -1;
                 MultiBufferSource renderTypeBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
-                int light = minecraft.getEntityRenderDispatcher().getPackedLightCoords(player, event.getPartialTicks());
+                int light = minecraft.getEntityRenderDispatcher().getPackedLightCoords(player, event.getPartialTick());
 
                 matrixStack.pushPose();
                 matrixStack.translate(handOffset * 0.65, -0.27, -0.72);
                 matrixStack.mulPose(Axis.POSITIVE_X.rotationDegrees(45F));
-                RenderUtil.renderColoredModel(VehicleModels.NOZZLE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY); //TODO check
+                RenderObjectHelper.renderColoredModel(VehicleModels.NOZZLE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, -1, OverlayTexture.NO_OVERLAY, light);
                 matrixStack.popPose();
             }
         }
@@ -140,7 +138,7 @@ public class FuelingHandler
     @SubscribeEvent
     public void onModelRenderPost(PlayerModelEvent.Render.Post event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         if(SyncedEntityData.instance().get(player, ModDataKeys.GAS_PUMP).isEmpty())
             return;
 
@@ -169,7 +167,7 @@ public class FuelingHandler
         matrixStack.translate(0, -9 * 0.0625F, 5.75 * 0.0625F);
 
         MultiBufferSource renderTypeBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        RenderUtil.renderColoredModel(VehicleModels.NOZZLE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, 0xFFFFFFFF, 15728880, OverlayTexture.NO_OVERLAY);
+        RenderObjectHelper.renderColoredModel(VehicleModels.NOZZLE.getBaseModel(), ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, 0xFFFFFFFF, OverlayTexture.NO_OVERLAY, LightTexture.FULL_BRIGHT);
 
         matrixStack.popPose();
     }

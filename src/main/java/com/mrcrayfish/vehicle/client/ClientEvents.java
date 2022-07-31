@@ -4,10 +4,8 @@ import com.mrcrayfish.vehicle.client.screen.DashboardScreen;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.entity.properties.VehicleProperties;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -16,11 +14,12 @@ import org.lwjgl.glfw.GLFW;
 /**
  * Author: MrCrayfish
  */
+
 public class ClientEvents
 {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public void onKeyInput(InputEvent.KeyInputEvent event)
+    public void onKeyInput(InputEvent.Key event)
     {
         Minecraft mc = Minecraft.getInstance();
         if(mc.getOverlay() != null)
