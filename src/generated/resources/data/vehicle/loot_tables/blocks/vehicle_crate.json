@@ -2,52 +2,52 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:copy_nbt",
-              "source": "block_entity",
               "ops": [
                 {
+                  "op": "replace",
                   "source": "vehicle",
-                  "target": "BlockEntityTag.vehicle",
-                  "op": "replace"
+                  "target": "BlockEntityTag.vehicle"
                 },
                 {
+                  "op": "replace",
                   "source": "color",
-                  "target": "BlockEntityTag.color",
-                  "op": "replace"
+                  "target": "BlockEntityTag.color"
                 },
                 {
+                  "op": "replace",
                   "source": "engineStack",
-                  "target": "BlockEntityTag.engineStack",
-                  "op": "replace"
+                  "target": "BlockEntityTag.engineStack"
                 },
                 {
+                  "op": "replace",
                   "source": "creative",
-                  "target": "BlockEntityTag.creative",
-                  "op": "replace"
+                  "target": "BlockEntityTag.creative"
                 },
                 {
+                  "op": "replace",
                   "source": "wheelStack",
-                  "target": "BlockEntityTag.wheelStack",
-                  "op": "replace"
+                  "target": "BlockEntityTag.wheelStack"
                 }
-              ]
+              ],
+              "source": "block_entity"
             }
           ],
           "name": "vehicle:vehicle_crate"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "rolls": 1.0
     }
   ]
 }

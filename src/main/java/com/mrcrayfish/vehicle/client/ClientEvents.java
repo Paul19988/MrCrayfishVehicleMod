@@ -14,11 +14,10 @@ import org.lwjgl.glfw.GLFW;
 /**
  * Author: MrCrayfish
  */
-
+@OnlyIn(Dist.CLIENT)
 public class ClientEvents
 {
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
     public void onKeyInput(InputEvent.Key event)
     {
         Minecraft mc = Minecraft.getInstance();

@@ -410,12 +410,12 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
 
     public Optional<FluidExtractorRecipe> getRecipe()
     {
-        return this.level.getRecipeManager().getRecipeFor(RecipeTypes.FLUID_EXTRACTOR, this, this.level);
+        return this.level.getRecipeManager().getRecipeFor(RecipeTypes.FLUID_EXTRACTOR.get(), this, this.level);
     }
 
     public boolean isValidIngredient(ItemStack ingredient)
     {
-        List<FluidExtractorRecipe> recipes = this.level.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == RecipeTypes.FLUID_EXTRACTOR).map(recipe -> (FluidExtractorRecipe) recipe).collect(Collectors.toList());
+        List<FluidExtractorRecipe> recipes = this.level.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == RecipeTypes.FLUID_EXTRACTOR.get()).map(recipe -> (FluidExtractorRecipe) recipe).toList();
         return recipes.stream().anyMatch(recipe -> InventoryUtil.areItemStacksEqualIgnoreCount(ingredient, recipe.ingredient()));
     }
 

@@ -63,17 +63,18 @@ public class VehicleMod
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModBlocks.REGISTER.register(eventBus);
         ModItems.REGISTER.register(eventBus);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
         ModEntities.REGISTER.register(eventBus);
         ModTileEntities.REGISTER.register(eventBus);
         ModContainers.REGISTER.register(eventBus);
         ModParticleTypes.REGISTER.register(eventBus);
         ModSounds.REGISTER.register(eventBus);
         ModRecipeSerializers.REGISTER.register(eventBus);
+        ModFluidTypes.REGISTER.register(eventBus);
+        RecipeTypes.REGISTER.register(eventBus);
         ModFluids.REGISTER.register(eventBus);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
         eventBus.addListener(this::onCommonSetup);
-        eventBus.addListener(this::onClientSetup);
         eventBus.addListener(this::onGatherData);
         MinecraftForge.EVENT_BUS.register(new CommonEvents());
         MinecraftForge.EVENT_BUS.register(new ModCommands());
@@ -89,7 +90,6 @@ public class VehicleMod
 
     private void onCommonSetup(FMLCommonSetupEvent event)
     {
-        RecipeTypes.init();
         VehicleProperties.loadDefaultProperties();
         PacketHandler.init();
         HeldVehicleDataHandler.register();
@@ -99,16 +99,11 @@ public class VehicleMod
         event.enqueueWork(() -> VehicleProperties.registerDynamicProvider(() -> new VehiclePropertiesGen(null)));
     }
 
-    private void onClientSetup(FMLClientSetupEvent event)
-    {
-        ClientHandler.setup();
-    }
-
     private void onGatherData(GatherDataEvent event)
     {
         DataGenerator generator = event.getGenerator();
-        generator.addProvider(false, new LootTableGen(generator));
-        generator.addProvider(false, new RecipeGen(generator));
-        generator.addProvider(false, new VehiclePropertiesGen(generator));
+        generator.addProvider(true, new LootTableGen(generator));
+        generator.addProvider(true, new RecipeGen(generator));
+        generator.addProvider(true, new VehiclePropertiesGen(generator));
     }
 }

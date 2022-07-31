@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "IDI",
-    "IWI",
-    "III"
-  ],
   "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
     "D": {
       "tag": "forge:dyes/white"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
     },
     "W": {
       "item": "minecraft:bucket"
     }
   },
+  "pattern": [
+    "IDI",
+    "IWI",
+    "III"
+  ],
   "result": {
     "item": "vehicle:spray_can"
   }

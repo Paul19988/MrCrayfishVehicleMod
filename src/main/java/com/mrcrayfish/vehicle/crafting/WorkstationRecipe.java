@@ -84,7 +84,7 @@ public class WorkstationRecipe implements Recipe<WorkstationTileEntity>
     @NotNull
     public RecipeType<?> getType()
     {
-        return RecipeTypes.WORKSTATION;
+        return RecipeTypes.WORKSTATION.get();
     }
 
     public boolean hasMaterials(Player player)

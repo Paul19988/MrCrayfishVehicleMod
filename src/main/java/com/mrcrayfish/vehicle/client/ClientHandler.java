@@ -13,12 +13,7 @@ import com.mrcrayfish.vehicle.client.model.ComponentManager;
 import com.mrcrayfish.vehicle.client.particle.DustParticle;
 import com.mrcrayfish.vehicle.client.particle.TyreSmokeParticle;
 import com.mrcrayfish.vehicle.client.raytrace.EntityRayTracer;
-import com.mrcrayfish.vehicle.client.render.tileentity.FluidExtractorRenderer;
-import com.mrcrayfish.vehicle.client.render.tileentity.FluidPumpRenderer;
-import com.mrcrayfish.vehicle.client.render.tileentity.FuelDrumRenderer;
-import com.mrcrayfish.vehicle.client.render.tileentity.GasPumpRenderer;
-import com.mrcrayfish.vehicle.client.render.tileentity.GasPumpTankRenderer;
-import com.mrcrayfish.vehicle.client.render.tileentity.VehicleCrateRenderer;
+import com.mrcrayfish.vehicle.client.render.tileentity.*;
 import com.mrcrayfish.vehicle.client.render.vehicle.*;
 import com.mrcrayfish.vehicle.client.screen.EditVehicleScreen;
 import com.mrcrayfish.vehicle.client.screen.FluidExtractorScreen;
@@ -51,15 +46,24 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.core.Registry;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
 /**
  * Author: MrCrayfish
@@ -74,7 +78,8 @@ public class ClientHandler
         return controllableLoaded;
     }
 
-    public static void setup()
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event)
     {
         if(ModList.get().isLoaded("controllable"))
         {
@@ -96,18 +101,7 @@ public class ClientHandler
 
         setupCustomBlockModels();
         setupRenderLayers();
-        setupVehicleRenders();
-        setupTileEntityRenderers();
-        setupScreenFactories();
-        setupItemColors();
         setupInteractableVehicles();
-
-        ((ReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener((ResourceManagerReloadListener) manager -> {
-            FluidUtils.clearCacheFluidColor();
-            OptifineHelper.refresh();
-            EntityRayTracer.instance().clearDataForReregistration();
-            ComponentManager.clearCache();
-        });
     }
 
     private static void setupCustomBlockModels()
@@ -134,61 +128,22 @@ public class ClientHandler
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.TRAFFIC_CONE.get(), RenderType.cutout());
     }
 
-    private static void setupVehicleRenders()
+    protected static void onResourceManagerReload(ResourceManager manager)
     {
-        /* Register Vehicles */
-        VehicleUtil.registerVehicleRenderer(ModEntities.QUAD_BIKE.get(), QuadBikeRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.SPORTS_CAR.get(), SportsCarRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.GO_KART.get(), GoKartRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.JET_SKI.get(), JetSkiRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.LAWN_MOWER.get(), LawnMowerRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.MOPED.get(), MopedRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.SPORTS_PLANE.get(), SportsPlaneRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.GOLF_CART.get(), GolfCartRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.OFF_ROADER.get(), OffRoaderRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.TRACTOR.get(), TractorRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.MINI_BUS.get(), MiniBusRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.DIRT_BIKE.get(), DirtBikeRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.COMPACT_HELICOPTER.get(), CompactHelicopterRenderer::new);
-
-        /* Register Trailers */
-        VehicleUtil.registerVehicleRenderer(ModEntities.VEHICLE_TRAILER.get(), VehicleTrailerRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.STORAGE_TRAILER.get(), StorageTrailerRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.FLUID_TRAILER.get(), FluidTrailerRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.SEEDER.get(), SeederTrailerRenderer::new);
-        VehicleUtil.registerVehicleRenderer(ModEntities.FERTILIZER.get(), FertilizerTrailerRenderer::new);
-
-        /* Register Mod Exclusive Vehicles */
-        if(ModList.get().isLoaded("cfm"))
-        {
-            VehicleUtil.registerVehicleRenderer(ModEntities.SOFACOPTER.get(), SofaHelicopterRenderer::new);
-        }
-
-        EntityRenderers.register(ModEntities.JACK.get(), com.mrcrayfish.vehicle.client.render.JackRenderer::new);
+        FluidUtils.clearCacheFluidColor();
+        OptifineHelper.refresh();
+        EntityRayTracer.instance().clearDataForReregistration();
+        ComponentManager.clearCache();
     }
 
-    private static void setupTileEntityRenderers()
+    @SubscribeEvent
+    public static void registerClientReloadListeners(RegisterClientReloadListenersEvent event)
     {
-        BlockEntityRenderers.register(ModTileEntities.FLUID_EXTRACTOR.get(), FluidExtractorRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.FUEL_DRUM.get(), FuelDrumRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.INDUSTRIAL_FUEL_DRUM.get(), FuelDrumRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.VEHICLE_CRATE.get(), VehicleCrateRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.JACK.get(), com.mrcrayfish.vehicle.client.render.tileentity.JackRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.GAS_PUMP.get(), GasPumpRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.GAS_PUMP_TANK.get(), GasPumpTankRenderer::new);
-        BlockEntityRenderers.register(ModTileEntities.FLUID_PUMP.get(), FluidPumpRenderer::new);
+        event.registerReloadListener((ResourceManagerReloadListener) ClientHandler::onResourceManagerReload);
     }
 
-    private static void setupScreenFactories()
-    {
-        MenuScreens.register(ModContainers.FLUID_EXTRACTOR.get(), FluidExtractorScreen::new);
-        MenuScreens.register(ModContainers.FLUID_MIXER.get(), FluidMixerScreen::new);
-        MenuScreens.register(ModContainers.EDIT_VEHICLE.get(), EditVehicleScreen::new);
-        MenuScreens.register(ModContainers.WORKSTATION.get(), WorkstationScreen::new);
-        MenuScreens.register(ModContainers.STORAGE.get(), StorageScreen::new);
-    }
-
-    private static void setupItemColors()
+    @SubscribeEvent
+    public static void onRegisterItemColorHandlersEvent(RegisterColorHandlersEvent.Item event)
     {
         ItemColor color = (stack, index) ->
         {
@@ -200,13 +155,69 @@ public class ClientHandler
             return stack.getTag().getInt(IDyeable.NBT_KEY);
         };
 
-        ForgeRegistries.ITEMS.forEach(item ->
+        for(Item item : ForgeRegistries.ITEMS)
         {
             if(item instanceof SprayCanItem || (item instanceof PartItem && ((PartItem) item).isColored()))
             {
-                Minecraft.getInstance().getItemColors().register(color, item);
+                event.register(color, item);
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void registerScreens(RegisterEvent event)
+    {
+        event.register(Registry.MENU_REGISTRY, helper -> {
+            MenuScreens.register(ModContainers.FLUID_EXTRACTOR.get(), FluidExtractorScreen::new);
+            MenuScreens.register(ModContainers.FLUID_MIXER.get(), FluidMixerScreen::new);
+            MenuScreens.register(ModContainers.EDIT_VEHICLE.get(), EditVehicleScreen::new);
+            MenuScreens.register(ModContainers.WORKSTATION.get(), WorkstationScreen::new);
+            MenuScreens.register(ModContainers.STORAGE.get(), StorageScreen::new);
         });
+    }
+
+    @SubscribeEvent
+    public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
+    {
+        /* Register Vehicles */
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.QUAD_BIKE.get(), QuadBikeRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.SPORTS_CAR.get(), SportsCarRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.GO_KART.get(), GoKartRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.JET_SKI.get(), JetSkiRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.LAWN_MOWER.get(), LawnMowerRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.MOPED.get(), MopedRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.SPORTS_PLANE.get(), SportsPlaneRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.GOLF_CART.get(), GolfCartRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.OFF_ROADER.get(), OffRoaderRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.TRACTOR.get(), TractorRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.MINI_BUS.get(), MiniBusRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.DIRT_BIKE.get(), DirtBikeRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.COMPACT_HELICOPTER.get(), CompactHelicopterRenderer::new);
+
+        /* Register Trailers */
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.VEHICLE_TRAILER.get(), VehicleTrailerRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.STORAGE_TRAILER.get(), StorageTrailerRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.FLUID_TRAILER.get(), FluidTrailerRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.SEEDER.get(), SeederTrailerRenderer::new);
+        VehicleUtil.registerVehicleRenderer(event, ModEntities.FERTILIZER.get(), FertilizerTrailerRenderer::new);
+
+        /* Register Mod Exclusive Vehicles */
+        if(ModList.get().isLoaded("cfm"))
+        {
+            VehicleUtil.registerVehicleRenderer(event, ModEntities.SOFACOPTER.get(), SofaHelicopterRenderer::new);
+        }
+
+        event.registerEntityRenderer(ModEntities.JACK.get(), com.mrcrayfish.vehicle.client.render.JackRenderer::new);
+
+        /* Register Block Entity Renderers */
+        event.registerBlockEntityRenderer(ModTileEntities.FLUID_EXTRACTOR.get(), FluidExtractorRenderer::new);
+        event.registerBlockEntityRenderer(ModTileEntities.FUEL_DRUM.get(), FuelDrumRenderer::new);
+        event.registerBlockEntityRenderer(ModTileEntities.INDUSTRIAL_FUEL_DRUM.get(), FuelDrumRenderer::new);
+        event.registerBlockEntityRenderer(ModTileEntities.VEHICLE_CRATE.get(), VehicleCrateRenderer::new);
+        event.registerBlockEntityRenderer(ModTileEntities.JACK.get(), com.mrcrayfish.vehicle.client.render.tileentity.JackRenderer::new);
+        event.registerBlockEntityRenderer(ModTileEntities.GAS_PUMP.get(), GasPumpRenderer::new);
+        event.registerBlockEntityRenderer(ModTileEntities.GAS_PUMP_TANK.get(), GasPumpTankRenderer::new);
+        event.registerBlockEntityRenderer(ModTileEntities.FLUID_PUMP.get(), FluidPumpRenderer::new);
     }
 
     private static void setupInteractableVehicles()

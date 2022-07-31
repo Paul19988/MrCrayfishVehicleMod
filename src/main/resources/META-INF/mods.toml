@@ -23,7 +23,7 @@ description="A mod that adds vehicles into Minecraft!"
 [[dependencies.vehicle]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.1,1.20)"`
+    versionRange="[1.19.1,1.20)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.vehicle]]

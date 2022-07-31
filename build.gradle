@@ -74,12 +74,17 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
+
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.1-42.0.1'
 
-    implementation fg.deobf("curse.maven:posture-${project.posture_project}:${project.posture_file}")
+    implementation fg.deobf("com.mrcrayfish.posture:posture:1.0.0-1.19")
+  //  implementation fg.deobf("curse.maven:posture-${project.posture_project}:${project.posture_file}")
     implementation fg.deobf("curse.maven:framework-${project.framework_project}:${project.framework_file}")
     implementation fg.deobf("curse.maven:controllable-${project.controllable_project}:${project.controllable_file}")
     implementation fg.deobf("curse.maven:configured-${project.configured_project}:${project.configured_file}")

@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
@@ -64,11 +65,11 @@ public class VehicleUtil
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static <T extends VehicleEntity> void registerVehicleRenderer(EntityType<T> type, BiFunction<EntityType<T>, VehicleProperties, AbstractVehicleRenderer<T>> rendererFunction)
+    public static <T extends VehicleEntity> void registerVehicleRenderer(EntityRenderersEvent.RegisterRenderers event, EntityType<T> type, BiFunction<EntityType<T>, VehicleProperties, AbstractVehicleRenderer<T>> rendererFunction)
     {
         VehicleProperties properties = VehicleProperties.get(type);
         AbstractVehicleRenderer<T> renderer = rendererFunction.apply(type, properties);
-        EntityRenderers.register(type, ctx -> new EntityVehicleRenderer<>(ctx, renderer));
+        event.registerEntityRenderer(type, ctx -> new EntityVehicleRenderer<>(ctx, renderer));
         VehicleRenderRegistry.registerVehicleRendererFunction(type, rendererFunction, renderer);
         EntityRayTracer.instance().registerTransforms(type, renderer::getRayTraceTransforms);
         EntityRayTracer.instance().registerDynamicRayTraceData(type, VehicleUtil::getCosmeticsRayTraceData);

@@ -61,6 +61,6 @@ public record FluidExtractorRecipe(ResourceLocation id, ItemStack ingredient, Fl
     @NotNull
     public RecipeType<?> getType()
     {
-        return RecipeTypes.FLUID_EXTRACTOR;
+        return RecipeTypes.FLUID_EXTRACTOR.get();
     }
 }

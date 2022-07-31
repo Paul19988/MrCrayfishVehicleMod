@@ -1,25 +1,29 @@
 {
+  "bodyTransform": {
+    "scale": 1.1
+  },
   "canBePainted": true,
-  "offsetToGround": -0.5,
+  "displayTransform": {
+    "scale": 1.35,
+    "translate": [
+      0.0,
+      0.0,
+      -0.15
+    ]
+  },
+  "extended": {
+    "vehicle:trailer": {
+      "hitchOffset": -25.0
+    }
+  },
   "heldOffset": [
     0.0,
     3.0,
     0.0
   ],
-  "displayTransform": {
-    "translate": [
-      0.0,
-      0.0,
-      -0.15
-    ],
-    "scale": 1.35
-  },
-  "bodyTransform": {
-    "scale": 1.1
-  },
+  "offsetToGround": -0.5,
   "wheels": [
     {
-      "side": "left",
       "offset": [
         9.5,
         0.0,
@@ -29,10 +33,10 @@
         1.0,
         1.25,
         1.25
-      ]
+      ],
+      "side": "left"
     },
     {
-      "side": "right",
       "offset": [
         9.5,
         0.0,
@@ -42,12 +46,8 @@
         1.0,
         1.25,
         1.25
-      ]
+      ],
+      "side": "right"
     }
-  ],
-  "extended": {
-    "vehicle:trailer": {
-      "hitchOffset": -25.0
-    }
-  }
+  ]
 }

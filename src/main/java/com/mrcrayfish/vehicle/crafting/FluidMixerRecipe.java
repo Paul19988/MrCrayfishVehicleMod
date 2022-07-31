@@ -147,6 +147,6 @@ public class FluidMixerRecipe implements Recipe<FluidMixerTileEntity>
     @NotNull
     public RecipeType<?> getType()
     {
-        return RecipeTypes.FLUID_MIXER;
+        return RecipeTypes.FLUID_MIXER.get();
     }
 }

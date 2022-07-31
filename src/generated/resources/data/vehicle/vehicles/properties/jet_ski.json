@@ -1,40 +1,60 @@
 {
+  "bodyTransform": {
+    "scale": 1.25,
+    "translate": [
+      0.0,
+      0.0,
+      0.25
+    ]
+  },
   "canBePainted": true,
-  "offsetToGround": 2.75,
+  "displayTransform": {
+    "scale": 1.5,
+    "translate": [
+      0.0,
+      0.0,
+      -7.2
+    ]
+  },
+  "extended": {
+    "vehicle:powered": {
+      "canLockWithKey": false,
+      "energyConsumptionPerTick": 0.5,
+      "enginePower": 18.0,
+      "engineSound": "vehicle:entity.jet_ski.engine",
+      "engineType": "vehicle:small_motor",
+      "fuelFillerTransform": {
+        "rotation": [
+          -90.0,
+          0.0,
+          0.0
+        ],
+        "scale": 0.35,
+        "translate": [
+          0.0,
+          9.25,
+          8.5
+        ]
+      },
+      "fuelFillerType": "small",
+      "maxEnginePitch": 2.2,
+      "minEnginePitch": 1.2
+    }
+  },
   "heldOffset": [
     6.0,
     0.0,
     0.0
   ],
-  "trailerOffset": [
-    0.0,
-    -0.094,
-    -0.65
-  ],
-  "displayTransform": {
-    "translate": [
-      0.0,
-      0.0,
-      -7.2
-    ],
-    "scale": 1.5
-  },
-  "bodyTransform": {
-    "translate": [
-      0.0,
-      0.0,
-      0.25
-    ],
-    "scale": 1.25
-  },
+  "offsetToGround": 2.75,
   "seats": [
     {
+      "driver": true,
       "position": [
         0.0,
         5.0,
         0.0
-      ],
-      "driver": true
+      ]
     },
     {
       "position": [
@@ -44,29 +64,9 @@
       ]
     }
   ],
-  "extended": {
-    "vehicle:powered": {
-      "energyConsumptionPerTick": 0.5,
-      "engineType": "vehicle:small_motor",
-      "enginePower": 18.0,
-      "minEnginePitch": 1.2,
-      "maxEnginePitch": 2.2,
-      "fuelFillerTransform": {
-        "translate": [
-          0.0,
-          9.25,
-          8.5
-        ],
-        "rotation": [
-          -90.0,
-          0.0,
-          0.0
-        ],
-        "scale": 0.35
-      },
-      "fuelFillerType": "small",
-      "canLockWithKey": false,
-      "engineSound": "vehicle:entity.jet_ski.engine"
-    }
-  }
+  "trailerOffset": [
+    0.0,
+    -0.094,
+    -0.65
+  ]
 }
