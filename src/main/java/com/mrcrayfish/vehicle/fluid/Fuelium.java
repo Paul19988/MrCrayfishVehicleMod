@@ -2,6 +2,7 @@ package com.mrcrayfish.vehicle.fluid;
 
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.vehicle.Reference;
+import com.mrcrayfish.vehicle.client.render.util.ColorHelper;
 import com.mrcrayfish.vehicle.init.ModBlocks;
 import com.mrcrayfish.vehicle.init.ModFluidTypes;
 import com.mrcrayfish.vehicle.init.ModFluids;
@@ -99,6 +100,7 @@ public abstract class Fuelium extends ForgeFlowingFluid
         {
             protected static final ResourceLocation STILL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/fuelium_still");
             protected static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/fuelium_flowing");
+            protected static final int PACKED_COLOR = ColorHelper.packARGBRed(148, 242, 45, 0xFF);
             protected static final Vector3f COLOR = new Vector3f(0.58039215686274509803921568627451F, 0.94901960784313725490196078431373F, 0.17647058823529411764705882352941F);
 
             @Override
@@ -118,6 +120,12 @@ public abstract class Fuelium extends ForgeFlowingFluid
             public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor)
             {
                 return COLOR;
+            }
+
+            @Override
+            public int getTintColor()
+            {
+                return PACKED_COLOR;
             }
         }
     }

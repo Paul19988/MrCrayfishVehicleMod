@@ -6,6 +6,7 @@
 		"workstation": "vehicle:model/workstation",
 		"fuelium": "vehicle:block/fuelium_still"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [1, 0, 13],

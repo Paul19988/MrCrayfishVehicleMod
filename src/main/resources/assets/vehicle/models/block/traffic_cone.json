@@ -4,6 +4,7 @@
 	"textures": {
 		"2": "vehicle:model/traffic_cone"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [2, 1, 2],

@@ -8,7 +8,7 @@ import com.mrcrayfish.vehicle.init.ModFluids;
 import com.mrcrayfish.vehicle.inventory.container.FluidMixerContainer;
 import com.mrcrayfish.vehicle.tileentity.FluidMixerTileEntity;
 import com.mrcrayfish.vehicle.util.FluidUtils;
-import com.mrcrayfish.vehicle.util.RenderUtil;
+import com.mrcrayfish.vehicle.client.render.util.RenderUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

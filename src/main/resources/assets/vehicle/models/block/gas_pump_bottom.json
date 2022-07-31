@@ -5,6 +5,7 @@
 		"1": "vehicle:model/gas_pump",
 		"particle": "vehicle:model/gas_pump"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [0, 4, 4],

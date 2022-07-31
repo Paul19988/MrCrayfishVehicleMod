@@ -4,7 +4,6 @@ import com.mrcrayfish.vehicle.client.raytrace.EntityRayTracer;
 import com.mrcrayfish.vehicle.client.raytrace.RayTraceFunction;
 import com.mrcrayfish.vehicle.client.raytrace.TriangleList;
 import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
-import com.mrcrayfish.vehicle.util.RenderUtil;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;

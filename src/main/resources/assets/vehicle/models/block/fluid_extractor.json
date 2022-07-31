@@ -5,6 +5,7 @@
 		"particle": "vehicle:block/metal",
 		"fluid_extractor": "vehicle:model/fluid_extractor"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [0, 0, 0],

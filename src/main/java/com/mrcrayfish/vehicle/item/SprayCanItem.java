@@ -1,7 +1,7 @@
 package com.mrcrayfish.vehicle.item;
 
 import com.mrcrayfish.vehicle.Config;
-import com.mrcrayfish.vehicle.util.RenderUtil;
+import com.mrcrayfish.vehicle.client.render.util.RenderUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;

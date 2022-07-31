@@ -1,4 +1,4 @@
-package com.mrcrayfish.vehicle.util;
+package com.mrcrayfish.vehicle.client.render.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;

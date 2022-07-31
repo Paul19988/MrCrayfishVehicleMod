@@ -5,6 +5,7 @@
 		"particle": "vehicle:block/workstation",
 		"workstation": "vehicle:model/workstation"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [1, 0, 13],

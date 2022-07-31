@@ -1,6 +1,6 @@
 package com.mrcrayfish.vehicle.block;
 
-import com.mrcrayfish.vehicle.util.RenderUtil;
+import com.mrcrayfish.vehicle.client.render.util.RenderUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;

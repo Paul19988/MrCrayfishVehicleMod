@@ -3,20 +3,25 @@ package com.mrcrayfish.vehicle.util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
+import com.mrcrayfish.vehicle.client.render.util.ColorHelper;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -24,15 +29,17 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Author: MrCrayfish
  */
 public class FluidUtils
 {
-    private static final Map<ResourceLocation, Integer> CACHE_FLUID_COLOR = new HashMap<>();
+    private static final Object2IntMap<ResourceLocation> CACHE_FLUID_COLOR = Util.make(() -> {
+        Object2IntMap<ResourceLocation> map = new Object2IntOpenHashMap<>();
+        map.defaultReturnValue(-1);
+        return map;
+    });
 
     @OnlyIn(Dist.CLIENT)
     public static void clearCacheFluidColor()
@@ -43,40 +50,40 @@ public class FluidUtils
     @OnlyIn(Dist.CLIENT)
     public static int getAverageFluidColor(Fluid fluid)
     {
-        Integer cachedColor = CACHE_FLUID_COLOR.get(ForgeRegistries.FLUIDS.getKey(fluid));
-        if(cachedColor != null)
+        ResourceLocation key = ForgeRegistries.FLUIDS.getKey(fluid);
+        int color = CACHE_FLUID_COLOR.getInt(key);
+
+        if(color == -1)
         {
-            return cachedColor;
-        }
-        else
-        {
-            int fluidColor = -1;
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluid).getStillTexture());
             if(sprite != null)
             {
-                long totalRed = 0;
-                long totalGreen = 0;
-                long totalBlue = 0;
-                int pixelCount = sprite.getWidth() * sprite.getHeight();
-                int red, green, blue;
-                for(int i = 0; i < sprite.getHeight(); i++)
+                int area = sprite.getWidth() * sprite.getHeight();
+
+                int r = 0;
+                int g = 0;
+                int b = 0;
+
+                int maxX = sprite.getHeight();
+                int maxY = sprite.getWidth();
+
+                for (int x2 = 0; x2 <= maxX; x2++)
                 {
-                    for(int j = 0; j < sprite.getWidth(); j++)
+                    for (int y2 = 0; y2 <= maxY; y2++)
                     {
-                        int color = sprite.getPixelRGBA(0, j, i);
-                        red = color & 255;
-                        green = color >> 8 & 255;
-                        blue = color >> 16 & 255;
-                        totalRed += red * red;
-                        totalGreen += green * green;
-                        totalBlue += blue * blue;
+                        int pixel = sprite.getPixelRGBA(0, x2, y2);
+
+                        r += ColorHelper.unpackARGBRed(pixel);
+                        g += ColorHelper.unpackARGBGreen(pixel);
+                        b += ColorHelper.unpackARGBBlue(pixel);
                     }
                 }
-                fluidColor = (((int) Math.sqrt(totalRed / pixelCount) & 255) << 16) | (((int) Math.sqrt(totalGreen / pixelCount) & 255) << 8) | (((int) Math.sqrt(totalBlue / pixelCount) & 255));
+
+                CACHE_FLUID_COLOR.put(key, color = ColorHelper.packARGBRed(r / area, g / area, b / area, 0xFF));
             }
-            CACHE_FLUID_COLOR.put(ForgeRegistries.FLUIDS.getKey(fluid), fluidColor);
-            return fluidColor;
         }
+
+        return color;
     }
 
     public static int transferFluid(IFluidHandler source, IFluidHandler target, int maxAmount)
@@ -144,11 +151,14 @@ public class FluidUtils
         if(tank.isEmpty())
             return;
 
-        TextureAtlasSprite sprite = ForgeHooksClient.getFluidSprites(world, pos, tank.getFluid().getFluid().defaultFluidState())[0];
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(tank.getFluid().getFluid()).getStillTexture());
+
         int waterColor = IClientFluidTypeExtensions.of(tank.getFluid().getFluid()).getTintColor(tank.getFluid().getFluid().defaultFluidState(), world, pos);
-        float red = (float) (waterColor >> 16 & 255) / 255.0F;
-        float green = (float) (waterColor >> 8 & 255) / 255.0F;
-        float blue = (float) (waterColor & 255) / 255.0F;
+
+        float red = ColorHelper.normalize(ColorHelper.unpackARGBRed(waterColor));
+        float green = ColorHelper.normalize(ColorHelper.unpackARGBGreen(waterColor));
+        float blue = ColorHelper.normalize(ColorHelper.unpackARGBBlue(waterColor));
+
         float side = 0.9F;
         float minU = sprite.getU0();
         float maxU = Math.min(minU + (sprite.getU1() - minU) * depth, sprite.getU1());
@@ -161,47 +171,182 @@ public class FluidUtils
         //left side
         if(sides.test(Direction.WEST))
         {
-            buffer.vertex(matrix, x + width, y, z).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(maxU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x, y, z).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(minU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x, y + height, z).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(minU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y + height, z).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(maxU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
+            buffer.vertex(matrix, x + width, y, z)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(maxU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x, y, z)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(minU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x, y + height, z)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(minU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y + height, z)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(maxU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
         }
 
         //right side
         if(sides.test(Direction.EAST))
         {
-            buffer.vertex(matrix, x, y, z + depth).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(maxU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y, z + depth).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(minU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y + height, z + depth).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(minU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x, y + height, z + depth).color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F).uv(maxU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
+            buffer.vertex(matrix, x, y, z + depth)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(maxU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y, z + depth)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(minU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y + height, z + depth)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(minU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x, y + height, z + depth)
+                    .color(red - 0.25F, green - 0.25F, blue - 0.25F, 1.0F)
+                    .uv(maxU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
         }
 
         maxU = Math.min(minU + (sprite.getU1() - minU) * depth, sprite.getU1());
 
         if(sides.test(Direction.SOUTH))
         {
-            buffer.vertex(matrix, x + width, y, z + depth).color(red * side, green * side, blue * side, 1.0F).uv(maxU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y, z).color(red * side, green * side, blue * side, 1.0F).uv(minU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y + height, z).color(red * side, green * side, blue * side, 1.0F).uv(minU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y + height, z + depth).color(red * side, green * side, blue * side, 1.0F).uv(maxU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
+            buffer.vertex(matrix, x + width, y, z + depth)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(maxU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y, z)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(minU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y + height, z)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(minU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y + height, z + depth)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(maxU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
         }
 
         if(sides.test(Direction.NORTH))
         {
-            buffer.vertex(matrix, x, y, z).color(red * side, green * side, blue * side, 1.0F).uv(minU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x, y, z + depth).color(red * side, green * side, blue * side, 1.0F).uv(maxU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x, y + height, z + depth).color(red * side, green * side, blue * side, 1.0F).uv(maxU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x, y + height, z).color(red * side, green * side, blue * side, 1.0F).uv(minU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
+            buffer.vertex(matrix, x, y, z)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(minU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x, y, z + depth)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(maxU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x, y + height, z + depth)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(maxU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x, y + height, z)
+                    .color(red * side, green * side, blue * side, 1.0F)
+                    .uv(minU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
         }
 
         maxV = Math.min(minV + (sprite.getV1() - minV) * width, sprite.getV1());
 
         if(sides.test(Direction.UP))
         {
-            buffer.vertex(matrix, x, y + height, z).color(red, green, blue, 1.0F).uv(maxU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x, y + height, z + depth).color(red, green, blue, 1.0F).uv(minU, minV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y + height, z + depth).color(red, green, blue, 1.0F).uv(minU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
-            buffer.vertex(matrix, x + width, y + height, z).color(red, green, blue, 1.0F).uv(maxU, maxV).uv2(light).normal(0.0F, 1.0F, 0.0F).endVertex();
+            buffer.vertex(matrix, x, y + height, z)
+                    .color(red, green, blue, 1.0F)
+                    .uv(maxU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x, y + height, z + depth)
+                    .color(red, green, blue, 1.0F)
+                    .uv(minU, minV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y + height, z + depth)
+                    .color(red, green, blue, 1.0F)
+                    .uv(minU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
+
+            buffer.vertex(matrix, x + width, y + height, z)
+                    .color(red, green, blue, 1.0F)
+                    .uv(maxU, maxV)
+                    .uv2(light)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .normal(0.0F, 1.0F, 0.0F)
+                    .endVertex();
         }
     }
 

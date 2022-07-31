@@ -3,9 +3,7 @@ package com.mrcrayfish.vehicle.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mrcrayfish.vehicle.client.render.util.ColorHelper;
-import com.mrcrayfish.vehicle.client.render.util.ModelQuadUtil;
 import com.mrcrayfish.vehicle.client.util.OptifineHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,7 +12,6 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -43,7 +40,6 @@ import java.util.List;
 public class RenderObjectHelper
 {
     protected static final RandomSource RANDOM = new XoroshiroRandomSource(42L);
-    private static final float NORM = 1.0F / 127.0F;
     private static final float[] EMPTY_COLOR = new float[] { 1F, 1F, 1F, 1F };
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
@@ -159,11 +155,14 @@ public class RenderObjectHelper
 
     protected static void renderQuadList(PoseStack.Pose pose, VertexConsumer consumer, List<BakedQuad> quads, ItemStack stack, int color, int overlay, int[] light)
     {
+        boolean useItemColor = !stack.isEmpty() && color == -1;
+
         // This is a very hot allocation, iterate over it manually
         // noinspection ForLoopReplaceableByForEach
         for (int i = 0, quadsSize = quads.size(); i < quadsSize; i++)
         {
             BakedQuad quad = quads.get(i);
+            int tintColor = 0xFFFFFFFF;
 
             if(OptifineHelper.isEmissiveTexturesEnabled())
             {
@@ -177,56 +176,26 @@ public class RenderObjectHelper
 
             if(quad.isTinted())
             {
-                if(!stack.isEmpty() && color == -1)
+                if(useItemColor)
                 {
-                    color = MINECRAFT.getItemColors().getColor(stack, quad.getTintIndex());
+                    tintColor = MINECRAFT.getItemColors().getColor(stack, quad.getTintIndex());
+                }
+                else
+                {
+                    tintColor = color;
                 }
 
                 if (OptifineHelper.isCustomColorsEnabled())
                 {
-                    color = OptifineHelper.castAsCustomColor(stack, quad.getTintIndex(), color);
+                    tintColor = OptifineHelper.castAsCustomColor(stack, quad.getTintIndex(), tintColor);
                 }
             }
 
-            float red =  ColorHelper.normalize(ColorHelper.unpackARGBRed(color));
-            float green = ColorHelper.normalize(ColorHelper.unpackARGBGreen(color));
-            float blue = ColorHelper.normalize(ColorHelper.unpackARGBBlue(color));
+            float red =  ColorHelper.normalize(ColorHelper.unpackARGBRed(tintColor));
+            float green = ColorHelper.normalize(ColorHelper.unpackARGBGreen(tintColor));
+            float blue = ColorHelper.normalize(ColorHelper.unpackARGBBlue(tintColor));
 
             consumer.putBulkData(pose, quad, EMPTY_COLOR, red, green, blue, 1F, light, overlay, true);
-        }
-    }
-
-    protected static void renderQuad(VertexConsumer consumer, PoseStack.Pose pose,
-                                     BakedQuad quad, int color, int overlay, int light)
-    {
-        for(int i = 0; i < 4; i++)
-        {
-            float x = ModelQuadUtil.getX(quad, i);
-            float y = ModelQuadUtil.getX(quad, i);
-            float z = ModelQuadUtil.getX(quad, i);
-
-            int quadColor = ModelQuadUtil.getColor(quad, i);
-
-            float oR = ColorHelper.normalize(ColorHelper.unpackARGBRed(quadColor));
-            float oG = ColorHelper.normalize(ColorHelper.unpackARGBGreen(quadColor));
-            float oB = ColorHelper.normalize(ColorHelper.unpackARGBBlue(quadColor));
-
-            oR *= ColorHelper.normalize(ColorHelper.unpackARGBRed(color));
-            oG *= ColorHelper.normalize(ColorHelper.unpackARGBGreen(color));
-            oB *= ColorHelper.normalize(ColorHelper.unpackARGBBlue(color));
-
-            float u = ModelQuadUtil.getTexU(quad, i);
-            float v = ModelQuadUtil.getTexV(quad, i);
-
-            int norm = ModelQuadUtil.getNormal(quad, i);
-
-            consumer.vertex(pose.pose(), x, y, z)
-                    .uv(u, v)
-                    .color(ColorHelper.packARGBRed(oR, oG, oB, 1F))
-                    .overlayCoords(overlay)
-                    .uv2(light)
-                    .normal(pose.normal(), (norm & 0xFF) * NORM, ((norm >> 8) * 0xFF) * NORM, ((norm >> 16) & 0xFF) * NORM)
-                    .endVertex();
         }
     }
 }

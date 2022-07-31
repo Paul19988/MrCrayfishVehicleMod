@@ -6,6 +6,7 @@
 		"workstation": "vehicle:model/workstation",
 		"blizzard": "vehicle:block/blizzard"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [1, 0, 13],

@@ -4,6 +4,7 @@
 	"textures": {
 		"fuel_drum": "vehicle:model/fuel_drum"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "octagon",
