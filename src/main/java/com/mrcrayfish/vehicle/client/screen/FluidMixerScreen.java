@@ -127,11 +127,8 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
 
         if(this.fluidMixerTileEntity.canMix())
         {
-            int blazeColorRGB = FluidUtils.getAverageFluidColor(this.fluidMixerTileEntity.getBlazeFluidStack().getFluid());
-            int sapColorRGB = FluidUtils.getAverageFluidColor(this.fluidMixerTileEntity.getEnderSapFluidStack().getFluid());
-
-            int blazeColor = (130 << 24) | blazeColorRGB;
-            int sapColor = (130 << 24) | sapColorRGB;
+            int blazeColor = FluidUtils.getAverageFluidColor(this.fluidMixerTileEntity.getBlazeFluidStack().getFluid());
+            int sapColor = FluidUtils.getAverageFluidColor(this.fluidMixerTileEntity.getEnderSapFluidStack().getFluid());
 
             int redBlaze = ColorHelper.unpackARGBRed(blazeColor);
             int greenBlaze = ColorHelper.unpackARGBGreen(blazeColor);
@@ -141,9 +138,9 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
             int greenSap = ColorHelper.unpackARGBGreen(sapColor);
             int blueSap = ColorHelper.unpackARGBBlue(sapColor);
 
-            int statrColorRGB = ColorHelper.packARGB(((redBlaze + redSap) / 2), ((greenBlaze + greenSap) / 2), ((blueBlaze + blueSap) / 2), 0xFF);
-            int statrColor = (130 << 24) | statrColorRGB;
-            int fluidColor = (130 << 24) | FluidUtils.getAverageFluidColor(ModFluids.FUELIUM.get()); //TODO change to recipe
+            int statrColorARGB = ColorHelper.packARGB(((redBlaze + redSap) / 2), ((greenBlaze + greenSap) / 2), ((blueBlaze + blueSap) / 2), 130);
+            int statrColor = statrColorARGB;
+            int fluidColor = ColorHelper.repackAlpha(FluidUtils.getAverageFluidColor(ModFluids.FUELIUM.get()), 130); //TODO change to recipe
 
             double extractionPercentage = this.fluidMixerTileEntity.getExtractionProgress() / (double) Config.SERVER.mixerMixTime.get();
 
@@ -168,9 +165,9 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
             if (extractionPercentage >= percentageStart)
             {
                 int alpha = (int) (130 * Mth.clamp((extractionPercentage - percentageStart) / (lenghtNode / lenghtTotal), 0, 1));
-                colorFade = (alpha << 24) | blazeColorRGB;
+                colorFade = ColorHelper.repackAlpha(blazeColor, alpha);
                 RenderUtil.drawGradientRectHorizontal(left, top, left + 10, top + 10, colorFade, colorFade);
-                colorFade = (alpha << 24) | sapColorRGB;
+                colorFade = ColorHelper.repackAlpha(sapColor, alpha);
                 top += 36;
                 RenderUtil.drawGradientRectHorizontal(left, top, left + 10, top + 10, colorFade, colorFade);
             }
@@ -192,7 +189,7 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
             if (extractionPercentage >= percentageStart)
             {
                 int alpha = (int) (130 * Mth.clamp((extractionPercentage - percentageStart) / (lenghtNode / lenghtTotal), 0, 1));
-                colorFade = (alpha << 24) | statrColorRGB;
+                colorFade = ColorHelper.repackAlpha(statrColorARGB, alpha);
                 RenderUtil.drawGradientRectHorizontal(left, top, left + 10, top + 10, colorFade, colorFade);
             }
             percentageStart += lenghtNode / lenghtTotal;
@@ -218,14 +215,14 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
 
     private void drawFluidTank(FluidStack fluid, PoseStack matrixStack, int x, int y, double level)
     {
-        FluidUtils.drawFluidTankInGUI(fluid, matrixStack.last().pose(), x, y, level, 59);
+        FluidUtils.drawFluidTankInGUI(fluid, x, y, level, 59);
         RenderSystem.setShaderTexture(0, GUI);
         this.blit(matrixStack, x, y, 176, 44, 16, 59);
     }
 
     private void drawSmallFluidTank(FluidStack fluid, PoseStack matrixStack, int x, int y, double level)
     {
-        FluidUtils.drawFluidTankInGUI(fluid, matrixStack.last().pose(), x, y, level, 29);
+        FluidUtils.drawFluidTankInGUI(fluid, x, y, level, 29);
         RenderSystem.setShaderTexture(0, GUI);
         this.blit(matrixStack, x, y, 176, 44, 16, 29);
     }

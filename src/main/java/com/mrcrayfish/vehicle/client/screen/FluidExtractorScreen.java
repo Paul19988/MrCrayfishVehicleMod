@@ -113,7 +113,7 @@ public class FluidExtractorScreen extends AbstractContainerScreen<FluidExtractor
 
     private void drawFluidTank(FluidStack fluid, PoseStack matrixStack, int x, int y, double level, int height)
     {
-        FluidUtils.drawFluidTankInGUI(fluid, matrixStack.last().pose(), x, y, level, height);
+        FluidUtils.drawFluidTankInGUI(fluid, x, y, level, height);
         RenderSystem.setShaderTexture(0, GUI);
         this.blit(matrixStack, x, y, 176, 44, 16, 59);
     }

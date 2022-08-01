@@ -33,7 +33,7 @@ public class RenderTypes
                     .createCompositeState(true)
     );
 
-    public static final RenderType LABEL_FLUID = RenderType.create("vehicle:fuel_drum_label_fluid",
+    public static final RenderType FUEL_DRUM_FLUID_LABEL = RenderType.create("vehicle:fuel_drum_label_fluid",
             DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
                     .setTextureState(
                             RenderStateShard.MultiTextureStateShard.builder()
@@ -41,6 +41,12 @@ public class RenderTypes
                                     .build()
                     )
                     .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexShader))
+                    .createCompositeState(false)
+    );
+
+    public static final RenderType FUEL_DRUM_FLUID_LABEL_BACKGROUND = RenderType.create("vehicle:fuel_drum_label_background",
+            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
+                    .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))
                     .createCompositeState(false)
     );
 }

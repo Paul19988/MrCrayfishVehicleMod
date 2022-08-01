@@ -19,6 +19,16 @@ public class ColorHelper
         return (a & 0xFF) << 24 | (b & 0xFF) << 16 | (g & 0xFF) << 8 | (r & 0xFF);
     }
 
+    public static int repackAlpha(int rgb, float alpha)
+    {
+        return (rgb & 0xFFFFFF) | ((int) (alpha * COMPONENT_RANGE) << 24);
+    }
+
+    public static int repackAlpha(int rgb, int alpha)
+    {
+        return (rgb & 0xFFFFFF) | (alpha & 0xFF) << 24;
+    }
+
     public static int unpackARGBAlpha(int color)
     {
         return (color >> 24) & 0xFF;

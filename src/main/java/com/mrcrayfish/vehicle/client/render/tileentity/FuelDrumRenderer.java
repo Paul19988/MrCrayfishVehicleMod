@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mrcrayfish.vehicle.block.entity.FuelDrumTileEntity;
+import com.mrcrayfish.vehicle.client.render.RenderTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
@@ -30,22 +31,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumTileEntity>
 {
-    public static final RenderType LABEL_BACKGROUND = RenderType.create("vehicle:fuel_drum_label_background",
-            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))
-                    .createCompositeState(false));
-
-
-    public static final RenderType LABEL_FLUID = RenderType.create("vehicle:fuel_drum_label_fluid",
-            DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
-                    .setTextureState(
-                            RenderStateShard.MultiTextureStateShard.builder()
-                                    .add(InventoryMenu.BLOCK_ATLAS, false, true)
-                                    .build()
-                    )
-                    .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexShader))
-                    .createCompositeState(false));
-
     private final Font font;
 
     public FuelDrumRenderer(BlockEntityRendererProvider.Context ctx)
@@ -93,7 +78,7 @@ public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumTileEntity>
             matrixStack.mulPose(rotation);
             matrixStack.scale(-0.025F, -0.025F, 0.025F);
 
-            VertexConsumer backgroundBuilder = renderTypeBuffer.getBuffer(LABEL_BACKGROUND);
+            VertexConsumer backgroundBuilder = renderTypeBuffer.getBuffer(RenderTypes.FUEL_DRUM_FLUID_LABEL_BACKGROUND);
 
             /* Background */
             Matrix4f matrix = matrixStack.last().pose();
@@ -117,7 +102,7 @@ public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumTileEntity>
             float maxV = minV + (sprite.getV1() - minV) * 4 * 0.0625F;
 
             /* Fluid Texture */
-            VertexConsumer fluidBuilder = renderTypeBuffer.getBuffer(LABEL_FLUID);
+            VertexConsumer fluidBuilder = renderTypeBuffer.getBuffer(RenderTypes.FUEL_DRUM_FLUID_LABEL);
             fluidBuilder.vertex(matrix, -offsetWidth, -1.0F, 0.0F).uv(minU, maxV).endVertex();
             fluidBuilder.vertex(matrix, -offsetWidth, 4.0F, 0.0F).uv(minU, minV).endVertex();
             fluidBuilder.vertex(matrix, -offsetWidth + fuelWidth, 4.0F, 0.0F).uv(maxU, minV).endVertex();

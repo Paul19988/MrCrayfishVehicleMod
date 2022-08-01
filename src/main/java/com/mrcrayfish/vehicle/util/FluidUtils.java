@@ -83,7 +83,7 @@ public class FluidUtils
                         blue += prevBlue * prevBlue;
                     }
                 }
-                CACHE_FLUID_COLOR.put(key, color = ColorHelper.packARGB((int) Math.sqrt(red / area), (int) Math.sqrt(green / area), (int) Math.sqrt(blue / area), 0xFF));
+                CACHE_FLUID_COLOR.put(key, color = ColorHelper.packARGB((int) Math.sqrt(red / area), (int) Math.sqrt(green / area), (int) Math.sqrt(blue / area), 130));
             }
         }
 
@@ -106,12 +106,18 @@ public class FluidUtils
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void drawFluidTankInGUI(FluidStack fluid, Matrix4f pos, double x, double y, double percent, int height)
+    public static void drawFluidTankInGUI(FluidStack fluid, double x, double y, double percent, int height)
     {
         if(fluid == null || fluid.isEmpty())
             return;
 
         ResourceLocation key = IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture();
+        int waterColor = IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor();
+
+        float red = ColorHelper.normalize(ColorHelper.unpackARGBRed(waterColor));
+        float green = ColorHelper.normalize(ColorHelper.unpackARGBGreen(waterColor));
+        float blue = ColorHelper.normalize(ColorHelper.unpackARGBBlue(waterColor));
+
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(key);
         if(sprite != null)
         {
@@ -124,29 +130,37 @@ public class FluidUtils
             double tankLevel = percent * height;
 
             Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
+            RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 
             int count = 1 + ((int) Math.ceil(tankLevel)) / 16;
             for(int i = 0; i < count; i++)
             {
                 double subHeight = Math.min(16.0, tankLevel - (16.0 * i));
                 double offsetY = height - 16.0 * i - subHeight;
-                drawQuad(pos, x, y + offsetY, 16, subHeight, minU, (float) (maxV - deltaV * (subHeight / 16.0)), maxU, maxV);
+                drawQuad(x, y + offsetY, 16, subHeight, minU, (float) (maxV - deltaV * (subHeight / 16.0)), maxU, maxV, red, green, blue);
             }
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void drawQuad(Matrix4f pos, double x, double y, double width, double height, float minU, float minV, float maxU, float maxV)
+    private static void drawQuad(double x, double y, double width, double height, float minU, float minV, float maxU, float maxV, float red, float green, float blue)
     {
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buffer = tessellator.getBuilder();
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.vertex(pos, (float) x, (float) (y + height), 0).uv(minU, maxV).endVertex();
-        buffer.vertex(pos, (float) (x + width), (float) (y + height), 0).uv(maxU, maxV).endVertex();
-        buffer.vertex(pos, (float) (x + width), (float) y, 0).uv(maxU, minV).endVertex();
-        buffer.vertex(pos, (float) x, (float) y, 0).uv(minU, minV).endVertex();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        buffer.vertex((float) x, (float) (y + height), 0).uv(minU, maxV).color(red, green, blue, 1F).endVertex();
+        buffer.vertex((float) (x + width), (float) (y + height), 0).uv(maxU, maxV).color(red, green, blue, 1F).endVertex();
+        buffer.vertex((float) (x + width), (float) y, 0).uv(maxU, minV).color(red, green, blue, 1F).endVertex();
+        buffer.vertex((float) x, (float) y, 0).uv(minU, minV).color(red, green, blue, 1F).endVertex();
         tessellator.end();
+
+        RenderSystem.disableBlend();
+        RenderSystem.enableTexture();
     }
 
     @OnlyIn(Dist.CLIENT)
