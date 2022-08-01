@@ -23,6 +23,7 @@ public class RenderPropertiesProvider
     {
         static final ResourceLocation STILL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/blaze_juice_still");
         static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/blaze_juice_flowing");
+        static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/blaze_juice_overlay");
         static final int PACKED_COLOR = ColorHelper.packARGB(254, 198, 0, 0xFF);
         static final Vector3f COLOR = new Vector3f(0.9960784313725490196078431372549F, 0.77647058823529411764705882352941F, 0F);
 
@@ -45,6 +46,12 @@ public class RenderPropertiesProvider
         }
 
         @Override
+        public ResourceLocation getOverlayTexture()
+        {
+            return OVERLAY_TEXTURE;
+        }
+
+        @Override
         @NotNull
         public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor)
         {
@@ -62,6 +69,7 @@ public class RenderPropertiesProvider
     {
         static final ResourceLocation STILL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/ender_sap_still");
         static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/ender_sap_flowing");
+        static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/ender_sap_overlay");
         static final int PACKED_COLOR = ColorHelper.packARGB(10, 93, 80, 0xFF);
         static final Vector3f COLOR = new Vector3f(0.03921568627450980392156862745098F, 0.36470588235294117647058823529412F, 0.31372549019607843137254901960784F);
 
@@ -84,6 +92,13 @@ public class RenderPropertiesProvider
         }
 
         @Override
+        public ResourceLocation getOverlayTexture()
+        {
+            return OVERLAY_TEXTURE;
+        }
+
+
+        @Override
         @NotNull
         public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor)
         {
@@ -101,6 +116,7 @@ public class RenderPropertiesProvider
     {
         static final ResourceLocation STILL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/fuelium_still");
         static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/fuelium_flowing");
+        static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/fuelium_overlay");
         static final int PACKED_COLOR = ColorHelper.packARGB(148, 242, 45, 0xFF);
         static final Vector3f COLOR = new Vector3f(0.58039215686274509803921568627451F, 0.94901960784313725490196078431373F, 0.17647058823529411764705882352941F);
 
@@ -120,6 +136,12 @@ public class RenderPropertiesProvider
         public ResourceLocation getFlowingTexture()
         {
             return FLOWING_TEXTURE;
+        }
+
+        @Override
+        public ResourceLocation getOverlayTexture()
+        {
+            return OVERLAY_TEXTURE;
         }
 
         @Override
