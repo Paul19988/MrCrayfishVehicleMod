@@ -92,21 +92,20 @@ public class EditVehicleScreen extends AbstractContainerScreen<EditVehicleContai
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY)
+    protected void renderLabels(@NotNull PoseStack matrices, int mouseX, int mouseY)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.font.draw(matrixStack, this.title.getString(), 8, 6, 4210752);
-        minecraft.font.draw(matrixStack, this.playerInventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
+        minecraft.font.draw(matrices, this.title.getString(), 8, 6, 4210752);
+        minecraft.font.draw(matrices, this.playerInventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
 
         if(this.showHelp)
         {
-            matrixStack.pushPose();
+            matrices.pushPose();
             {
-                matrixStack.scale(0.5F, 0.5F, 0.5F);
-                minecraft.font.draw(matrixStack, I18n.get("container.edit_vehicle.window_help"), 56, 38, 0xFFFFFF);
+                matrices.scale(0.5F, 0.5F, 0.5F);
+                minecraft.font.draw(matrices, I18n.get("container.edit_vehicle.window_help"), 56, 38, 0xFFFFFF);
             }
-            matrixStack.popPose();
+            matrices.popPose();
         }
     }
 
@@ -232,13 +231,13 @@ public class EditVehicleScreen extends AbstractContainerScreen<EditVehicleContai
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(@NotNull PoseStack matrices, int mouseX, int mouseY, float partialTicks)
     {
         this.renderVehicleToBuffer(RenderSystem.getModelViewStack(), mouseX, mouseY, partialTicks);
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, partialTicks);
 
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrices, mouseX, mouseY);
 
         int startX = (this.width - this.imageWidth) / 2;
         int startY = (this.height - this.imageHeight) / 2;
@@ -249,11 +248,11 @@ public class EditVehicleScreen extends AbstractContainerScreen<EditVehicleContai
             {
                 if(this.cachedVehicle.getProperties().getExtended(PoweredProperties.class).getEngineType() != EngineType.NONE)
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Collections.singletonList(Component.literal("Engine")), Component::getVisualOrderText), mouseX, mouseY); //TODO localise
+                    this.renderTooltip(matrices, Lists.transform(Collections.singletonList(Component.translatable("vehicle.tooltip.engine")), Component::getVisualOrderText), mouseX, mouseY);
                 }
                 else
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Arrays.asList(Component.literal("Engine"),  Component.literal(ChatFormatting.GRAY + "Not applicable")), Component::getVisualOrderText), mouseX, mouseY); //TODO localise
+                    this.renderTooltip(matrices, Lists.transform(Arrays.asList(Component.translatable("vehicle.tooltip.engine"),  Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), Component::getVisualOrderText), mouseX, mouseY);
                 }
             }
         }
@@ -264,11 +263,11 @@ public class EditVehicleScreen extends AbstractContainerScreen<EditVehicleContai
             {
                 if(this.cachedVehicle.getProperties().canChangeWheels())
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Collections.singletonList(Component.literal("Wheels")), Component::getVisualOrderText), mouseX, mouseY);
+                    this.renderTooltip(matrices, Lists.transform(Collections.singletonList(Component.translatable("vehicle.tooltip.wheels")), Component::getVisualOrderText), mouseX, mouseY);
                 }
                 else
                 {
-                    this.renderTooltip(matrixStack, Lists.transform(Arrays.asList(Component.literal("Wheels"), Component.literal(ChatFormatting.GRAY + "Not applicable")), Component::getVisualOrderText), mouseX, mouseY);
+                    this.renderTooltip(matrices, Lists.transform(Arrays.asList(Component.translatable("vehicle.tooltip.wheels"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), Component::getVisualOrderText), mouseX, mouseY);
                 }
             }
         }

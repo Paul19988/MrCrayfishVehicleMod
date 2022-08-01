@@ -268,7 +268,7 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float partialTicks)
+    public void render(@NotNull PoseStack matrices, int mouseX, int mouseY, float partialTicks)
     {
         super.render(matrices, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrices, mouseX, mouseY);

@@ -82,7 +82,7 @@ public abstract class AbstractMotorcycleRenderer<T extends MotorcycleEntity> ext
         matrixStack.popPose();
 
         this.renderWheels(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
-        this.renderEngine(vehicle, matrixStack, renderTypeBuffer, light);
+        this.renderEngine(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
         this.renderFuelFiller(vehicle, matrixStack, renderTypeBuffer, light);
         this.renderIgnition(vehicle, matrixStack, renderTypeBuffer, light);
         this.renderCosmetics(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);

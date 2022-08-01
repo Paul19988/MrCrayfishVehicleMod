@@ -51,14 +51,16 @@ public abstract class AbstractPlaneRenderer<T extends PlaneEntity> extends Abstr
 
         //Render body
         matrixStack.pushPose();
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) bodyPosition.getRotX()));
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) bodyPosition.getRotY()));
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) bodyPosition.getRotZ()));
-        this.render(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
+        {
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) bodyPosition.getRotX()));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) bodyPosition.getRotY()));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) bodyPosition.getRotZ()));
+            this.render(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
+        }
         matrixStack.popPose();
 
         this.renderWheels(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
-        this.renderEngine(vehicle, matrixStack, renderTypeBuffer, light);
+        this.renderEngine(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
         this.renderFuelFiller(vehicle, matrixStack, renderTypeBuffer, light);
         this.renderIgnition(vehicle, matrixStack, renderTypeBuffer, light);
         this.renderCosmetics(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);

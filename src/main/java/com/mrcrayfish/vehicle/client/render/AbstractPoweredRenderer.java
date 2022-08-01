@@ -1,6 +1,7 @@
 package com.mrcrayfish.vehicle.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.vehicle.client.model.ComponentModel;
 import com.mrcrayfish.vehicle.client.raytrace.EntityRayTracer;
@@ -56,7 +57,7 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
         this.wheelAngleProperty.setDefaultValue(() -> angle);
     }
 
-    protected void renderEngine(@Nullable T vehicle, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light)
+    protected void renderEngine(@Nullable T vehicle, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, float delta, int light)
     {
         VehicleProperties properties = this.vehiclePropertiesProperty.get(vehicle);
         if(properties.getExtended(PoweredProperties.class).isRenderEngine() && !this.engineStackProperty.get(vehicle).isEmpty())
@@ -68,9 +69,12 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
                 {
                     if(vehicle != null && vehicle.isEnginePowered() && vehicle.getControllingPassenger() != null)
                     {
-                        matrixStack.mulPose(Vector3f.XP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
-                        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
-                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(-0.5F * (vehicle.tickCount % 2)));
+                        Quaternion rotation = new Quaternion(0F, 0F, 0F, 1F);
+                        rotation.mul(Vector3f.XP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
+                        rotation.mul(Vector3f.ZP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
+                        rotation.mul(Vector3f.YP.rotationDegrees(-0.5F * (vehicle.tickCount % 2)));
+
+                        matrixStack.mulPose(rotation);
                     }
 
                     BakedModel engineModel = RenderObjectHelper.getModel(this.engineStackProperty.get(vehicle));
@@ -130,13 +134,15 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
         {
             matrixStack.translate((wheel.getOffsetX() * 0.0625) * wheel.getSide().getOffset(), wheel.getOffsetY() * 0.0625, wheel.getOffsetZ() * 0.0625);
 
+            Quaternion rotation = new Quaternion(0, 0, 0, 1F);
+
             if(wheel.getPosition() == Wheel.Position.FRONT)
             {
                 float wheelAngle = this.wheelAngleProperty.get(vehicle, partialTicks);
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(wheelAngle));
+                rotation.mul(Vector3f.YP.rotationDegrees(wheelAngle));
             }
 
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
+            rotation.mul(Vector3f.XP.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
 
             if(wheel.getSide() != Wheel.Side.NONE)
             {
@@ -147,9 +153,10 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
 
             if(wheel.getSide() == Wheel.Side.RIGHT)
             {
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
+                rotation.mul(Vector3f.YP.rotationDegrees(180F));
             }
 
+            matrixStack.mulPose(rotation);
             RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, IDyeable.getColorFromStack(stack), OverlayTexture.NO_OVERLAY, light);
         }
         matrixStack.popPose();
@@ -165,7 +172,6 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
 
             matrixStack.translate(x * 0.0625, y * 0.0625, z * 0.0625);
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(angle));
-            matrixStack.scale(scale, scale, scale);
             matrixStack.mulPose(Vector3f.YP.rotationDegrees(steeringWheelRotation));
 
             this.renderDamagedPart(vehicle, model, matrixStack, renderTypeBuffer, light, partialTicks);

@@ -65,7 +65,7 @@ public abstract class AbstractBoatRenderer<T extends BoatEntity> extends Abstrac
         //Render body
         this.render(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
 
-        this.renderEngine(vehicle, matrixStack, renderTypeBuffer, light);
+        this.renderEngine(vehicle, matrixStack, renderTypeBuffer, partialTicks, light);
         this.renderFuelFiller(vehicle, matrixStack, renderTypeBuffer, light);
         this.renderIgnition(vehicle, matrixStack, renderTypeBuffer, light);
 

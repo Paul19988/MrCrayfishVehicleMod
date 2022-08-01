@@ -41,7 +41,7 @@ public class VehiclePropertiesDataLoader extends SimplePreparableReloadListener<
 
     @Override
     @NotNull
-    protected Map<ResourceLocation, VehicleProperties> prepare(ResourceManager manager, @NotNull ProfilerFiller profiler)
+    protected Map<ResourceLocation, VehicleProperties> prepare(@NotNull ResourceManager manager, @NotNull ProfilerFiller profiler)
     {
         Map<ResourceLocation, VehicleProperties> propertiesMap = new HashMap<>();
 
