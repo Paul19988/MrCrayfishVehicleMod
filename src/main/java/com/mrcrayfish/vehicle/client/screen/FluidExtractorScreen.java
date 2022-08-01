@@ -99,7 +99,7 @@ public class FluidExtractorScreen extends AbstractContainerScreen<FluidExtractor
             int fluidColor = -1;
             if(fluidExtract != null)
             {
-                fluidColor = (255 << 24) | FluidUtils.getAverageFluidColor(fluidExtract.fluid());
+                fluidColor = FluidUtils.getAverageFluidColor(fluidExtract.fluid());
             }
             RenderUtil.drawGradientRectHorizontal(left, top, right, bottom, -1, fluidColor);
             this.blit(matrixStack, startX + 93, startY + 34, 176, 14, 23, 16);
@@ -113,7 +113,7 @@ public class FluidExtractorScreen extends AbstractContainerScreen<FluidExtractor
 
     private void drawFluidTank(FluidStack fluid, PoseStack matrixStack, int x, int y, double level, int height)
     {
-        FluidUtils.drawFluidTankInGUI(fluid, x, y, level, height);
+        FluidUtils.drawFluidTankInGUI(fluid, matrixStack.last().pose(), x, y, level, height);
         RenderSystem.setShaderTexture(0, GUI);
         this.blit(matrixStack, x, y, 176, 44, 16, 59);
     }

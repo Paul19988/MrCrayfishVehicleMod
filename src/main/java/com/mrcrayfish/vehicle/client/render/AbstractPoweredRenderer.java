@@ -65,16 +65,19 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
             if(!engine.isEmpty())
             {
                 matrixStack.pushPose();
-                if(vehicle != null && vehicle.isEnginePowered() && vehicle.getControllingPassenger() != null)
                 {
-                    matrixStack.mulPose(Vector3f.XP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
-                    matrixStack.mulPose(Vector3f.ZP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
-                    matrixStack.mulPose(Vector3f.YP.rotationDegrees(-0.5F * (vehicle.tickCount % 2)));
+                    if(vehicle != null && vehicle.isEnginePowered() && vehicle.getControllingPassenger() != null)
+                    {
+                        matrixStack.mulPose(Vector3f.XP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
+                        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(0.5F * (vehicle.tickCount % 2)));
+                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(-0.5F * (vehicle.tickCount % 2)));
+                    }
+
+                    BakedModel engineModel = RenderObjectHelper.getModel(this.engineStackProperty.get(vehicle));
+                    Transform engineTransform = properties.getExtended(PoweredProperties.class).getEngineTransform();
+                    matrixStack.translate(0.0, 0.5 * engineTransform.getScale(), 0.0);
+                    this.renderPart(engineTransform, engineModel, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
                 }
-                BakedModel engineModel = RenderObjectHelper.getModel(this.engineStackProperty.get(vehicle));
-                Transform engineTransform = properties.getExtended(PoweredProperties.class).getEngineTransform();
-                matrixStack.translate(0.0, 0.5 * engineTransform.getScale(), 0.0);
-                this.renderPart(engineTransform, engineModel, matrixStack, renderTypeBuffer, -1, light, OverlayTexture.NO_OVERLAY);
                 matrixStack.popPose();
             }
         }
@@ -124,38 +127,49 @@ public abstract class AbstractPoweredRenderer<T extends PoweredVehicleEntity> ex
             return;
 
         matrixStack.pushPose();
-        matrixStack.translate((wheel.getOffsetX() * 0.0625) * wheel.getSide().getOffset(), wheel.getOffsetY() * 0.0625, wheel.getOffsetZ() * 0.0625);
-        if(wheel.getPosition() == Wheel.Position.FRONT)
         {
-            float wheelAngle = this.wheelAngleProperty.get(vehicle, partialTicks);
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(wheelAngle));
+            matrixStack.translate((wheel.getOffsetX() * 0.0625) * wheel.getSide().getOffset(), wheel.getOffsetY() * 0.0625, wheel.getOffsetZ() * 0.0625);
+
+            if(wheel.getPosition() == Wheel.Position.FRONT)
+            {
+                float wheelAngle = this.wheelAngleProperty.get(vehicle, partialTicks);
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(wheelAngle));
+            }
+
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
+
+            if(wheel.getSide() != Wheel.Side.NONE)
+            {
+                matrixStack.translate((((wheel.getWidth() * wheel.getScaleX()) / 2) * 0.0625) * wheel.getSide().getOffset(), 0.0, 0.0);
+            }
+
+            matrixStack.scale(wheel.getScaleX(), wheel.getScaleY(), wheel.getScaleZ());
+
+            if(wheel.getSide() == Wheel.Side.RIGHT)
+            {
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
+            }
+
+            RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, IDyeable.getColorFromStack(stack), OverlayTexture.NO_OVERLAY, light);
         }
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-this.getWheelRotation(vehicle, wheel, partialTicks)));
-        if(wheel.getSide() != Wheel.Side.NONE)
-        {
-            matrixStack.translate((((wheel.getWidth() * wheel.getScaleX()) / 2) * 0.0625) * wheel.getSide().getOffset(), 0.0, 0.0);
-        }
-        matrixStack.scale(wheel.getScaleX(), wheel.getScaleY(), wheel.getScaleZ());
-        if(wheel.getSide() == Wheel.Side.RIGHT)
-        {
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
-        }
-        int wheelColor = IDyeable.getColorFromStack(stack);
-        RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, renderTypeBuffer, wheelColor, light, OverlayTexture.NO_OVERLAY);
         matrixStack.popPose();
     }
 
     protected void renderSteeringWheel(T vehicle, ComponentModel model, double x, double y, double z, float scale, float angle, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks)
     {
         matrixStack.pushPose();
-        matrixStack.translate(x * 0.0625, y * 0.0625, z * 0.0625);
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(angle));
-        matrixStack.scale(scale, scale, scale);
-        float wheelAngle = this.wheelAngleProperty.get(vehicle, partialTicks);
-        float maxSteeringAngle = this.vehiclePropertiesProperty.get(vehicle).getExtended(PoweredProperties.class).getMaxSteeringAngle();
-        float steeringWheelRotation = (wheelAngle / maxSteeringAngle) * 25F;
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(steeringWheelRotation));
-        this.renderDamagedPart(vehicle, model, matrixStack, renderTypeBuffer, light, partialTicks);
+        {
+            float wheelAngle = this.wheelAngleProperty.get(vehicle, partialTicks);
+            float maxSteeringAngle = this.vehiclePropertiesProperty.get(vehicle).getExtended(PoweredProperties.class).getMaxSteeringAngle();
+            float steeringWheelRotation = (wheelAngle / maxSteeringAngle) * 25F;
+
+            matrixStack.translate(x * 0.0625, y * 0.0625, z * 0.0625);
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(angle));
+            matrixStack.scale(scale, scale, scale);
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(steeringWheelRotation));
+
+            this.renderDamagedPart(vehicle, model, matrixStack, renderTypeBuffer, light, partialTicks);
+        }
         matrixStack.popPose();
     }
 }

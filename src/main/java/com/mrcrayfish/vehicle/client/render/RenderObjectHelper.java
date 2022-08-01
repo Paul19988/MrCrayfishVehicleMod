@@ -16,6 +16,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +35,6 @@ import java.util.List;
 
 /**
  * @author Mo0dss
- * Same as the old RenderUtil but alot more clean and useful
  */
 @OnlyIn(Dist.CLIENT)
 public class RenderObjectHelper
@@ -125,7 +125,7 @@ public class RenderObjectHelper
                                     ItemRenderer.getFoilBufferDirect(renderTypeBuffer, subRenderType, true, stack.hasFoil()) :
                                     ItemRenderer.getFoilBuffer(renderTypeBuffer, subRenderType, true, stack.hasFoil());
 
-                            renderModel(pose, buffer, subRenderType, stack, model, -1, overlay, light);
+                            renderModel(pose, buffer, subRenderType, stack, subModel, -1, overlay, light);
                         }
                     }
                 }

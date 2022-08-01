@@ -5,16 +5,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
 import com.mrcrayfish.vehicle.block.entity.FuelDrumTileEntity;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -29,52 +31,55 @@ import org.jetbrains.annotations.NotNull;
 public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumTileEntity>
 {
     public static final RenderType LABEL_BACKGROUND = RenderType.create("vehicle:fuel_drum_label_background",
-            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder().createCompositeState(false));
+            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
+                    .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))
+                    .createCompositeState(false));
+
 
     public static final RenderType LABEL_FLUID = RenderType.create("vehicle:fuel_drum_label_fluid",
             DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
-                    .setTextureState(RenderStateShard.MultiTextureStateShard.builder()
-                            .add(InventoryMenu.BLOCK_ATLAS, false, true)
-                            .build())
+                    .setTextureState(
+                            RenderStateShard.MultiTextureStateShard.builder()
+                                    .add(InventoryMenu.BLOCK_ATLAS, false, true)
+                                    .build()
+                    )
+                    .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexShader))
                     .createCompositeState(false));
 
     private final Font font;
-    private final Camera camera;
-    private final HitResult cameraHitResult;
 
     public FuelDrumRenderer(BlockEntityRendererProvider.Context ctx)
     {
         this.font = ctx.getFont();
-        this.camera = ctx.getBlockEntityRenderDispatcher().camera;
-        this.cameraHitResult = ctx.getBlockEntityRenderDispatcher().cameraHitResult;
     }
 
     @Override
     public void render(@NotNull FuelDrumTileEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
     {
-        if(this.camera == null)
-            return;
+        Minecraft minecraft = Minecraft.getInstance();
+        HitResult hitResult = minecraft.hitResult;
 
-        if(Minecraft.getInstance().player.isCrouching())
+        if(minecraft.player.isCrouching())
         {
-            if(entity.hasFluid() && this.cameraHitResult != null && this.cameraHitResult.getType() == HitResult.Type.BLOCK)
+            if(entity.hasFluid() && hitResult != null && hitResult.getType() == HitResult.Type.BLOCK)
             {
-                BlockHitResult result = (BlockHitResult) this.cameraHitResult;
+                BlockHitResult result = (BlockHitResult) hitResult;
                 if(result.getBlockPos().equals(entity.getBlockPos()))
                 {
-                    this.drawFluidLabel(this.font, entity.getFluidTank(), matrices, buffers);
+                    this.drawFluidLabel(this.font, minecraft.getEntityRenderDispatcher().cameraOrientation(), entity.getFluidTank(), matrices, buffers);
                 }
             }
         }
     }
 
-    private void drawFluidLabel(Font fontRendererIn, FluidTank tank, PoseStack matrixStack, MultiBufferSource renderTypeBuffer)
+    private void drawFluidLabel(Font fontRendererIn, Quaternion rotation, FluidTank tank, PoseStack matrixStack, MultiBufferSource renderTypeBuffer)
     {
         if(tank.getFluid().isEmpty())
             return;
 
         FluidStack stack = tank.getFluid();
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(tank.getFluid().getFluid()).getStillTexture());
+        ResourceLocation stillTexture = IClientFluidTypeExtensions.of(tank.getFluid().getFluid()).getStillTexture();
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
         if(sprite != null)
         {
             float level = tank.getFluidAmount() / (float) tank.getCapacity();
@@ -85,7 +90,7 @@ public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumTileEntity>
 
             matrixStack.pushPose();
             matrixStack.translate(0.5, 1.25, 0.5);
-            matrixStack.mulPose(this.camera.rotation());
+            matrixStack.mulPose(rotation);
             matrixStack.scale(-0.025F, -0.025F, 0.025F);
 
             VertexConsumer backgroundBuilder = renderTypeBuffer.getBuffer(LABEL_BACKGROUND);

@@ -7,6 +7,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -37,13 +38,23 @@ public class RenderUtil
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
 
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        bufferbuilder.vertex(right, top, 0).color(rightColor).endVertex();
-        bufferbuilder.vertex(left, top, 0).color(leftColor).endVertex();
-        bufferbuilder.vertex(left, bottom, 0).color(leftColor).endVertex();
-        bufferbuilder.vertex(right, bottom, 0).color(rightColor).endVertex();
+        int rightRed = ColorHelper.unpackARGBRed(rightColor);
+        int rightGreen = ColorHelper.unpackARGBGreen(rightColor);
+        int rightBlue = ColorHelper.unpackARGBBlue(rightColor);
+        int rightAlpha = ColorHelper.unpackARGBAlpha(rightColor);
 
+        int leftRed = ColorHelper.unpackARGBRed(leftColor);
+        int leftGreen = ColorHelper.unpackARGBGreen(leftColor);
+        int leftBlue = ColorHelper.unpackARGBBlue(leftColor);
+        int leftAlpha = ColorHelper.unpackARGBAlpha(leftColor);
+
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        bufferbuilder.vertex(right, top, 0).color(rightRed, rightGreen, rightBlue, rightAlpha).endVertex();
+        bufferbuilder.vertex(left, top, 0).color(leftRed, leftGreen, leftBlue, leftAlpha).endVertex();
+        bufferbuilder.vertex(left, bottom, 0).color(leftRed, leftGreen, leftBlue, leftAlpha).endVertex();
+        bufferbuilder.vertex(right, bottom, 0).color(rightRed, rightGreen, rightBlue, rightAlpha).endVertex();
         tesselator.end();
+
         RenderSystem.disableBlend();
         RenderSystem.enableTexture();
     }

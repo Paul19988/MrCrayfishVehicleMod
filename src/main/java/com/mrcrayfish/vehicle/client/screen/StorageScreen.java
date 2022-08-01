@@ -40,8 +40,8 @@ public class StorageScreen extends AbstractContainerScreen<StorageContainer>
     @Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY)
     {
-        this.minecraft.font.draw(matrixStack, this.getTitle().getString(), 8, 6, 4210752);
-        this.minecraft.font.draw(matrixStack, this.playerInventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
+        this.minecraft.font.draw(matrixStack, this.getTitle(), 8, 6, 4210752);
+        this.minecraft.font.draw(matrixStack, this.playerInventory.getDisplayName(), 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override

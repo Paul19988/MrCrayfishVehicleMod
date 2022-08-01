@@ -6,6 +6,7 @@ import com.mrcrayfish.vehicle.item.WrenchItem;
 import com.mrcrayfish.vehicle.block.entity.PipeTileEntity;
 import com.mrcrayfish.vehicle.block.entity.PumpTileEntity;
 import com.mrcrayfish.vehicle.util.VoxelShapeHelper;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -37,10 +38,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Author: MrCrayfish
@@ -62,11 +60,13 @@ public class FluidPipeBlock extends ObjectBlock implements EntityBlock
     public FluidPipeBlock()
     {
         super(Properties.of(Material.METAL).sound(SoundType.NETHERITE_BLOCK).strength(0.5F));
+
         BlockState defaultState = this.getStateDefinition().any().setValue(DISABLED, true);
         for(BooleanProperty property : CONNECTED_PIPES)
         {
             defaultState = defaultState.setValue(property, false);
         }
+
         this.registerDefaultState(defaultState);
     }
 
@@ -254,22 +254,25 @@ public class FluidPipeBlock extends ObjectBlock implements EntityBlock
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if(tileEntity instanceof PipeTileEntity)
         {
-            Set<BlockPos> pumps = ((PipeTileEntity) tileEntity).getPumps();
-            pumps.forEach(pumpPos ->
+            LongSet pumps = ((PipeTileEntity) tileEntity).getPumps();
+
+            for(long pump : pumps)
             {
-                BlockEntity te = world.getBlockEntity(pumpPos);
-                if(te instanceof PumpTileEntity)
+                BlockPos pumpPos = BlockPos.of(pump);
+                BlockEntity blockEntity = world.getBlockEntity(pumpPos);
+                if(blockEntity instanceof PumpTileEntity pumpBlockEntity)
                 {
-                    ((PumpTileEntity) te).invalidatePipeNetwork();
+                    pumpBlockEntity.invalidatePipeNetwork();
                 }
-            });
+            }
         }
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighbourState, LevelAccessor world, BlockPos pos, BlockPos neighbourPos)
+    @NotNull
+    public BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState neighbourState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighbourPos)
     {
-        return this.getPipeState(state, world, pos);
+        return this.getPipeState(state, level, pos);
     }
 
     @Nullable
@@ -307,6 +310,7 @@ public class FluidPipeBlock extends ObjectBlock implements EntityBlock
                                     continue;
                                 }
                             }
+
                             state = state.setValue(DISABLED, false);
                             break;
                         }
@@ -373,12 +377,15 @@ public class FluidPipeBlock extends ObjectBlock implements EntityBlock
     }
 
     @Override
-    public VoxelShape getBlockSupportShape(BlockState p_60581_, BlockGetter p_60582_, BlockPos p_60583_) {
+    @NotNull
+    public VoxelShape getBlockSupportShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos)
+    {
         return Shapes.block();
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder)
+    {
         super.createBlockStateDefinition(builder);
 
         builder.add(CONNECTED_PIPES);
@@ -387,7 +394,8 @@ public class FluidPipeBlock extends ObjectBlock implements EntityBlock
 
     @Nullable
     @Override
-    public PipeTileEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public PipeTileEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
+    {
         return new PipeTileEntity(pos, state);
     }
 

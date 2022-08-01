@@ -41,12 +41,12 @@ public class GasPumpTileEntity extends TileEntitySynced
 
     public static void onServerTick(Level level, BlockPos pos, BlockState state, GasPumpTileEntity entity)
     {
-        entity.onServerTick();
+        entity.onServerTick(level);
     }
 
     public static void onClientTick(Level level, BlockPos pos, BlockState state, GasPumpTileEntity entity)
     {
-        entity.onClientTick();
+        entity.onServerTick(level);
     }
 
     public HermiteInterpolator getCachedSpline()
@@ -104,48 +104,44 @@ public class GasPumpTileEntity extends TileEntitySynced
         }
     }
 
-    public void onServerTick()
+    public void onServerTick(Level level)
     {
         if(this.fuelingEntityId != -1)
         {
             if(this.fuelingEntity == null)
             {
-                Entity entity = this.level.getEntity(this.fuelingEntityId);
+                Entity entity = level.getEntity(this.fuelingEntityId);
+
                 if(entity instanceof Player)
                 {
                     this.fuelingEntity = (Player) entity;
                 }
-                else if(!this.level.isClientSide)
+                else if(!level.isClientSide)
                 {
                     this.fuelingEntityId = -1;
                     this.syncFuelingEntity();
                 }
             }
         }
+        else if(level.isClientSide && this.fuelingEntity != null)
+        {
+            this.fuelingEntity = null;
+        }
 
-        if(this.fuelingEntity != null)
+        if(!level.isClientSide && this.fuelingEntity != null)
         {
             if(Math.sqrt(this.fuelingEntity.distanceToSqr(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5)) > Config.SERVER.maxHoseDistance.get() || !this.fuelingEntity.isAlive())
             {
                 if(this.fuelingEntity.isAlive())
                 {
-                    this.level.playSound(null, this.fuelingEntity.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    level.playSound(null, this.fuelingEntity.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 SyncedEntityData.instance().set(this.fuelingEntity, ModDataKeys.GAS_PUMP, Optional.empty());
                 this.fuelingEntityId = -1;
                 this.fuelingEntity = null;
                 this.syncFuelingEntity();
+                //TODO add breaking sound like when a trailer disconnects
             }
-        }
-    }
-
-    public void onClientTick()
-    {
-        this.onServerTick();
-
-        if(this.fuelingEntity != null)
-        {
-            this.fuelingEntity = null;
         }
     }
 

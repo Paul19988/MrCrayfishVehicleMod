@@ -1,11 +1,15 @@
 package com.mrcrayfish.vehicle.client.util;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * Utility class to help with hermite interpolation. Based on work by Nils Pipenbrinck
@@ -13,17 +17,21 @@ import java.util.Map;
  */
 public class HermiteInterpolator
 {
-    private Map<Pair<Integer, Float>, Result> resultCache = new HashMap<>();
-    private Point[] points;
+    protected static final Long2ObjectMap<BiFunction<Integer, Double, Result>> pos2resultCacheMap = new Long2ObjectOpenHashMap<>();
 
-    public HermiteInterpolator(Point ... points)
+    private Map<Pair<Integer, Double>, Result> resultCache = new HashMap<>();
+    private final Point[] points;
+    private final BlockPos origin;
+
+    public HermiteInterpolator(BlockPos origin, Point... points)
     {
         this.points = points;
+        this.origin = origin;
     }
 
-    public Result get(int index, float progress)
+    public Result get(int index, double progress)
     {
-        //This cache might be a bad because of the use of a float in the key
+        //This cache might be a bad
         return this.resultCache.computeIfAbsent(Pair.of(index, progress), pair -> {
             Point p1 = this.getPoint(index);
             Point p2 = this.getPoint(index + 1);
@@ -33,6 +41,7 @@ public class HermiteInterpolator
             double aX = angle(p1.pos.x, p2.pos.x, p1.control.x, p2.control.x, progress);
             double aY = angle(p1.pos.y, p2.pos.y, p1.control.y, p2.control.y, progress);
             double aZ = angle(p1.pos.z, p2.pos.z, p1.control.z, p2.control.z, progress);
+
             return new Result(new Vec3(pX, pY, pZ), new Vec3(aX, aY, aZ));
         });
     }
@@ -55,6 +64,7 @@ public class HermiteInterpolator
         double a2 = -2 * sss + 3 * ss;
         double a3 = sss - 2 * ss + s;
         double a4 = sss - ss;
+
         return a1 * p1 + a2 * p2 + a3 * t1 + a4 * t2;
     }
 
@@ -65,6 +75,7 @@ public class HermiteInterpolator
         double a2 = -6 * ss + 6 * s;
         double a3 = 3 * ss - 4 * s + 1;
         double a4 = 3 * ss - 2 * s;
+
         return a1 * p1 + a2 * p2 + a3 * t1 + a4 * t2;
     }
 

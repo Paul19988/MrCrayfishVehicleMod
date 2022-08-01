@@ -2,6 +2,7 @@ package com.mrcrayfish.vehicle.fluid;
 
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.vehicle.Reference;
+import com.mrcrayfish.vehicle.client.RenderPropertiesProvider;
 import com.mrcrayfish.vehicle.client.render.util.ColorHelper;
 import com.mrcrayfish.vehicle.init.ModBlocks;
 import com.mrcrayfish.vehicle.init.ModFluidTypes;
@@ -91,41 +92,7 @@ public abstract class BlazeJuice extends ForgeFlowingFluid
         @Override
         public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
         {
-            consumer.accept(new ClientFluidType());
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public static class ClientFluidType implements IClientFluidTypeExtensions
-        {
-            protected static final ResourceLocation STILL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/blaze_juice_still");
-            protected static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(Reference.MOD_ID, "block/blaze_juice_flowing");
-            protected static final int PACKED_COLOR = ColorHelper.packARGBRed(254, 198, 0, 0xFF);
-            protected static final Vector3f COLOR = new Vector3f(0.9960784313725490196078431372549F, 0.77647058823529411764705882352941F, 0F);
-
-            @Override
-            public ResourceLocation getStillTexture()
-            {
-                return STILL_TEXTURE;
-            }
-
-            @Override
-            public ResourceLocation getFlowingTexture()
-            {
-                return FLOWING_TEXTURE;
-            }
-
-            @Override
-            @NotNull
-            public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor)
-            {
-                return COLOR;
-            }
-
-            @Override
-            public int getTintColor()
-            {
-                return PACKED_COLOR;
-            }
+            consumer.accept(RenderPropertiesProvider.BLAZE_JUICE);
         }
     }
 }

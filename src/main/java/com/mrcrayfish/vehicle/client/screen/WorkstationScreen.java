@@ -399,35 +399,37 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
             RenderSystem.applyModelViewMatrix();
 
             PoseStack matrixStack = new PoseStack();
-            matrixStack.translate(0.0D, 0.0D, 1000.0D);
+            matrixStack.pushPose();
+            {
+                matrixStack.translate(0.0D, 0.0D, 1000.0D);
 
-            float scale = this.prevVehicleScale + (this.vehicleScale - this.prevVehicleScale) * partialTicks;
-            matrixStack.scale(scale, scale, scale);
+                float scale = this.prevVehicleScale + (this.vehicleScale - this.prevVehicleScale) * partialTicks;
+                matrixStack.scale(scale, scale, scale);
 
-            Quaternion quaternion = Axis.POSITIVE_X.rotationDegrees(-5F);
-            Quaternion quaternion1 = Axis.POSITIVE_Y.rotationDegrees(-(this.minecraft.player.tickCount + partialTicks));
-            quaternion.mul(quaternion1);
-            matrixStack.mulPose(quaternion);
+                Quaternion quaternion = Axis.POSITIVE_X.rotationDegrees(-5F);
+                Quaternion quaternion1 = Axis.POSITIVE_Y.rotationDegrees(-(this.minecraft.player.tickCount + partialTicks));
+                quaternion.mul(quaternion1);
+                matrixStack.mulPose(quaternion);
 
-            CachedVehicle transitionVehicle = this.transitioning ? prevCachedVehicle : cachedVehicle;
+                CachedVehicle transitionVehicle = this.transitioning ? prevCachedVehicle : cachedVehicle;
 
-            Transform position = transitionVehicle.getProperties().getDisplayTransform();
-            matrixStack.scale((float) position.getScale(), (float) position.getScale(), (float) position.getScale());
-            matrixStack.mulPose(Axis.POSITIVE_X.rotationDegrees((float) position.getRotX()));
-            matrixStack.mulPose(Axis.POSITIVE_Y.rotationDegrees((float) position.getRotY()));
-            matrixStack.mulPose(Axis.POSITIVE_Z.rotationDegrees((float) position.getRotZ()));
-            matrixStack.translate(position.getX(), position.getY(), position.getZ());
+                Transform position = transitionVehicle.getProperties().getDisplayTransform();
+                matrixStack.scale((float) position.getScale(), (float) position.getScale(), (float) position.getScale());
+                matrixStack.mulPose(Axis.POSITIVE_X.rotationDegrees((float) position.getRotX()));
+                matrixStack.mulPose(Axis.POSITIVE_Y.rotationDegrees((float) position.getRotY()));
+                matrixStack.mulPose(Axis.POSITIVE_Z.rotationDegrees((float) position.getRotZ()));
+                matrixStack.translate(position.getX(), position.getY(), position.getZ());
 
-            Lighting.setupForEntityInInventory();
+                Lighting.setupForEntityInInventory();
 
-            EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
-            renderManager.setRenderShadow(false);
-            renderManager.overrideCameraOrientation(quaternion);
-            MultiBufferSource.BufferSource renderTypeBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
-            RenderSystem.runAsFancy(() -> transitionVehicle.getRenderer().setupTransformsAndRender(null, matrixStack, renderTypeBuffer, partialTicks, 15728880));
-            renderTypeBuffer.endBatch();
-            renderManager.setRenderShadow(true);
-
+                EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
+                renderManager.setRenderShadow(false);
+                renderManager.overrideCameraOrientation(quaternion);
+                MultiBufferSource.BufferSource renderTypeBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
+                RenderSystem.runAsFancy(() -> transitionVehicle.getRenderer().setupTransformsAndRender(null, matrixStack, renderTypeBuffer, partialTicks, 15728880));
+                renderTypeBuffer.endBatch();
+                renderManager.setRenderShadow(true);
+            }
             matrixStack.popPose();
         }
         matrices.popPose();

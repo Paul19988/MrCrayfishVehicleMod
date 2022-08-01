@@ -2,6 +2,8 @@ package com.mrcrayfish.vehicle.block.entity;
 
 import com.mrcrayfish.vehicle.init.ModTileEntities;
 import com.mrcrayfish.vehicle.util.TileEntityUtil;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ByteArrayTag;
@@ -18,7 +20,7 @@ import java.util.Set;
  */
 public class PipeTileEntity extends TileEntitySynced
 {
-    protected Set<BlockPos> pumps = new HashSet<>();
+    protected LongSet pumps = new LongOpenHashSet();
     protected boolean[] disabledConnections = new boolean[Direction.values().length];
 
     public PipeTileEntity(BlockPos pos, BlockState state)
@@ -33,15 +35,15 @@ public class PipeTileEntity extends TileEntitySynced
 
     public void addPump(BlockPos pos)
     {
-        this.pumps.add(pos);
+        this.pumps.add(pos.asLong());
     }
 
     public void removePump(BlockPos pos)
     {
-        this.pumps.remove(pos);
+        this.pumps.remove(pos.asLong());
     }
 
-    public Set<BlockPos> getPumps()
+    public LongSet getPumps()
     {
         return this.pumps;
     }

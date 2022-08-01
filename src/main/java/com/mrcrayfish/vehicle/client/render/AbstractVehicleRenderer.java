@@ -171,13 +171,15 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
     {
         if(position == null) return;
         matrixStack.pushPose();
-        matrixStack.translate(position.getX() * 0.0625, position.getY() * 0.0625, position.getZ() * 0.0625);
-        matrixStack.translate(0.0, -0.5, 0.0);
-        matrixStack.scale((float) position.getScale(), (float) position.getScale(), (float) position.getScale());
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) position.getRotX()));
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) position.getRotY()));
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) position.getRotZ()));
-        RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, color, overlayTexture, lightTexture);
+        {
+            matrixStack.translate(position.getX() * 0.0625, position.getY() * 0.0625, position.getZ() * 0.0625);
+            matrixStack.translate(0.0, -0.5, 0.0);
+            matrixStack.scale((float) position.getScale(), (float) position.getScale(), (float) position.getScale());
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) position.getRotX()));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) position.getRotY()));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) position.getRotZ()));
+            RenderObjectHelper.renderColoredModel(model, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, color, overlayTexture, lightTexture);
+        }
         matrixStack.popPose();
     }
 
@@ -185,14 +187,18 @@ public abstract class AbstractVehicleRenderer<T extends VehicleEntity>
     {
         if(position == null) return;
         matrixStack.pushPose();
-        matrixStack.translate(position.getX() * 0.0625, position.getY() * 0.0625, position.getZ() * 0.0625);
-        matrixStack.translate(0.0, -0.25, 0.0);
-        matrixStack.scale((float) position.getScale(), (float) position.getScale(), (float) position.getScale());
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) position.getRotX()));
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) position.getRotY()));
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) position.getRotZ()));
-        matrixStack.translate(0.0, 0.0, -0.05);
-        RenderObjectHelper.renderModel(stack, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, overlayTexture, lightTexture, model);
+        {
+            matrixStack.translate(position.getX() * 0.0625, position.getY() * 0.0625, position.getZ() * 0.0625);
+            matrixStack.translate(0.0, -0.25, 0.0);
+            matrixStack.scale((float) position.getScale(), (float) position.getScale(), (float) position.getScale());
+
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) position.getRotX()));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) position.getRotY()));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) position.getRotZ()));
+            matrixStack.translate(0.0, 0.0, -0.05);
+
+            RenderObjectHelper.renderModel(stack, ItemTransforms.TransformType.NONE, false, matrixStack, buffer, overlayTexture, lightTexture, model);
+        }
         matrixStack.popPose();
     }
 

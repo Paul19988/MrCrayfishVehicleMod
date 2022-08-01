@@ -90,14 +90,14 @@ public class GasPumpRenderer implements BlockEntityRenderer<GasPumpTileEntity>
             Vec3 nozzleVec = this.getNozzlePosition(player, entity.getBlockPos(), delta);
             Vec3 lookVec = this.getLookVector(player, delta);
             HermiteInterpolator.Point nozzlePoint = new HermiteInterpolator.Point(nozzleVec, new Vec3(lookVec.x * 3, lookVec.y * 3, lookVec.z * 3));
-            entity.setCachedSpline(new HermiteInterpolator(new HermiteInterpolator.Point(new Vec3(hoseStartPos[0], 0.6425, hoseStartPos[1]), new Vec3(0, -5, 0)), nozzlePoint));
+            entity.setCachedSpline(new HermiteInterpolator(entity.getBlockPos(), new HermiteInterpolator.Point(new Vec3(hoseStartPos[0], 0.6425, hoseStartPos[1]), new Vec3(0, -5, 0)), nozzlePoint));
             entity.setRecentlyUsed(true);
         }
         else if(entity.getCachedSpline() == null || entity.isRecentlyUsed())
         {
             double[] nozzlePos = CollisionHelper.fixRotation(facing, 0.345, 1.06, 0.345, 1.06);
             HermiteInterpolator.Point nozzlePoint = new HermiteInterpolator.Point(new Vec3(nozzlePos[0], 0.1, nozzlePos[1]), new Vec3(0, 3, 0));
-            entity.setCachedSpline(new HermiteInterpolator(new HermiteInterpolator.Point(new Vec3(hoseStartPos[0], 0.6425, hoseStartPos[1]), new Vec3(0, -5, 0)), nozzlePoint));
+            entity.setCachedSpline(new HermiteInterpolator(entity.getBlockPos(), new HermiteInterpolator.Point(new Vec3(hoseStartPos[0], 0.6425, hoseStartPos[1]), new Vec3(0, -5, 0)), nozzlePoint));
             entity.setRecentlyUsed(false);
         }
 
@@ -197,9 +197,9 @@ public class GasPumpRenderer implements BlockEntityRenderer<GasPumpTileEntity>
         {
             for(int j = 0; j < segments; j++)
             {
-                float percent = j / (float) segments;
+                double percent = j / (double) segments;
                 HermiteInterpolator.Result start = spline.get(i, percent);
-                HermiteInterpolator.Result end = spline.get(i, (float) (j + 1) / (float) segments);
+                HermiteInterpolator.Result end = spline.get(i, (double) (j + 1) / (double) segments);
 
                 Matrix4f startMatrix = new Matrix4f();
                 startMatrix.setIdentity();
