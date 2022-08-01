@@ -6,7 +6,7 @@ import com.mojang.math.Matrix4f;
 import com.mrcrayfish.vehicle.block.FluidPumpBlock;
 import com.mrcrayfish.vehicle.client.raytrace.EntityRayTracer;
 import com.mrcrayfish.vehicle.init.ModItems;
-import com.mrcrayfish.vehicle.block.entity.PumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.PumpBlockEntity;
 import net.minecraft.client.Camera;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * Author: MrCrayfish
  */
-public class FluidPumpRenderer implements BlockEntityRenderer<PumpTileEntity>
+public class FluidPumpRenderer implements BlockEntityRenderer<PumpBlockEntity>
 {
     private final Camera camera;
     private final HitResult hitResult;
@@ -41,7 +41,7 @@ public class FluidPumpRenderer implements BlockEntityRenderer<PumpTileEntity>
     }
 
     @Override
-    public void render(PumpTileEntity entity, float delta, PoseStack matrices, MultiBufferSource buffers, int light, int overlay)
+    public void render(PumpBlockEntity entity, float delta, PoseStack matrices, MultiBufferSource buffers, int light, int overlay)
     {
         if(this.camera == null)
         {
@@ -89,7 +89,7 @@ public class FluidPumpRenderer implements BlockEntityRenderer<PumpTileEntity>
         matrices.popPose();
     }
 
-    private void renderInteractableBox(PumpTileEntity tileEntity, PoseStack matrixStack, MultiBufferSource renderTypeBuffer)
+    private void renderInteractableBox(PumpBlockEntity tileEntity, PoseStack matrixStack, MultiBufferSource renderTypeBuffer)
     {
         if(this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK)
         {

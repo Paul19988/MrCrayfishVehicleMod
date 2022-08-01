@@ -40,7 +40,7 @@ import java.util.UUID;
 /**
  * Author: MrCrayfish
  */
-public class VehicleCrateTileEntity extends TileEntitySynced
+public class VehicleCrateBlockEntity extends BlockEntitySynced
 {
     private ResourceLocation entityId;
     private int color = VehicleEntity.DYE_TO_COLOR[0];
@@ -53,17 +53,17 @@ public class VehicleCrateTileEntity extends TileEntitySynced
     @OnlyIn(Dist.CLIENT)
     private Entity entity;
 
-    public VehicleCrateTileEntity(BlockPos pos, BlockState state)
+    public VehicleCrateBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.VEHICLE_CRATE.get(), pos, state);
     }
 
-    public static void onServerTick(Level level, BlockPos pos, BlockState state, VehicleCrateTileEntity entity)
+    public static void onServerTick(Level level, BlockPos pos, BlockState state, VehicleCrateBlockEntity entity)
     {
         entity.onServerTick();
     }
 
-    public static void onClientTick(Level level, BlockPos pos, BlockState state, VehicleCrateTileEntity entity)
+    public static void onClientTick(Level level, BlockPos pos, BlockState state, VehicleCrateBlockEntity entity)
     {
         entity.onClientTick();
     }

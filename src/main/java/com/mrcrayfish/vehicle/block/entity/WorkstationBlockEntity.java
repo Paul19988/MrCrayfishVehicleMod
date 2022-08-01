@@ -21,11 +21,11 @@ import javax.annotation.Nullable;
 /**
  * Author: MrCrayfish
  */
-public class WorkstationTileEntity extends TileEntitySynced implements IStorageBlock
+public class WorkstationBlockEntity extends BlockEntitySynced implements IStorageBlock
 {
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(3, ItemStack.EMPTY);
 
-    public WorkstationTileEntity(BlockPos pos, BlockState state)
+    public WorkstationBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.WORKSTATION.get(), pos, state);
     }

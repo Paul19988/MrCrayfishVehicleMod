@@ -1,7 +1,7 @@
 package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.Config;
-import com.mrcrayfish.vehicle.block.entity.IndustrialFuelDrumTileEntity;
+import com.mrcrayfish.vehicle.block.entity.IndustrialFuelDrumBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +24,6 @@ public class IndustrialFuelDrumBlock extends FuelDrumBlock
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new IndustrialFuelDrumTileEntity(pos, state);
+        return new IndustrialFuelDrumBlockEntity(pos, state);
     }
 }

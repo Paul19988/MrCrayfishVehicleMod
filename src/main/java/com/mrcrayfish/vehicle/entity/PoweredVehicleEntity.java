@@ -22,8 +22,8 @@ import com.mrcrayfish.vehicle.network.message.MessageHandbrake;
 import com.mrcrayfish.vehicle.network.message.MessageHorn;
 import com.mrcrayfish.vehicle.network.message.MessageThrottle;
 import com.mrcrayfish.vehicle.network.message.MessageTurnAngle;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTankTileEntity;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpTankBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpBlockEntity;
 import com.mrcrayfish.vehicle.util.CommonUtils;
 import com.mrcrayfish.vehicle.util.InventoryUtil;
 import net.minecraft.client.Minecraft;
@@ -190,11 +190,11 @@ public abstract class PoweredVehicleEntity extends VehicleEntity implements Cont
         {
             BlockPos pos = SyncedEntityData.instance().get(player, ModDataKeys.GAS_PUMP).get();
             BlockEntity tileEntity = this.level.getBlockEntity(pos);
-            if(!(tileEntity instanceof GasPumpTileEntity))
+            if(!(tileEntity instanceof GasPumpBlockEntity))
                 return;
 
             tileEntity = this.level.getBlockEntity(pos.below());
-            if(!(tileEntity instanceof GasPumpTankTileEntity gasPumpTank))
+            if(!(tileEntity instanceof GasPumpTankBlockEntity gasPumpTank))
                 return;
 
             FluidTank tank = gasPumpTank.getFluidTank();

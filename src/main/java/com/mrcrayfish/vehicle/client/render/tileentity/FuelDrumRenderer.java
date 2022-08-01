@@ -1,19 +1,14 @@
 package com.mrcrayfish.vehicle.client.render.tileentity;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
-import com.mrcrayfish.vehicle.block.entity.FuelDrumTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FuelDrumBlockEntity;
 import com.mrcrayfish.vehicle.client.render.RenderTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -29,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Author: MrCrayfish
  */
-public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumTileEntity>
+public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumBlockEntity>
 {
     private final Font font;
 
@@ -39,7 +34,7 @@ public class FuelDrumRenderer implements BlockEntityRenderer<FuelDrumTileEntity>
     }
 
     @Override
-    public void render(@NotNull FuelDrumTileEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
+    public void render(@NotNull FuelDrumBlockEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
     {
         Minecraft minecraft = Minecraft.getInstance();
         HitResult hitResult = minecraft.hitResult;

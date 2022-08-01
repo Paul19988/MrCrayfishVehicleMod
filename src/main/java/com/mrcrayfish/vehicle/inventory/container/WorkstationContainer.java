@@ -3,7 +3,7 @@ package com.mrcrayfish.vehicle.inventory.container;
 import com.mrcrayfish.vehicle.init.ModContainers;
 import com.mrcrayfish.vehicle.item.EngineItem;
 import com.mrcrayfish.vehicle.item.WheelItem;
-import com.mrcrayfish.vehicle.block.entity.WorkstationTileEntity;
+import com.mrcrayfish.vehicle.block.entity.WorkstationBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,10 +18,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class WorkstationContainer extends AbstractContainerMenu
 {
-    private final WorkstationTileEntity workstationTileEntity;
+    private final WorkstationBlockEntity workstationTileEntity;
     private final BlockPos pos;
 
-    public WorkstationContainer(int windowId, Inventory playerInventory, WorkstationTileEntity workstationTileEntity)
+    public WorkstationContainer(int windowId, Inventory playerInventory, WorkstationBlockEntity workstationTileEntity)
     {
         super(ModContainers.WORKSTATION.get(), windowId);
         this.workstationTileEntity = workstationTileEntity;
@@ -172,7 +172,7 @@ public class WorkstationContainer extends AbstractContainerMenu
         return pos;
     }
 
-    public WorkstationTileEntity getTileEntity()
+    public WorkstationBlockEntity getTileEntity()
     {
         return workstationTileEntity;
     }

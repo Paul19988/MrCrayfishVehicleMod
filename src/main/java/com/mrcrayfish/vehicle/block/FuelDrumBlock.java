@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.Config;
 import com.mrcrayfish.vehicle.init.ModBlocks;
-import com.mrcrayfish.vehicle.block.entity.FuelDrumTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FuelDrumBlockEntity;
 import com.mrcrayfish.vehicle.client.render.util.RenderUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -164,6 +164,6 @@ public class FuelDrumBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new FuelDrumTileEntity(pos, state);
+        return new FuelDrumBlockEntity(pos, state);
     }
 }

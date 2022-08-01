@@ -33,7 +33,7 @@ import java.util.function.Function;
 /**
  * Author: MrCrayfish
  */
-public class PumpTileEntity extends PipeTileEntity
+public class PumpBlockEntity extends PipeBlockEntity
 {
     private int lastHandlerIndex;
     private boolean validatedNetwork;
@@ -41,12 +41,12 @@ public class PumpTileEntity extends PipeTileEntity
     private final List<Pair<BlockPos, Direction>> fluidHandlers = new ObjectArrayList<>();
     private PowerMode powerMode = PowerMode.ALWAYS_ACTIVE;
 
-    public PumpTileEntity(BlockPos pos, BlockState state)
+    public PumpBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.FLUID_PUMP.get(), pos, state);
     }
 
-    public static void onServerTick(Level level, BlockPos pos, BlockState state, PumpTileEntity entity)
+    public static void onServerTick(Level level, BlockPos pos, BlockState state, PumpBlockEntity entity)
     {
         entity.tick();
     }
@@ -205,7 +205,7 @@ public class PumpTileEntity extends PipeTileEntity
                 if(state.getValue(FluidPipeBlock.CONNECTED_PIPES[direction.get3DDataValue()]))
                 {
                     BlockEntity selfTileEntity = this.level.getBlockEntity(pos);
-                    if(selfTileEntity instanceof PipeTileEntity pipeTileEntity)
+                    if(selfTileEntity instanceof PipeBlockEntity pipeTileEntity)
                     {
                         pipeTileEntity.addPump(this.worldPosition);
                         node.tileEntity = new WeakReference<>(pipeTileEntity);
@@ -248,7 +248,7 @@ public class PumpTileEntity extends PipeTileEntity
     {
         this.fluidNetwork.forEach((pos, node) ->
         {
-            PipeTileEntity tileEntity = node.tileEntity.get();
+            PipeBlockEntity tileEntity = node.tileEntity.get();
             if(tileEntity != null)
             {
                 tileEntity.removePump(this.worldPosition);
@@ -328,7 +328,7 @@ public class PumpTileEntity extends PipeTileEntity
 
     private static class PipeNode
     {
-        private WeakReference<PipeTileEntity> tileEntity;
+        private WeakReference<PipeBlockEntity> tileEntity;
     }
 
     public enum PowerMode
@@ -341,15 +341,15 @@ public class PumpTileEntity extends PipeTileEntity
 
         private static final String LANG_KEY_CHAT_PREFIX = Reference.MOD_ID + ".chat.pump.power";
         private final String key;
-        private final Function<PumpTileEntity, Boolean> function;
+        private final Function<PumpBlockEntity, Boolean> function;
 
-        PowerMode(String key, Function<PumpTileEntity, Boolean> function)
+        PowerMode(String key, Function<PumpBlockEntity, Boolean> function)
         {
             this.key = String.join(".", LANG_KEY_CHAT_PREFIX, key);
             this.function = function;
         }
 
-        public boolean test(PumpTileEntity pump)
+        public boolean test(PumpBlockEntity pump)
         {
             return this.function.apply(pump);
         }

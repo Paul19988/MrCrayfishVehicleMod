@@ -1,6 +1,6 @@
 package com.mrcrayfish.vehicle.entity;
 
-import com.mrcrayfish.vehicle.block.entity.JackTileEntity;
+import com.mrcrayfish.vehicle.block.entity.JackBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -77,9 +77,9 @@ public class EntityJack extends Entity implements IEntityAdditionalSpawnData
         }
 
         BlockEntity tileEntity = this.level.getBlockEntity(new BlockPos(this.initialX, this.initialY, this.initialZ));
-        if(tileEntity instanceof JackTileEntity jackTileEntity)
+        if(tileEntity instanceof JackBlockEntity jackTileEntity)
         {
-            this.setPos(this.initialX, this.initialY + 0.5 * (jackTileEntity.liftProgress / (double) JackTileEntity.MAX_LIFT_PROGRESS), this.initialZ);
+            this.setPos(this.initialX, this.initialY + 0.5 * (jackTileEntity.liftProgress / (double) JackBlockEntity.MAX_LIFT_PROGRESS), this.initialZ);
         }
     }
 

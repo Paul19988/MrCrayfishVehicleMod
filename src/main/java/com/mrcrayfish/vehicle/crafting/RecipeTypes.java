@@ -2,8 +2,6 @@ package com.mrcrayfish.vehicle.crafting;
 
 
 import com.mrcrayfish.vehicle.Reference;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;

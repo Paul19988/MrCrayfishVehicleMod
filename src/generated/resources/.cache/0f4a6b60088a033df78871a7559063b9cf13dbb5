@@ -1,4 +1,4 @@
-// 1.19.1	2022-07-31T13:31:26.5733365	VehicleProperties
+// 1.19.1	2022-08-01T13:18:39.6694562	VehicleProperties
 9eede04cd11de5499df0c9fd3e71646cb37efafd data/vehicle/vehicles/cosmetics/compact_helicopter.json
 180b73520129a8396455754ce94492ba9d616553 data/vehicle/vehicles/cosmetics/mini_bus.json
 a34e55b0bd0942b288974774ae2e3c4f943fb020 data/vehicle/vehicles/cosmetics/moped.json
@@ -19,7 +19,7 @@ be2d37679d54a4bfa2b5baa4f703ed1cbbcb0ecc data/vehicle/vehicles/properties/moped.
 fca2cb3957a07fbdd06ce15ff376be278edc3d8a data/vehicle/vehicles/properties/seeder.json
 bcf002a7d07f076849dfc329b6eb9e40fab7e52c data/vehicle/vehicles/properties/sofacopter.json
 fa053b28942c0ca216ff374e4c7aae12d417ee1d data/vehicle/vehicles/properties/sports_car.json
-471c7a4e8348dfdd4054cc2cd2c3366e0e2554dc data/vehicle/vehicles/properties/sports_plane.json
+80a810020cb50fa5547f552f912164d388a708f5 data/vehicle/vehicles/properties/sports_plane.json
 655804bfeb2fc4017f288b0d1fa4ae728a766202 data/vehicle/vehicles/properties/storage_trailer.json
 d24fd096818c0ccd96fd39b036b0ad0f39c58a11 data/vehicle/vehicles/properties/tractor.json
 71d7ec3d1e590b43baf82572778112e47284f5c7 data/vehicle/vehicles/properties/vehicle_trailer.json

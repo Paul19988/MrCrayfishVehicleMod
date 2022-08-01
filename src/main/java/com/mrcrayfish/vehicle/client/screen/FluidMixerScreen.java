@@ -8,10 +8,11 @@ import com.mrcrayfish.vehicle.Reference;
 import com.mrcrayfish.vehicle.client.render.util.ColorHelper;
 import com.mrcrayfish.vehicle.init.ModFluids;
 import com.mrcrayfish.vehicle.inventory.container.FluidMixerContainer;
-import com.mrcrayfish.vehicle.block.entity.FluidMixerTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidMixerBlockEntity;
 import com.mrcrayfish.vehicle.util.FluidUtils;
 import com.mrcrayfish.vehicle.client.render.util.RenderUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +32,7 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
     private static final ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/fluid_mixer.png");
 
     private final Inventory playerInventory;
-    private final FluidMixerTileEntity fluidMixerTileEntity;
+    private final FluidMixerBlockEntity fluidMixerTileEntity;
 
     public FluidMixerScreen(FluidMixerContainer container, Inventory playerInventory, Component title)
     {
@@ -45,7 +46,6 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
     @Override
     public void render(@NotNull PoseStack matrices, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, partialTicks);
 
         int startX = (this.width - this.imageWidth) / 2;
@@ -105,24 +105,28 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY)
     {
-        this.minecraft.font.draw(matrixStack, this.fluidMixerTileEntity.getDisplayName(), 8, 6, 4210752);
-        this.minecraft.font.draw(matrixStack, this.playerInventory.getDisplayName(), 8, this.imageHeight - 96 + 2, 4210752);
+        Font font = this.font;
+
+        font.draw(matrixStack, this.fluidMixerTileEntity.getDisplayName(), 8, 6, 4210752);
+        font.draw(matrixStack, this.playerInventory.getDisplayName(), 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(@NotNull PoseStack matrices, float partialTicks, int mouseX, int mouseY)
     {
+        this.renderBackground(matrices);
+
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int startX = (this.width - this.imageWidth) / 2;
         int startY = (this.height - this.imageHeight) / 2;
 
         RenderSystem.setShaderTexture(0, GUI);
-        this.blit(matrixStack, startX, startY, 0, 0, this.imageWidth, this.imageHeight);
+        this.blit(matrices, startX, startY, 0, 0, this.imageWidth, this.imageHeight);
 
         if(this.fluidMixerTileEntity.getRemainingFuel() >= 0)
         {
             int remainingFuel = (int) (14 * (this.fluidMixerTileEntity.getRemainingFuel() / (double) this.fluidMixerTileEntity.getFuelMaxProgress()));
-            this.blit(matrixStack, startX + 9, startY + 31 + 14 - remainingFuel, 176, 14 - remainingFuel, 14, remainingFuel + 1);
+            this.blit(matrices, startX + 9, startY + 31 + 14 - remainingFuel, 176, 14 - remainingFuel, 14, remainingFuel + 1);
         }
 
         if(this.fluidMixerTileEntity.canMix())
@@ -138,9 +142,8 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
             int greenSap = ColorHelper.unpackARGBGreen(sapColor);
             int blueSap = ColorHelper.unpackARGBBlue(sapColor);
 
-            int statrColorARGB = ColorHelper.packARGB(((redBlaze + redSap) / 2), ((greenBlaze + greenSap) / 2), ((blueBlaze + blueSap) / 2), 130);
-            int statrColor = statrColorARGB;
-            int fluidColor = ColorHelper.repackAlpha(FluidUtils.getAverageFluidColor(ModFluids.FUELIUM.get()), 130); //TODO change to recipe
+            int statrColor = ColorHelper.packARGB(((redBlaze + redSap) / 2), ((greenBlaze + greenSap) / 2), ((blueBlaze + blueSap) / 2), 130);
+            int fluidColor = FluidUtils.getAverageFluidColor(ModFluids.FUELIUM.get()); //TODO change to recipe
 
             double extractionPercentage = this.fluidMixerTileEntity.getExtractionProgress() / (double) Config.SERVER.mixerMixTime.get();
 
@@ -189,7 +192,7 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
             if (extractionPercentage >= percentageStart)
             {
                 int alpha = (int) (130 * Mth.clamp((extractionPercentage - percentageStart) / (lenghtNode / lenghtTotal), 0, 1));
-                colorFade = ColorHelper.repackAlpha(statrColorARGB, alpha);
+                colorFade = ColorHelper.repackAlpha(statrColor, alpha);
                 RenderUtil.drawGradientRectHorizontal(left, top, left + 10, top + 10, colorFade, colorFade);
             }
             percentageStart += lenghtNode / lenghtTotal;
@@ -200,17 +203,19 @@ public class FluidMixerScreen extends AbstractContainerScreen<FluidMixerContaine
                 top = startY + 36;
                 int right = left + 76;
                 int bottom = top + 26;
+
                 double percentageItem = Mth.clamp((extractionPercentage - percentageStart) / (lenghtItem / lenghtTotal), 0, 1);
                 RenderUtil.drawGradientRectHorizontal(left, top, right, bottom, statrColor, fluidColor);
-                this.blit(matrixStack, left, top, 176, 14, 76, 26);
+                this.blit(matrices, left, top, 176, 14, 76, 26);
+
                 int extractionProgress = (int) (76 * percentageItem + 1);
-                this.blit(matrixStack, left + extractionProgress, top, 73 + extractionProgress, 36, 76 - extractionProgress, 26);
+                this.blit(matrices, left + extractionProgress, top, 73 + extractionProgress, 36, 76 - extractionProgress, 26);
             }
         }
 
-        this.drawSmallFluidTank(this.fluidMixerTileEntity.getBlazeFluidStack(), matrixStack, startX + 33, startY + 17, this.fluidMixerTileEntity.getBlazeLevel() / (double) this.fluidMixerTileEntity.getBlazeTank().getCapacity());
-        this.drawSmallFluidTank(this.fluidMixerTileEntity.getEnderSapFluidStack(), matrixStack, startX + 33, startY + 52, this.fluidMixerTileEntity.getEnderSapLevel() / (double) this.fluidMixerTileEntity.getEnderSapTank().getCapacity());
-        this.drawFluidTank(this.fluidMixerTileEntity.getFueliumFluidStack(), matrixStack, startX + 151, startY + 20, this.fluidMixerTileEntity.getFueliumLevel() / (double) this.fluidMixerTileEntity.getFueliumTank().getCapacity());
+        this.drawSmallFluidTank(this.fluidMixerTileEntity.getBlazeFluidStack(), matrices, startX + 33, startY + 17, this.fluidMixerTileEntity.getBlazeLevel() / (double) this.fluidMixerTileEntity.getBlazeTank().getCapacity());
+        this.drawSmallFluidTank(this.fluidMixerTileEntity.getEnderSapFluidStack(), matrices, startX + 33, startY + 52, this.fluidMixerTileEntity.getEnderSapLevel() / (double) this.fluidMixerTileEntity.getEnderSapTank().getCapacity());
+        this.drawFluidTank(this.fluidMixerTileEntity.getFueliumFluidStack(), matrices, startX + 151, startY + 20, this.fluidMixerTileEntity.getFueliumLevel() / (double) this.fluidMixerTileEntity.getFueliumTank().getCapacity());
     }
 
     private void drawFluidTank(FluidStack fluid, PoseStack matrixStack, int x, int y, double level)

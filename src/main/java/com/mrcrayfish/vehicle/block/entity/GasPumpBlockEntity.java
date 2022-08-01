@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  * Author: MrCrayfish
  */
-public class GasPumpTileEntity extends TileEntitySynced
+public class GasPumpBlockEntity extends BlockEntitySynced
 {
     private int fuelingEntityId;
     private Player fuelingEntity;
@@ -34,17 +34,17 @@ public class GasPumpTileEntity extends TileEntitySynced
     private HermiteInterpolator cachedSpline;
     private boolean recentlyUsed;
 
-    public GasPumpTileEntity(BlockPos pos, BlockState state)
+    public GasPumpBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.GAS_PUMP.get(), pos, state);
     }
 
-    public static void onServerTick(Level level, BlockPos pos, BlockState state, GasPumpTileEntity entity)
+    public static void onServerTick(Level level, BlockPos pos, BlockState state, GasPumpBlockEntity entity)
     {
         entity.onServerTick(level);
     }
 
-    public static void onClientTick(Level level, BlockPos pos, BlockState state, GasPumpTileEntity entity)
+    public static void onClientTick(Level level, BlockPos pos, BlockState state, GasPumpBlockEntity entity)
     {
         entity.onServerTick(level);
     }
@@ -73,9 +73,9 @@ public class GasPumpTileEntity extends TileEntitySynced
     public FluidTank getTank()
     {
         BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.below());
-        if(tileEntity instanceof GasPumpTankTileEntity)
+        if(tileEntity instanceof GasPumpTankBlockEntity)
         {
-            return ((GasPumpTankTileEntity) tileEntity).getFluidTank();
+            return ((GasPumpTankBlockEntity) tileEntity).getFluidTank();
         }
         return null;
     }

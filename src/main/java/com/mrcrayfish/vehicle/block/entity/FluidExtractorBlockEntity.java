@@ -44,7 +44,7 @@ import java.util.Optional;
 /**
  * Author: MrCrayfish
  */
-public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements Container, MenuProvider, Nameable
+public class FluidExtractorBlockEntity extends BlockEntityFluidHandlerSynced implements Container, MenuProvider, Nameable
 {
     private NonNullList<ItemStack> inventory = NonNullList.withSize(7, ItemStack.EMPTY);
 
@@ -106,13 +106,13 @@ public class FluidExtractorTileEntity extends TileFluidHandlerSynced implements 
         }
     };
 
-    public FluidExtractorTileEntity(BlockPos pos, BlockState state)
+    public FluidExtractorBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.FLUID_EXTRACTOR.get(), Config.SERVER.extractorCapacity.get(), stack -> true, pos, state);
         this.capacity = Config.SERVER.extractorCapacity.get();
     }
 
-    public static void onServerTick(Level level, BlockPos pos, BlockState state, FluidExtractorTileEntity entity)
+    public static void onServerTick(Level level, BlockPos pos, BlockState state, FluidExtractorBlockEntity entity)
     {
         entity.onServerTick();
     }

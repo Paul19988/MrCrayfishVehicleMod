@@ -1,7 +1,7 @@
 package com.mrcrayfish.vehicle.crafting;
 
 import com.mrcrayfish.vehicle.init.ModRecipeSerializers;
-import com.mrcrayfish.vehicle.block.entity.FluidExtractorTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidExtractorBlockEntity;
 import com.mrcrayfish.vehicle.util.InventoryUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -14,18 +14,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Author: MrCrayfish
  */
-public record FluidExtractorRecipe(ResourceLocation id, ItemStack ingredient, FluidEntry result) implements Recipe<FluidExtractorTileEntity>
+public record FluidExtractorRecipe(ResourceLocation id, ItemStack ingredient, FluidEntry result) implements Recipe<FluidExtractorBlockEntity>
 {
     @Override
-    public boolean matches(FluidExtractorTileEntity fluidExtractor, @NotNull Level level)
+    public boolean matches(FluidExtractorBlockEntity fluidExtractor, @NotNull Level level)
     {
-        ItemStack source = fluidExtractor.getItem(FluidExtractorTileEntity.SLOT_FLUID_SOURCE);
+        ItemStack source = fluidExtractor.getItem(FluidExtractorBlockEntity.SLOT_FLUID_SOURCE);
         return InventoryUtil.areItemStacksEqualIgnoreCount(source, this.ingredient);
     }
 
     @Override
     @NotNull
-    public ItemStack assemble(@NotNull FluidExtractorTileEntity inv)
+    public ItemStack assemble(@NotNull FluidExtractorBlockEntity inv)
     {
         return ItemStack.EMPTY;
     }

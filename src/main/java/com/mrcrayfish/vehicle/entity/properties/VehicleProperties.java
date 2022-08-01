@@ -14,7 +14,6 @@ import com.mrcrayfish.vehicle.datagen.VehiclePropertiesProvider;
 import com.mrcrayfish.vehicle.common.entity.Wheel;
 import com.mrcrayfish.vehicle.network.HandshakeMessages;
 import com.mrcrayfish.vehicle.util.ExtraJSONUtils;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;

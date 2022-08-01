@@ -2,8 +2,8 @@ package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.init.ModSounds;
 import com.mrcrayfish.vehicle.init.ModTileEntities;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTankTileEntity;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpTankBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpBlockEntity;
 import com.mrcrayfish.vehicle.util.VoxelShapeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -97,7 +97,7 @@ public class GasPumpBlock extends RotatedEntityObjectBlock
         if(state.getValue(TOP))
         {
             BlockEntity tileEntity = level.getBlockEntity(pos);
-            if(tileEntity instanceof GasPumpTileEntity gasPump)
+            if(tileEntity instanceof GasPumpBlockEntity gasPump)
             {
                 if(gasPump.getFuelingEntity() != null && gasPump.getFuelingEntity().getId() == player.getId())
                 {
@@ -190,9 +190,9 @@ public class GasPumpBlock extends RotatedEntityObjectBlock
     {
         if (state.getValue(TOP))
         {
-            return new GasPumpTileEntity(pos, state);
+            return new GasPumpBlockEntity(pos, state);
         }
-        return new GasPumpTankTileEntity(pos, state);
+        return new GasPumpTankBlockEntity(pos, state);
     }
 
     @Nullable
@@ -203,9 +203,9 @@ public class GasPumpBlock extends RotatedEntityObjectBlock
         {
             if(level.isClientSide())
             {
-                return createTickerHelper(type, ModTileEntities.GAS_PUMP.get(), GasPumpTileEntity::onClientTick);
+                return createTickerHelper(type, ModTileEntities.GAS_PUMP.get(), GasPumpBlockEntity::onClientTick);
             }
-            return createTickerHelper(type, ModTileEntities.GAS_PUMP.get(), GasPumpTileEntity::onServerTick);
+            return createTickerHelper(type, ModTileEntities.GAS_PUMP.get(), GasPumpBlockEntity::onServerTick);
         }
 
         return null;

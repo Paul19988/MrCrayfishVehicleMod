@@ -13,7 +13,7 @@ import com.mrcrayfish.vehicle.client.render.Axis;
 import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.client.util.HermiteInterpolator;
 import com.mrcrayfish.vehicle.init.ModBlocks;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpBlockEntity;
 import com.mrcrayfish.vehicle.util.CollisionHelper;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 /**
  * Author: MrCrayfish
  */
-public class GasPumpRenderer implements BlockEntityRenderer<GasPumpTileEntity>
+public class GasPumpRenderer implements BlockEntityRenderer<GasPumpBlockEntity>
 {
     private final Font font;
 
@@ -50,7 +50,7 @@ public class GasPumpRenderer implements BlockEntityRenderer<GasPumpTileEntity>
     }
 
     @Override
-    public void render(GasPumpTileEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
+    public void render(GasPumpBlockEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
     {
         Font font = this.font;
         BlockState state = entity.getBlockState();
@@ -167,7 +167,7 @@ public class GasPumpRenderer implements BlockEntityRenderer<GasPumpTileEntity>
     }
 
     @Override
-    public boolean shouldRenderOffScreen(@NotNull GasPumpTileEntity entity)
+    public boolean shouldRenderOffScreen(@NotNull GasPumpBlockEntity entity)
     {
         return true;
     }
@@ -273,7 +273,7 @@ public class GasPumpRenderer implements BlockEntityRenderer<GasPumpTileEntity>
         matrixStack.popPose();
     }
 
-    private Triple<Float, Float, Float> getHoseColour(GasPumpTileEntity gasPump)
+    private Triple<Float, Float, Float> getHoseColour(GasPumpBlockEntity gasPump)
     {
         float red = 0.05F;
         float green = 0.05F;

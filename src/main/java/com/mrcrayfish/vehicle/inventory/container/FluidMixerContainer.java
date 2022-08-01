@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.inventory.container;
 
 import com.mrcrayfish.vehicle.init.ModContainers;
 import com.mrcrayfish.vehicle.inventory.container.slot.FuelSlot;
-import com.mrcrayfish.vehicle.block.entity.FluidMixerTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidMixerBlockEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -23,9 +23,9 @@ public class FluidMixerContainer extends AbstractContainerMenu
     private int enderSapLevel;
     private int fueliumLevel;
 
-    private final FluidMixerTileEntity fluidExtractor;
+    private final FluidMixerBlockEntity fluidExtractor;
 
-    public FluidMixerContainer(int windowId, Inventory playerInventory, FluidMixerTileEntity fluidExtractor)
+    public FluidMixerContainer(int windowId, Inventory playerInventory, FluidMixerBlockEntity fluidExtractor)
     {
         super(ModContainers.FLUID_MIXER.get(), windowId);
         this.fluidExtractor = fluidExtractor;
@@ -49,7 +49,7 @@ public class FluidMixerContainer extends AbstractContainerMenu
         this.addDataSlots(fluidExtractor.getFluidMixerData());
     }
 
-    public FluidMixerTileEntity getFluidExtractor()
+    public FluidMixerBlockEntity getFluidExtractor()
     {
         return fluidExtractor;
     }

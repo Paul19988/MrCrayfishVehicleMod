@@ -27,7 +27,7 @@ import com.mrcrayfish.vehicle.item.EngineItem;
 import com.mrcrayfish.vehicle.item.WheelItem;
 import com.mrcrayfish.vehicle.network.PacketHandler;
 import com.mrcrayfish.vehicle.network.message.MessageCraftVehicle;
-import com.mrcrayfish.vehicle.block.entity.WorkstationTileEntity;
+import com.mrcrayfish.vehicle.block.entity.WorkstationBlockEntity;
 import com.mrcrayfish.vehicle.util.CommonUtils;
 import com.mrcrayfish.vehicle.util.InventoryUtil;
 import net.minecraft.ChatFormatting;
@@ -46,6 +46,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
     private final List<MaterialItem> materials;
     private List<MaterialItem> filteredMaterials;
     private final Inventory playerInventory;
-    private final WorkstationTileEntity workstation;
+    private final WorkstationBlockEntity workstation;
     private Button btnCraft;
     private CheckBox checkBoxMaterials;
     private boolean validEngine;
@@ -234,7 +235,6 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
         return result;
     }
 
-    @SuppressWarnings({"unchecked"})
     private void loadVehicle(int index)
     {
         prevCachedVehicle = cachedVehicle;
@@ -268,11 +268,10 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack matrices, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+        super.render(matrices, mouseX, mouseY, partialTicks);
+        this.renderTooltip(matrices, mouseX, mouseY);
 
         int startX = (this.width - this.imageWidth) / 2;
         int startY = (this.height - this.imageHeight) / 2;
@@ -285,7 +284,7 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
                 MaterialItem materialItem = this.filteredMaterials.get(i);
                 if(materialItem != MaterialItem.EMPTY)
                 {
-                    this.renderTooltip(matrixStack, materialItem.getDisplayStack(), mouseX, mouseY);
+                    this.renderTooltip(matrices, materialItem.getDisplayStack(), mouseX, mouseY);
                 }
             }
         }
@@ -293,36 +292,38 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
         VehicleProperties properties = cachedVehicle.getProperties();
         if(properties.canBePainted())
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.optional").withStyle(ChatFormatting.AQUA), Component.translatable("vehicle.tooltip.paint_color").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
+            this.drawSlotTooltip(matrices, Lists.newArrayList(Component.translatable("vehicle.tooltip.optional").withStyle(ChatFormatting.AQUA), Component.translatable("vehicle.tooltip.paint_color").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
         }
         else
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.paint_color"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
+            this.drawSlotTooltip(matrices, Lists.newArrayList(Component.translatable("vehicle.tooltip.paint_color"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 172, 29, mouseX, mouseY, 0);
         }
 
         if(properties.getExtended(PoweredProperties.class).getEngineType() != EngineType.NONE)
         {
             Component engineName = properties.getExtended(PoweredProperties.class).getEngineType().getEngineName();
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.required").withStyle(ChatFormatting.RED), engineName), startX, startY, 192, 29, mouseX, mouseY, 1);
+            this.drawSlotTooltip(matrices, Lists.newArrayList(Component.translatable("vehicle.tooltip.required").withStyle(ChatFormatting.RED), engineName), startX, startY, 192, 29, mouseX, mouseY, 1);
         }
         else
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.engine"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 192, 29, mouseX, mouseY, 1);
+            this.drawSlotTooltip(matrices, Lists.newArrayList(Component.translatable("vehicle.tooltip.engine"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 192, 29, mouseX, mouseY, 1);
         }
 
         if(properties.canChangeWheels())
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.required").withStyle(ChatFormatting.RED), Component.translatable("vehicle.tooltip.wheels")), startX, startY, 212, 29, mouseX, mouseY, 2);
+            this.drawSlotTooltip(matrices, Lists.newArrayList(Component.translatable("vehicle.tooltip.required").withStyle(ChatFormatting.RED), Component.translatable("vehicle.tooltip.wheels")), startX, startY, 212, 29, mouseX, mouseY, 2);
         }
         else
         {
-            this.drawSlotTooltip(matrixStack, Lists.newArrayList(Component.translatable("vehicle.tooltip.wheels"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 212, 29, mouseX, mouseY, 2);
+            this.drawSlotTooltip(matrices, Lists.newArrayList(Component.translatable("vehicle.tooltip.wheels"), Component.translatable("vehicle.tooltip.not_applicable").withStyle(ChatFormatting.GRAY)), startX, startY, 212, 29, mouseX, mouseY, 2);
         }
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(@NotNull PoseStack matrices, float partialTicks, int mouseX, int mouseY)
     {
+        this.renderBackground(matrices);
+
         /* Fixes partial ticks to use percentage from 0 to 1 */
         partialTicks = this.minecraft.getFrameTime();
 
@@ -332,20 +333,20 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
         RenderSystem.enableBlend();
 
         RenderSystem.setShaderTexture(0, GUI);
-        this.blit(matrixStack, startX, startY, 0, 0, 173, 184);
-        blit(matrixStack, startX + 173, startY, 78, 184, 173, 0, 1, 184, 256, 256);
-        this.blit(matrixStack, startX + 251, startY, 174, 0, 24, 184);
-        this.blit(matrixStack, startX + 256, startY + 64, 12, 241, 12, 15);
+        this.blit(matrices, startX, startY, 0, 0, 173, 184);
+        blit(matrices, startX + 173, startY, 78, 184, 173, 0, 1, 184, 256, 256);
+        this.blit(matrices, startX + 251, startY, 174, 0, 24, 184);
+        this.blit(matrices, startX + 256, startY + 64, 12, 241, 12, 15);
 
         /* Slots */
         VehicleProperties properties = cachedVehicle.getProperties();
-        this.drawSlot(matrixStack, startX, startY, 172, 29, 164, 184, 0, false, properties.canBePainted());
+        this.drawSlot(matrices, startX, startY, 172, 29, 164, 184, 0, false, properties.canBePainted());
         boolean needsEngine = properties.getExtended(PoweredProperties.class).getEngineType() != EngineType.NONE;
-        this.drawSlot(matrixStack, startX, startY, 192, 29, 164, 200, 1, !this.validEngine, needsEngine);
+        this.drawSlot(matrices, startX, startY, 192, 29, 164, 200, 1, !this.validEngine, needsEngine);
         boolean needsWheels = properties.canChangeWheels();
-        this.drawSlot(matrixStack, startX, startY, 212, 29, 164, 216, 2, needsWheels && this.workstation.getItem(2).isEmpty(), needsWheels);
+        this.drawSlot(matrices, startX, startY, 212, 29, 164, 216, 2, needsWheels && this.workstation.getItem(2).isEmpty(), needsWheels);
 
-        drawCenteredString(matrixStack, this.font, cachedVehicle.getType().getDescription(), startX + 88, startY + 22, Color.WHITE.getRGB());
+        drawCenteredString(matrices, this.font, cachedVehicle.getType().getDescription(), startX + 88, startY + 22, Color.WHITE.getRGB());
 
         this.filteredMaterials = this.getMaterials();
         Lighting.setupFor3DItems();
@@ -360,11 +361,11 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
             {
                 if(materialItem.isEnabled())
                 {
-                    this.blit(matrixStack, startX + 172, startY + i * 19 + 63, 0, 184, 80, 19);
+                    this.blit(matrices, startX + 172, startY + i * 19 + 63, 0, 184, 80, 19);
                 }
                 else
                 {
-                    this.blit(matrixStack, startX + 172, startY + i * 19 + 63, 0, 222, 80, 19);
+                    this.blit(matrices, startX + 172, startY + i * 19 + 63, 0, 222, 80, 19);
                 }
 
                 String name = stack.getHoverName().getString();
@@ -372,7 +373,7 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationContai
                 {
                     name = this.font.plainSubstrByWidth(stack.getHoverName().getString(), 50).trim() + "...";
                 }
-                this.font.draw(matrixStack, name, startX + 172 + 22, startY + i * 19 + 6 + 63, Color.WHITE.getRGB());
+                this.font.draw(matrices, name, startX + 172 + 22, startY + i * 19 + 6 + 63, Color.WHITE.getRGB());
 
                 Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(stack, startX + 172 + 2, startY + i * 19 + 1 + 63);
 

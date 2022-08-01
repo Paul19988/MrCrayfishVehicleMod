@@ -1,8 +1,8 @@
 package com.mrcrayfish.vehicle.common;
 
 import com.mrcrayfish.vehicle.block.FluidPipeBlock;
-import com.mrcrayfish.vehicle.block.entity.PipeTileEntity;
-import com.mrcrayfish.vehicle.block.entity.PumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.PipeBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.PumpBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
@@ -40,9 +40,9 @@ public class FluidNetworkHandler
 
     private FluidNetworkHandler() {}
 
-    public void addPipeForUpdate(PipeTileEntity tileEntity)
+    public void addPipeForUpdate(PipeBlockEntity tileEntity)
     {
-        if(!(tileEntity instanceof PumpTileEntity))
+        if(!(tileEntity instanceof PumpBlockEntity))
         {
             this.dirty = true;
             this.pipeUpdateMap.computeIfAbsent(tileEntity.getLevel().dimension(), key -> new HashSet<>()).add(tileEntity.getBlockPos());
@@ -64,7 +64,7 @@ public class FluidNetworkHandler
             positions.forEach(pos ->
             {
                 BlockEntity tileEntity = event.level.getBlockEntity(pos);
-                if(tileEntity instanceof PipeTileEntity pipeTileEntity)
+                if(tileEntity instanceof PipeBlockEntity pipeTileEntity)
                 {
                     BlockState state = pipeTileEntity.getBlockState();
                     boolean disabled = pipeTileEntity.getPumps().isEmpty() || event.level.hasNeighborSignal(pos);

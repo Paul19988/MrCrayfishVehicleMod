@@ -15,8 +15,8 @@ import com.mrcrayfish.vehicle.init.ModSounds;
 import com.mrcrayfish.vehicle.item.FluidPipeItem;
 import com.mrcrayfish.vehicle.network.PacketHandler;
 import com.mrcrayfish.vehicle.network.message.MessageThrowVehicle;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTileEntity;
-import com.mrcrayfish.vehicle.block.entity.JackTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.JackBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -227,7 +227,7 @@ public class CommonEvents
                 {
                     BlockPos pos = event.getPos();
                     BlockEntity tileEntity = world.getBlockEntity(pos);
-                    if(tileEntity instanceof JackTileEntity jack)
+                    if(tileEntity instanceof JackBlockEntity jack)
                     {
                         if(jack.getJack() == null)
                         {
@@ -416,7 +416,7 @@ public class CommonEvents
             if(pos.isPresent())
             {
                 BlockEntity tileEntity = world.getBlockEntity(pos.get());
-                if(!(tileEntity instanceof GasPumpTileEntity))
+                if(!(tileEntity instanceof GasPumpBlockEntity))
                 {
                     SyncedEntityData.instance().set(player, ModDataKeys.GAS_PUMP, Optional.empty());
                 }

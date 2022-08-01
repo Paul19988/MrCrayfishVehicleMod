@@ -1,6 +1,6 @@
 package com.mrcrayfish.vehicle.block;
 
-import com.mrcrayfish.vehicle.block.entity.WorkstationTileEntity;
+import com.mrcrayfish.vehicle.block.entity.WorkstationBlockEntity;
 import com.mrcrayfish.vehicle.util.VoxelShapeHelper;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -80,6 +80,6 @@ public class WorkstationBlock extends RotatedEntityObjectBlock
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new WorkstationTileEntity(pos, state);
+        return new WorkstationBlockEntity(pos, state);
     }
 }

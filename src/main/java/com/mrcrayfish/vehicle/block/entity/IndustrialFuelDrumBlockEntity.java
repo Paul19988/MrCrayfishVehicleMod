@@ -8,9 +8,9 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Author: MrCrayfish
  */
-public class IndustrialFuelDrumTileEntity extends FuelDrumTileEntity
+public class IndustrialFuelDrumBlockEntity extends FuelDrumBlockEntity
 {
-    public IndustrialFuelDrumTileEntity(BlockPos pos, BlockState state)
+    public IndustrialFuelDrumBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.INDUSTRIAL_FUEL_DRUM.get(), ModBlocks.INDUSTRIAL_FUEL_DRUM.get().getCapacity(), pos, state);
     }

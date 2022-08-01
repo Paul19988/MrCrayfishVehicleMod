@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.inventory.container;
 
 import com.mrcrayfish.vehicle.init.ModContainers;
 import com.mrcrayfish.vehicle.inventory.container.slot.FuelSlot;
-import com.mrcrayfish.vehicle.block.entity.FluidExtractorTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidExtractorBlockEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,9 +21,9 @@ public class FluidExtractorContainer extends AbstractContainerMenu
     private int maxFuelProgress;
     private int fluidLevel;
 
-    private final FluidExtractorTileEntity fluidExtractor;
+    private final FluidExtractorBlockEntity fluidExtractor;
 
-    public FluidExtractorContainer(int windowId, Inventory playerInventory, FluidExtractorTileEntity fluidExtractor)
+    public FluidExtractorContainer(int windowId, Inventory playerInventory, FluidExtractorBlockEntity fluidExtractor)
     {
         super(ModContainers.FLUID_EXTRACTOR.get(), windowId);
         this.fluidExtractor = fluidExtractor;
@@ -47,7 +47,7 @@ public class FluidExtractorContainer extends AbstractContainerMenu
         this.addDataSlots(fluidExtractor.getFluidExtractorData());
     }
 
-    public FluidExtractorTileEntity getFluidExtractor()
+    public FluidExtractorBlockEntity getFluidExtractor()
     {
         return fluidExtractor;
     }

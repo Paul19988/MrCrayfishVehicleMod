@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 /**
  * Author: MrCrayfish
  */
-public class FluidMixerTileEntity extends TileEntitySynced implements Container, MenuProvider, IFluidTankWriter
+public class FluidMixerBlockEntity extends BlockEntitySynced implements Container, MenuProvider, IFluidTankWriter
 {
     private NonNullList<ItemStack> inventory = NonNullList.withSize(7, ItemStack.EMPTY);
 
@@ -134,12 +134,12 @@ public class FluidMixerTileEntity extends TileEntitySynced implements Container,
         }
     };
 
-    public FluidMixerTileEntity(BlockPos pos, BlockState state)
+    public FluidMixerBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.FLUID_MIXER.get(), pos, state);
     }
 
-    public static void onServerTick(Level level, BlockPos pos, BlockState state, FluidMixerTileEntity entity)
+    public static void onServerTick(Level level, BlockPos pos, BlockState state, FluidMixerBlockEntity entity)
     {
         entity.onServerTick();
     }

@@ -18,9 +18,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class TileFluidHandlerSynced extends FluidHandlerBlockEntity
+public class BlockEntityFluidHandlerSynced extends FluidHandlerBlockEntity
 {
-    public TileFluidHandlerSynced(@Nonnull BlockEntityType<?> tileEntityTypeIn, int capacity, BlockPos pos, BlockState state)
+    public BlockEntityFluidHandlerSynced(@Nonnull BlockEntityType<?> tileEntityTypeIn, int capacity, BlockPos pos, BlockState state)
     {
         super(tileEntityTypeIn, pos, state);
         this.tank = new FluidTank(capacity)
@@ -28,12 +28,12 @@ public class TileFluidHandlerSynced extends FluidHandlerBlockEntity
             @Override
             protected void onContentsChanged()
             {
-                TileFluidHandlerSynced.this.syncFluidToClient();
+                BlockEntityFluidHandlerSynced.this.syncFluidToClient();
             }
         };
     }
 
-    public TileFluidHandlerSynced(@Nonnull BlockEntityType<?> tileEntityTypeIn, int capacity, Predicate<FluidStack> validator, BlockPos pos, BlockState state)
+    public BlockEntityFluidHandlerSynced(@Nonnull BlockEntityType<?> tileEntityTypeIn, int capacity, Predicate<FluidStack> validator, BlockPos pos, BlockState state)
     {
         super(tileEntityTypeIn, pos, state);
         this.tank = new FluidTank(capacity, validator)
@@ -41,7 +41,7 @@ public class TileFluidHandlerSynced extends FluidHandlerBlockEntity
             @Override
             protected void onContentsChanged()
             {
-                TileFluidHandlerSynced.this.syncFluidToClient();
+                BlockEntityFluidHandlerSynced.this.syncFluidToClient();
             }
         };
     }

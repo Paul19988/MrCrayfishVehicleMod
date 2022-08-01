@@ -1,7 +1,7 @@
 package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.init.ModTileEntities;
-import com.mrcrayfish.vehicle.block.entity.JackTileEntity;
+import com.mrcrayfish.vehicle.block.entity.JackBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -43,7 +43,7 @@ public class JackBlock extends RotatedObjectBlock implements EntityBlock
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         BlockEntity tileEntity = level.getBlockEntity(pos);
-        if(tileEntity instanceof JackTileEntity jack)
+        if(tileEntity instanceof JackBlockEntity jack)
         {
             return Shapes.create(SHAPE.bounds().expandTowards(0, 0.5 * jack.getProgress(), 0));
         }
@@ -54,14 +54,14 @@ public class JackBlock extends RotatedObjectBlock implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new JackTileEntity(pos, state);
+        return new JackBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type)
     {
-        return createTickerHelper(type, ModTileEntities.JACK.get(), JackTileEntity::onServerTick);
+        return createTickerHelper(type, ModTileEntities.JACK.get(), JackBlockEntity::onServerTick);
     }
 
     @Nullable

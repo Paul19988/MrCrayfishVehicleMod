@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Author: MrCrayfish
  */
-public class JackTileEntity extends TileEntitySynced
+public class JackBlockEntity extends BlockEntitySynced
 {
     public static final int MAX_LIFT_PROGRESS = 20;
 
@@ -32,12 +32,12 @@ public class JackTileEntity extends TileEntitySynced
     public int prevLiftProgress;
     public int liftProgress;
 
-    public JackTileEntity(BlockPos pos, BlockState state)
+    public JackBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.JACK.get(), pos, state);
     }
 
-    public static void onServerTick(Level level, BlockPos pos, BlockState state, JackTileEntity entity)
+    public static void onServerTick(Level level, BlockPos pos, BlockState state, JackBlockEntity entity)
     {
         entity.tick();
     }

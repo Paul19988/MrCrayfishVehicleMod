@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.crafting;
 
 import com.google.common.collect.ImmutableList;
 import com.mrcrayfish.vehicle.init.ModRecipeSerializers;
-import com.mrcrayfish.vehicle.block.entity.WorkstationTileEntity;
+import com.mrcrayfish.vehicle.block.entity.WorkstationBlockEntity;
 import com.mrcrayfish.vehicle.util.InventoryUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Author: MrCrayfish
  */
-public class WorkstationRecipe implements Recipe<WorkstationTileEntity>
+public class WorkstationRecipe implements Recipe<WorkstationBlockEntity>
 {
     private final ResourceLocation id;
     private final EntityType<?> vehicle;
@@ -41,14 +41,14 @@ public class WorkstationRecipe implements Recipe<WorkstationTileEntity>
     }
 
     @Override
-    public boolean matches(@NotNull WorkstationTileEntity inv, @NotNull Level worldIn)
+    public boolean matches(@NotNull WorkstationBlockEntity inv, @NotNull Level worldIn)
     {
         return false;
     }
 
     @Override
     @NotNull
-    public ItemStack assemble(@NotNull WorkstationTileEntity inv)
+    public ItemStack assemble(@NotNull WorkstationBlockEntity inv)
     {
         return ItemStack.EMPTY;
     }

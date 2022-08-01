@@ -1,6 +1,5 @@
 package com.mrcrayfish.vehicle;
 
-import com.mrcrayfish.vehicle.client.ClientHandler;
 import com.mrcrayfish.vehicle.client.model.ComponentManager;
 import com.mrcrayfish.vehicle.client.model.VehicleModels;
 import com.mrcrayfish.vehicle.common.CommonEvents;
@@ -8,9 +7,7 @@ import com.mrcrayfish.vehicle.common.FluidNetworkHandler;
 import com.mrcrayfish.vehicle.common.entity.HeldVehicleDataHandler;
 import com.mrcrayfish.vehicle.crafting.RecipeTypes;
 import com.mrcrayfish.vehicle.crafting.WorkstationIngredient;
-import com.mrcrayfish.vehicle.datagen.LootTableGen;
-import com.mrcrayfish.vehicle.datagen.RecipeGen;
-import com.mrcrayfish.vehicle.datagen.VehiclePropertiesGen;
+import com.mrcrayfish.vehicle.datagen.*;
 import com.mrcrayfish.vehicle.entity.properties.ExtendedProperties;
 import com.mrcrayfish.vehicle.entity.properties.HelicopterProperties;
 import com.mrcrayfish.vehicle.entity.properties.LandProperties;
@@ -28,13 +25,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -102,8 +99,12 @@ public class VehicleMod
     private void onGatherData(GatherDataEvent event)
     {
         DataGenerator generator = event.getGenerator();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+
         generator.addProvider(true, new LootTableGen(generator));
         generator.addProvider(true, new RecipeGen(generator));
         generator.addProvider(true, new VehiclePropertiesGen(generator));
+        generator.addProvider(true, new FluidTagGen(generator, existingFileHelper));
+        generator.addProvider(true, new BlockTagGen(generator, existingFileHelper));
     }
 }

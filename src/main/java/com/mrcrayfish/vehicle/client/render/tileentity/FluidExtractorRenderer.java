@@ -3,7 +3,7 @@ package com.mrcrayfish.vehicle.client.render.tileentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.vehicle.block.FluidExtractorBlock;
-import com.mrcrayfish.vehicle.block.entity.FluidExtractorTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidExtractorBlockEntity;
 import com.mrcrayfish.vehicle.util.FluidUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 /**
  * Author: MrCrayfish
  */
-public class FluidExtractorRenderer implements BlockEntityRenderer<FluidExtractorTileEntity>
+public class FluidExtractorRenderer implements BlockEntityRenderer<FluidExtractorBlockEntity>
 {
     private static final FluidUtils.FluidSides FLUID_SIDES = new FluidUtils.FluidSides(Direction.WEST, Direction.EAST, Direction.SOUTH, Direction.UP);
 
@@ -22,7 +22,7 @@ public class FluidExtractorRenderer implements BlockEntityRenderer<FluidExtracto
     {}
 
     @Override
-    public void render(FluidExtractorTileEntity entity, float delta, PoseStack matrices, MultiBufferSource buffers, int light, int overlay)
+    public void render(FluidExtractorBlockEntity entity, float delta, PoseStack matrices, MultiBufferSource buffers, int light, int overlay)
     {
         FluidTank tank = entity.getFluidTank();
         if(tank.isEmpty())

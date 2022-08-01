@@ -9,14 +9,14 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Author: MrCrayfish
  */
-public class FuelDrumTileEntity extends TileFluidHandlerSynced
+public class FuelDrumBlockEntity extends BlockEntityFluidHandlerSynced
 {
-    public FuelDrumTileEntity(BlockPos pos, BlockState state)
+    public FuelDrumBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.FUEL_DRUM.get(), ModBlocks.FUEL_DRUM.get().getCapacity(), pos, state);
     }
 
-    public FuelDrumTileEntity(BlockEntityType<?> tileEntityType, int capacity, BlockPos pos, BlockState state)
+    public FuelDrumBlockEntity(BlockEntityType<?> tileEntityType, int capacity, BlockPos pos, BlockState state)
     {
         super(tileEntityType, capacity, pos, state);
     }

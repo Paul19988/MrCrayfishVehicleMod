@@ -9,9 +9,9 @@ import com.mrcrayfish.vehicle.inventory.container.FluidExtractorContainer;
 import com.mrcrayfish.vehicle.inventory.container.FluidMixerContainer;
 import com.mrcrayfish.vehicle.inventory.container.StorageContainer;
 import com.mrcrayfish.vehicle.inventory.container.WorkstationContainer;
-import com.mrcrayfish.vehicle.block.entity.FluidExtractorTileEntity;
-import com.mrcrayfish.vehicle.block.entity.FluidMixerTileEntity;
-import com.mrcrayfish.vehicle.block.entity.WorkstationTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidExtractorBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidMixerBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.WorkstationBlockEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -28,11 +28,11 @@ public class ModContainers
     public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Reference.MOD_ID);
 
     public static final RegistryObject<MenuType<FluidExtractorContainer>> FLUID_EXTRACTOR = register("fluid_extractor", (windowId, playerInventory, data) -> {
-        FluidExtractorTileEntity fluidExtractor = (FluidExtractorTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        FluidExtractorBlockEntity fluidExtractor = (FluidExtractorBlockEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
         return new FluidExtractorContainer(windowId, playerInventory, fluidExtractor);
     });
     public static final RegistryObject<MenuType<FluidMixerContainer>> FLUID_MIXER = register("fluid_mixer", (windowId, playerInventory, data) -> {
-        FluidMixerTileEntity fluidMixer = (FluidMixerTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        FluidMixerBlockEntity fluidMixer = (FluidMixerBlockEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
         return new FluidMixerContainer(windowId, playerInventory, fluidMixer);
     });
     public static final RegistryObject<MenuType<EditVehicleContainer>> EDIT_VEHICLE = register("edit_vehicle", (windowId, playerInventory, data) -> {
@@ -40,7 +40,7 @@ public class ModContainers
         return new EditVehicleContainer(windowId, entity.getVehicleInventory(), entity, playerInventory.player, playerInventory);
     });
     public static final RegistryObject<MenuType<WorkstationContainer>> WORKSTATION = register("workstation", (windowId, playerInventory, data) -> {
-        WorkstationTileEntity workstation = (WorkstationTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        WorkstationBlockEntity workstation = (WorkstationBlockEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
         return new WorkstationContainer(windowId, playerInventory, workstation);
     });
     public static final RegistryObject<MenuType<StorageContainer>> STORAGE = register("storage", (windowId, playerInventory, data) -> {

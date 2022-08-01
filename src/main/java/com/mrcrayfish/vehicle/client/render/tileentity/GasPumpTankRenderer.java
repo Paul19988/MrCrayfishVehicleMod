@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrcrayfish.vehicle.block.RotatedObjectBlock;
 import com.mrcrayfish.vehicle.client.render.Axis;
 import com.mrcrayfish.vehicle.init.ModBlocks;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTankTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpTankBlockEntity;
 import com.mrcrayfish.vehicle.util.FluidUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Author: MrCrayfish
  */
-public class GasPumpTankRenderer implements BlockEntityRenderer<GasPumpTankTileEntity>
+public class GasPumpTankRenderer implements BlockEntityRenderer<GasPumpTankBlockEntity>
 {
     private static final FluidUtils.FluidSides FLUID_SIDES = new FluidUtils.FluidSides(Direction.NORTH, Direction.SOUTH, Direction.UP);
 
@@ -28,7 +28,7 @@ public class GasPumpTankRenderer implements BlockEntityRenderer<GasPumpTankTileE
     }
 
     @Override
-    public void render(GasPumpTankTileEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
+    public void render(GasPumpTankBlockEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
     {
         Level world = entity.getLevel();
         BlockState state = entity.getBlockState();

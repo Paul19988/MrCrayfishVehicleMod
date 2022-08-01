@@ -2,8 +2,8 @@ package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.init.ModItems;
 import com.mrcrayfish.vehicle.init.ModTileEntities;
-import com.mrcrayfish.vehicle.block.entity.PipeTileEntity;
-import com.mrcrayfish.vehicle.block.entity.PumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.PipeBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.PumpBlockEntity;
 import com.mrcrayfish.vehicle.util.VoxelShapeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -91,8 +91,8 @@ public class FluidPumpBlock extends FluidPipeBlock implements EntityBlock
 
         if(!level.isClientSide())
         {
-            PipeTileEntity tileEntity = getPipeTileEntity(level, pos);
-            if(tileEntity instanceof PumpTileEntity pumpTileEntity)
+            PipeBlockEntity tileEntity = getPipeTileEntity(level, pos);
+            if(tileEntity instanceof PumpBlockEntity pumpTileEntity)
             {
 
                 /*if(!FMLLoader.isProduction())
@@ -128,9 +128,9 @@ public class FluidPumpBlock extends FluidPipeBlock implements EntityBlock
         if(!state.is(replaceState.getBlock()))
         {
             BlockEntity tileEntity = world.getBlockEntity(pos);
-            if(tileEntity instanceof PumpTileEntity)
+            if(tileEntity instanceof PumpBlockEntity)
             {
-                ((PumpTileEntity) tileEntity).removePumpFromPipes();
+                ((PumpBlockEntity) tileEntity).removePumpFromPipes();
             }
         }
         super.onRemove(state, world, pos, replaceState, what);
@@ -142,9 +142,9 @@ public class FluidPumpBlock extends FluidPipeBlock implements EntityBlock
         super.invalidatePipeNetwork(world, pos);
 
         BlockEntity tileEntity = world.getBlockEntity(pos);
-        if(tileEntity instanceof PumpTileEntity)
+        if(tileEntity instanceof PumpBlockEntity)
         {
-            ((PumpTileEntity) tileEntity).invalidatePipeNetwork();
+            ((PumpBlockEntity) tileEntity).invalidatePipeNetwork();
         }
     }
 
@@ -166,7 +166,7 @@ public class FluidPumpBlock extends FluidPipeBlock implements EntityBlock
     {
         boolean disabled = false;
         BlockEntity tileEntity = world.getBlockEntity(pos);
-        if(tileEntity instanceof PumpTileEntity pump)
+        if(tileEntity instanceof PumpBlockEntity pump)
         {
             disabled = !pump.getPowerMode().test(pump);
         }
@@ -191,9 +191,9 @@ public class FluidPumpBlock extends FluidPipeBlock implements EntityBlock
 
     @Nullable
     @Override
-    public PumpTileEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
+    public PumpBlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new PumpTileEntity(pos, state);
+        return new PumpBlockEntity(pos, state);
     }
 
     @Nullable
@@ -202,7 +202,7 @@ public class FluidPumpBlock extends FluidPipeBlock implements EntityBlock
     {
         if(!level.isClientSide())
         {
-            return createTickerHelper(type, ModTileEntities.FLUID_PUMP.get(), PumpTileEntity::onServerTick);
+            return createTickerHelper(type, ModTileEntities.FLUID_PUMP.get(), PumpBlockEntity::onServerTick);
         }
 
         return null;

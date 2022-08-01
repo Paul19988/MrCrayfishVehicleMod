@@ -1,7 +1,7 @@
 package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.init.ModTileEntities;
-import com.mrcrayfish.vehicle.block.entity.FluidMixerTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidMixerBlockEntity;
 import com.mrcrayfish.vehicle.util.TileEntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -95,13 +95,13 @@ public class FluidMixerBlock extends RotatedEntityObjectBlock
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new FluidMixerTileEntity(pos, state);
+        return new FluidMixerBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type)
     {
-        return createTickerHelper(type, ModTileEntities.FLUID_MIXER.get(), FluidMixerTileEntity::onServerTick);
+        return createTickerHelper(type, ModTileEntities.FLUID_MIXER.get(), FluidMixerBlockEntity::onServerTick);
     }
 }

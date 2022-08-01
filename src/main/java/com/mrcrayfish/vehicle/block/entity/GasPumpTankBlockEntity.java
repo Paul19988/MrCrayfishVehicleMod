@@ -8,9 +8,9 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Author: MrCrayfish
  */
-public class GasPumpTankTileEntity extends TileFluidHandlerSynced
+public class GasPumpTankBlockEntity extends BlockEntityFluidHandlerSynced
 {
-    public GasPumpTankTileEntity(BlockPos pos, BlockState state)
+    public GasPumpTankBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.GAS_PUMP_TANK.get(), Config.SERVER.gasPumpCapacity.get(), pos, state);
     }

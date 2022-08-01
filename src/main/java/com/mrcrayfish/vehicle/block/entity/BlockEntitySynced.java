@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class TileEntitySynced extends BlockEntity
+public class BlockEntitySynced extends BlockEntity
 {
-    public TileEntitySynced(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state)
+    public BlockEntitySynced(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state)
     {
         super(blockEntityType, pos, state);
     }

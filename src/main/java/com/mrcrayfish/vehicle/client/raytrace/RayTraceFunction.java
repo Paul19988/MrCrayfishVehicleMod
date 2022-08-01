@@ -8,8 +8,8 @@ import com.mrcrayfish.vehicle.init.ModDataKeys;
 import com.mrcrayfish.vehicle.item.JerryCanItem;
 import com.mrcrayfish.vehicle.network.PacketHandler;
 import com.mrcrayfish.vehicle.network.message.MessageFuelVehicle;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTankTileEntity;
-import com.mrcrayfish.vehicle.block.entity.GasPumpTileEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpTankBlockEntity;
+import com.mrcrayfish.vehicle.block.entity.GasPumpBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -51,11 +51,11 @@ public interface RayTraceFunction
         {
             BlockPos pos = SyncedEntityData.instance().get(player, ModDataKeys.GAS_PUMP).get();
             BlockEntity tileEntity = player.level.getBlockEntity(pos);
-            if(!(tileEntity instanceof GasPumpTileEntity))
+            if(!(tileEntity instanceof GasPumpBlockEntity))
                 break gasPump;
 
             tileEntity = player.level.getBlockEntity(pos.below());
-            if(!(tileEntity instanceof GasPumpTankTileEntity gasPumpTank))
+            if(!(tileEntity instanceof GasPumpTankBlockEntity gasPumpTank))
                 break gasPump;
 
             FluidTank tank = gasPumpTank.getFluidTank();

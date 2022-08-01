@@ -12,23 +12,20 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Author: MrCrayfish
  */
-public class PipeTileEntity extends TileEntitySynced
+public class PipeBlockEntity extends BlockEntitySynced
 {
     protected LongSet pumps = new LongOpenHashSet();
     protected boolean[] disabledConnections = new boolean[Direction.values().length];
 
-    public PipeTileEntity(BlockPos pos, BlockState state)
+    public PipeBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.FLUID_PIPE.get(), pos, state);
     }
 
-    public PipeTileEntity(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state)
+    public PipeBlockEntity(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state)
     {
         super(tileEntityType, pos, state);
     }

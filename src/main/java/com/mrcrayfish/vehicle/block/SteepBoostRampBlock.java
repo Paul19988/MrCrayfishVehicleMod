@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import com.mrcrayfish.vehicle.init.ModSounds;
-import com.mrcrayfish.vehicle.block.entity.BoostTileEntity;
+import com.mrcrayfish.vehicle.block.entity.BoostBlockEntity;
 import com.mrcrayfish.vehicle.util.Bounds;
 import com.mrcrayfish.vehicle.util.StateHelper;
 import net.minecraft.core.BlockPos;
@@ -59,6 +59,7 @@ public class SteepBoostRampBlock extends RotatedObjectBlock implements EntityBlo
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
     {
+
         if(entity instanceof PoweredVehicleEntity && entity.getControllingPassenger() != null)
         {
             Direction facing = state.getValue(DIRECTION);
@@ -66,9 +67,9 @@ public class SteepBoostRampBlock extends RotatedObjectBlock implements EntityBlo
             {
                 float speedMultiplier = 0.0F;
                 BlockEntity tileEntity = level.getBlockEntity(pos);
-                if(tileEntity instanceof BoostTileEntity)
+                if(tileEntity instanceof BoostBlockEntity)
                 {
-                    speedMultiplier = ((BoostTileEntity) tileEntity).getSpeedMultiplier();
+                    speedMultiplier = ((BoostBlockEntity) tileEntity).getSpeedMultiplier();
                 }
 
                 PoweredVehicleEntity poweredVehicle = (PoweredVehicleEntity) entity;
@@ -131,6 +132,6 @@ public class SteepBoostRampBlock extends RotatedObjectBlock implements EntityBlo
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new BoostTileEntity(pos, state, 1.0F);
+        return new BoostBlockEntity(pos, state, 1.0F);
     }
 }

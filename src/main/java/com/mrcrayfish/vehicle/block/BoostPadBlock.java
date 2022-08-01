@@ -2,7 +2,7 @@ package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import com.mrcrayfish.vehicle.init.ModSounds;
-import com.mrcrayfish.vehicle.block.entity.BoostTileEntity;
+import com.mrcrayfish.vehicle.block.entity.BoostBlockEntity;
 import com.mrcrayfish.vehicle.util.StateHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,9 +67,9 @@ public class BoostPadBlock extends RotatedObjectBlock implements EntityBlock
             {
                 float speedMultiplier = 0.0F;
                 BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-                if(tileEntity instanceof BoostTileEntity)
+                if(tileEntity instanceof BoostBlockEntity)
                 {
-                    speedMultiplier = ((BoostTileEntity) tileEntity).getSpeedMultiplier();
+                    speedMultiplier = ((BoostBlockEntity) tileEntity).getSpeedMultiplier();
                 }
 
                 PoweredVehicleEntity poweredVehicle = (PoweredVehicleEntity) entityIn;
@@ -128,6 +128,6 @@ public class BoostPadBlock extends RotatedObjectBlock implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new BoostTileEntity(pos, state, 0.5F);
+        return new BoostBlockEntity(pos, state, 0.5F);
     }
 }

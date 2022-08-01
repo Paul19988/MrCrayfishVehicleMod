@@ -1,11 +1,9 @@
 package com.mrcrayfish.vehicle.client.handler;
 
 import com.mrcrayfish.posture.api.event.PlayerModelEvent;
-import com.mrcrayfish.vehicle.client.render.layer.LayerHeldVehicle;
 import com.mrcrayfish.vehicle.common.entity.HeldVehicleDataHandler;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;

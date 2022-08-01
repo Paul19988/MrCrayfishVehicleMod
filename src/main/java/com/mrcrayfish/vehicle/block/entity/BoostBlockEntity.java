@@ -10,16 +10,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Author: MrCrayfish
  */
-public class BoostTileEntity extends TileEntitySynced
+public class BoostBlockEntity extends BlockEntitySynced
 {
     private float speedMultiplier;
 
-    public BoostTileEntity(BlockPos pos, BlockState state)
+    public BoostBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModTileEntities.BOOST.get(), pos, state);
     }
 
-    public BoostTileEntity(BlockPos pos, BlockState state, float defaultSpeedMultiplier)
+    public BoostBlockEntity(BlockPos pos, BlockState state, float defaultSpeedMultiplier)
     {
         super(ModTileEntities.BOOST.get(), pos, state);
         this.speedMultiplier = defaultSpeedMultiplier;

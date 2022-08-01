@@ -7,7 +7,7 @@ import com.mrcrayfish.vehicle.client.render.Axis;
 import com.mrcrayfish.vehicle.client.render.VehicleRenderRegistry;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.init.ModBlocks;
-import com.mrcrayfish.vehicle.block.entity.JackTileEntity;
+import com.mrcrayfish.vehicle.block.entity.JackBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Author: MrCrayfish
  */
-public class JackRenderer implements BlockEntityRenderer<JackTileEntity>
+public class JackRenderer implements BlockEntityRenderer<JackBlockEntity>
 {
     private final BlockRenderDispatcher dispatcher;
     private final ModelBlockRenderer modelBlockRenderer;
@@ -40,7 +40,7 @@ public class JackRenderer implements BlockEntityRenderer<JackTileEntity>
     }
 
     @Override
-    public void render(JackTileEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
+    public void render(JackBlockEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
     {
         if(!entity.hasLevel())
             return;
@@ -69,7 +69,7 @@ public class JackRenderer implements BlockEntityRenderer<JackTileEntity>
 
             matrices.pushPose();
             {
-                float progress = (entity.prevLiftProgress + (entity.liftProgress - entity.prevLiftProgress) * delta) / (float) JackTileEntity.MAX_LIFT_PROGRESS;
+                float progress = (entity.prevLiftProgress + (entity.liftProgress - entity.prevLiftProgress) * delta) / (float) JackBlockEntity.MAX_LIFT_PROGRESS;
                 matrices.translate(0, 0.5 * progress, 0);
 
                 //Render the head
@@ -92,7 +92,7 @@ public class JackRenderer implements BlockEntityRenderer<JackTileEntity>
                     {
                         matrices.translate(0, 1 * 0.0625, 0);
                         matrices.translate(0.5, 0.5, 0.5);
-                        float progress = (entity.prevLiftProgress + (entity.liftProgress - entity.prevLiftProgress) * delta) / (float) JackTileEntity.MAX_LIFT_PROGRESS;
+                        float progress = (entity.prevLiftProgress + (entity.liftProgress - entity.prevLiftProgress) * delta) / (float) JackBlockEntity.MAX_LIFT_PROGRESS;
                         matrices.translate(0, 0.5 * progress, 0);
 
                         Vec3 heldOffset = vehicle.getProperties().getHeldOffset().yRot(passenger.getYRot() * 0.017453292F);

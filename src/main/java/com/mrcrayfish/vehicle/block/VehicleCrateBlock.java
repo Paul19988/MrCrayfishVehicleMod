@@ -5,7 +5,7 @@ import com.mrcrayfish.vehicle.init.ModBlocks;
 import com.mrcrayfish.vehicle.init.ModItems;
 import com.mrcrayfish.vehicle.init.ModTileEntities;
 import com.mrcrayfish.vehicle.item.IDyeable;
-import com.mrcrayfish.vehicle.block.entity.VehicleCrateTileEntity;
+import com.mrcrayfish.vehicle.block.entity.VehicleCrateBlockEntity;
 import com.mrcrayfish.vehicle.client.render.util.RenderUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -91,7 +91,7 @@ public class VehicleCrateBlock extends RotatedEntityObjectBlock
     public VoxelShape getShape(@NotNull BlockState state, BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext ctx)
     {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if(blockEntity instanceof VehicleCrateTileEntity && ((VehicleCrateTileEntity) blockEntity).isOpened())
+        if(blockEntity instanceof VehicleCrateBlockEntity && ((VehicleCrateBlockEntity) blockEntity).isOpened())
         {
             return PANEL;
         }
@@ -151,7 +151,7 @@ public class VehicleCrateBlock extends RotatedEntityObjectBlock
     private void openCrate(LevelReader world, BlockPos pos, BlockState state, LivingEntity placer)
     {
         BlockEntity tileEntity = world.getBlockEntity(pos);
-        if(tileEntity instanceof VehicleCrateTileEntity && this.canOpen(world, pos))
+        if(tileEntity instanceof VehicleCrateBlockEntity && this.canOpen(world, pos))
         {
             if(world.isClientSide())
             {
@@ -159,7 +159,7 @@ public class VehicleCrateBlock extends RotatedEntityObjectBlock
             }
             else
             {
-                ((VehicleCrateTileEntity) tileEntity).open(placer.getUUID());
+                ((VehicleCrateBlockEntity) tileEntity).open(placer.getUUID());
             }
         }
     }
@@ -192,7 +192,7 @@ public class VehicleCrateBlock extends RotatedEntityObjectBlock
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new VehicleCrateTileEntity(pos, state);
+        return new VehicleCrateBlockEntity(pos, state);
     }
 
     @Nullable
@@ -201,10 +201,10 @@ public class VehicleCrateBlock extends RotatedEntityObjectBlock
     {
         if(level.isClientSide())
         {
-            return createTickerHelper(type, ModTileEntities.VEHICLE_CRATE.get(), VehicleCrateTileEntity::onClientTick);
+            return createTickerHelper(type, ModTileEntities.VEHICLE_CRATE.get(), VehicleCrateBlockEntity::onClientTick);
         }
 
-        return createTickerHelper(type, ModTileEntities.VEHICLE_CRATE.get(), VehicleCrateTileEntity::onServerTick);
+        return createTickerHelper(type, ModTileEntities.VEHICLE_CRATE.get(), VehicleCrateBlockEntity::onServerTick);
     }
 
     @Override

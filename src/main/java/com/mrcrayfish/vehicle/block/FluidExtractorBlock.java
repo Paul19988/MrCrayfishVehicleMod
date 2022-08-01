@@ -1,7 +1,7 @@
 package com.mrcrayfish.vehicle.block;
 
 import com.mrcrayfish.vehicle.init.ModTileEntities;
-import com.mrcrayfish.vehicle.block.entity.FluidExtractorTileEntity;
+import com.mrcrayfish.vehicle.block.entity.FluidExtractorBlockEntity;
 import com.mrcrayfish.vehicle.util.TileEntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,7 +56,7 @@ public class FluidExtractorBlock extends RotatedEntityObjectBlock
             }
 
             BlockEntity tileEntity = level.getBlockEntity(pos);
-            if(tileEntity instanceof FluidExtractorTileEntity)
+            if(tileEntity instanceof FluidExtractorBlockEntity)
             {
                 TileEntityUtil.sendUpdatePacket(tileEntity, (ServerPlayer) player);
                 NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, pos);
@@ -101,7 +101,7 @@ public class FluidExtractorBlock extends RotatedEntityObjectBlock
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        return new FluidExtractorTileEntity(pos, state);
+        return new FluidExtractorBlockEntity(pos, state);
     }
 
     @Nullable
@@ -110,7 +110,7 @@ public class FluidExtractorBlock extends RotatedEntityObjectBlock
     {
         if(!level.isClientSide)
         {
-            return createTickerHelper(type, ModTileEntities.FLUID_EXTRACTOR.get(), FluidExtractorTileEntity::onServerTick);
+            return createTickerHelper(type, ModTileEntities.FLUID_EXTRACTOR.get(), FluidExtractorBlockEntity::onServerTick);
         }
 
         return null;

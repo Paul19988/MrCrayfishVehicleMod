@@ -8,7 +8,7 @@ import com.mrcrayfish.vehicle.client.render.Axis;
 import com.mrcrayfish.vehicle.client.render.RenderObjectHelper;
 import com.mrcrayfish.vehicle.entity.VehicleEntity;
 import com.mrcrayfish.vehicle.init.ModBlocks;
-import com.mrcrayfish.vehicle.block.entity.VehicleCrateTileEntity;
+import com.mrcrayfish.vehicle.block.entity.VehicleCrateBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Author: MrCrayfish
  */
-public class VehicleCrateRenderer implements BlockEntityRenderer<VehicleCrateTileEntity>
+public class VehicleCrateRenderer implements BlockEntityRenderer<VehicleCrateBlockEntity>
 {
     private final Minecraft minecraft;
 
@@ -40,7 +40,7 @@ public class VehicleCrateRenderer implements BlockEntityRenderer<VehicleCrateTil
     }
 
     @Override
-    public void render(VehicleCrateTileEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
+    public void render(VehicleCrateBlockEntity entity, float delta, @NotNull PoseStack matrices, @NotNull MultiBufferSource buffers, int light, int overlay)
     {
         BlockState state = entity.getLevel().getBlockState(entity.getBlockPos());
         if(state.getBlock() != ModBlocks.VEHICLE_CRATE.get())
@@ -169,7 +169,7 @@ public class VehicleCrateRenderer implements BlockEntityRenderer<VehicleCrateTil
     }
 
     @Override
-    public boolean shouldRenderOffScreen(@NotNull VehicleCrateTileEntity entity)
+    public boolean shouldRenderOffScreen(@NotNull VehicleCrateBlockEntity entity)
     {
         return true;
     }
